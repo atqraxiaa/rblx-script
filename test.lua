@@ -3,7 +3,7 @@ mainGui.Name = "Main_GUI"
 mainGui.ClipToDeviceSafeArea = true
 mainGui.IgnoreGuiInset = true
 mainGui.ResetOnSpawn = false
-screenGui.DisplayOrder = 10
+mainGui.DisplayOrder = 10
 mainGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
 -- Main Frame
