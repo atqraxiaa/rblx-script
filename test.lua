@@ -13,7 +13,7 @@ frame.Position = UDim2.new(0.5, -150, 0.5, -90)
 frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 frame.BackgroundTransparency = 0.2
 frame.BorderSizePixel = 0
-frame.Parent = gui
+frame.Parent = mainGui
 
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 12)
