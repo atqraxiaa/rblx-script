@@ -56,7 +56,7 @@ exitBtn.Parent = titleBar
 
 -- Exit Function
 exitBtn.MouseButton1Click:Connect(function()
-	gui:Destroy()
+	mainGui:Destroy()
 end)
 
 -- Minimize Logic
