@@ -19,7 +19,7 @@ frame.Parent = gui
 
 -- Rounded corners
 local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
+corner.CornerRadius = UDim.new(0, 0)
 corner.Parent = frame
 
 -- Title bar
