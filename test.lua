@@ -1,4 +1,3 @@
--- Wait for game to fully load
 repeat task.wait() until game:IsLoaded()
 
 local Players = game:GetService("Players")
@@ -13,7 +12,7 @@ gui.IgnoreGuiInset = true
 gui.ResetOnSpawn = false
 gui.Parent = playerGui
 
--- Main frame (no fade-in)
+-- Main frame
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 500, 0, 350)
 local fullSize = UDim2.new(0, 500, 0, 350)
@@ -48,6 +47,14 @@ title.TextSize = 14
 title.BackgroundTransparency = 1
 title.Parent = titleBar
 
+-- Body container
+local bodyContainer = Instance.new("Frame")
+bodyContainer.BackgroundTransparency = 1
+bodyContainer.BorderSizePixel = 0
+bodyContainer.Position = UDim2.new(0, 0, 0, 32)
+bodyContainer.Size = UDim2.new(1, 0, 1, -32)
+bodyContainer.Parent = frame
+
 -- Minimize Button
 local minimized = false
 local minBtn = Instance.new("TextButton")
@@ -71,30 +78,31 @@ exitBtn.TextSize = 12
 exitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 exitBtn.Parent = titleBar
 
+exitBtn.MouseButton1Click:Connect(function()
+	gui:Destroy()
+end)
+
+-- Minimize logic
 minBtn.MouseButton1Click:Connect(function()
 	minimized = not minimized
 	if minimized then
-		-- Collapse: only title bar visible
-		frame.Size = UDim2.new(fullSize.X.Scale, fullSize.X.Offset, 0, 32)
-		content.Visible = false
+		title.Size = UDim2.new(1, -60, 1, 0)
+		frame.Size = UDim2.new(0, 300, 0, 32)
+		bodyContainer.Visible = false
 	else
-		-- Restore full GUI
+		title.Size = UDim2.new(1, -80, 1, 0)
 		frame.Size = fullSize
-		content.Visible = true
+		bodyContainer.Visible = true
 	end
-end)
-
-exitBtn.MouseButton1Click:Connect(function()
-	gui:Destroy()
 end)
 
 -- Sidebar
 local sidebar = Instance.new("Frame")
 sidebar.Size = UDim2.new(0, 120, 1, -32)
-sidebar.Position = UDim2.new(0, 0, 0, 32)
+sidebar.Position = UDim2.new(0, 0, 0, 0)
 sidebar.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
 sidebar.BorderSizePixel = 0
-sidebar.Parent = frame
+sidebar.Parent = bodyContainer
 
 local tabs = {"Main", "Shop", "Misc"}
 
@@ -113,12 +121,12 @@ end
 
 -- Main content area
 local content = Instance.new("Frame")
-content.Position = UDim2.new(0, 120, 0, 32)
-content.Size = UDim2.new(1, -120, 1, -32)
+content.Position = UDim2.new(0, 120, 0, 0)
+content.Size = UDim2.new(1, -120, 1, 0)
 content.BackgroundTransparency = 1
-content.Parent = frame
+content.Parent = bodyContainer
 
--- Auto Sell section
+-- Example: Auto Sell
 local header = Instance.new("TextLabel")
 header.Text = "Auto Sell"
 header.Font = Enum.Font.GothamBold
