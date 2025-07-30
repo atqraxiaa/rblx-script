@@ -31,10 +31,7 @@ titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
 titleBar.BorderSizePixel = 0
 titleBar.Parent = frame
 
-local titleCorner = Instance.new("UICorner")
-titleCorner.CornerRadius = UDim.new(0, 12)
-titleCorner.CornerMask = Enum.CornerMask.Top
-titleCorner.Parent = titleBar
+Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 titleBar.ClipsDescendants = true
 
 -- Title text
