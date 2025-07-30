@@ -109,7 +109,7 @@ for i, name in ipairs(tabs) do
 	button.Size = UDim2.new(1, -10, 0, 30)
 	button.BackgroundTransparency = 1
 	button.Text = name
-	button.TextColor3 = Color3.fromRGB(200, 200, 200)
+	button.TextColor3 = Color3.fromRGB(30, 30, 35)
 	button.Font = Enum.Font.Gotham
 	button.TextSize = 12
 	button.TextXAlignment = Enum.TextXAlignment.Left
@@ -117,7 +117,7 @@ for i, name in ipairs(tabs) do
 
 	local padding = Instance.new("UIPadding")
 	padding.PaddingLeft = UDim.new(0, 10)
-	padding.PaddingTop = UDim.new(0, 3)
+	padding.PaddingTop = UDim.new(0, 4)
 	padding.Parent = button
 end
 
@@ -128,7 +128,6 @@ content.Size = UDim2.new(1, -120, 1, 0)
 content.BackgroundTransparency = 1
 content.Parent = bodyContainer
 
--- Example: Auto Sell
 local header = Instance.new("TextLabel")
 header.Text = "Auto Sell"
 header.Font = Enum.Font.GothamBold
@@ -150,7 +149,6 @@ toggle.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
 toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggle.Parent = content
 
--- Auto Sell Logic
 local toggled = false
 local sellRemote = ReplicatedStorage:WaitForChild("GameEvents"):WaitForChild("Sell_Inventory")
 local sellCFrame = CFrame.new(86.5844193, 2.99999976, 0.426782995)
