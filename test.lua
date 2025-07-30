@@ -145,20 +145,11 @@ end)
 
 task.spawn(function()
 	while true do
-		task.wait(1)
+		task.wait(1) -- Check every second
 		if toggled then
-			-- Update interval from input
-			local sec = tonumber(intervalInput.Text)
-			if sec and sec >= 1 then
-				sellInterval = sec
-			end
-
-			task.wait(sellInterval)
-
 			local backpack = player:FindFirstChild("Backpack")
 			local max = player:FindFirstChild("MaxBackpack")
 			if backpack and max and tonumber(backpack.Value) >= tonumber(max.Value) then
-				-- Teleport and fire sell
 				if player.Character then
 					local hrp = player.Character:FindFirstChild("HumanoidRootPart")
 					if hrp then
@@ -173,3 +164,4 @@ task.spawn(function()
 		end
 	end
 end)
+
