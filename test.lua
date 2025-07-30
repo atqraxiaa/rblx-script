@@ -14,8 +14,7 @@ gui.Parent = playerGui
 
 -- Main frame
 local frame = Instance.new("Frame")
-local fullSize = UDim2.new(0, 500, 0, 350)
-frame.Size = fullSize
+frame.Size = UDim2.new(0, 500, 0, 350)
 frame.Position = UDim2.new(0, 100, 0, 100)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
 frame.BackgroundTransparency = 0.1
@@ -116,10 +115,6 @@ for i, name in ipairs(tabs) do
 	button.TextSize = 12
 	button.TextXAlignment = Enum.TextXAlignment.Left
 	button.Parent = sidebar
-
-	local padding = Instance.new("UIPadding")
-	padding.PaddingLeft = UDim.new(0, 2)
-	padding.Parent = button
 end
 
 -- Main content area
