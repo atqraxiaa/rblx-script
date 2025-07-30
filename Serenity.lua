@@ -18,7 +18,7 @@ local fullSize = UDim2.new(0, 500, 0, 350)
 
 frame.Position = UDim2.new(0, 100, 0, 100)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-frame.BackgroundTransparency = 0.5
+frame.BackgroundTransparency = 0.1
 frame.BorderSizePixel = 0
 frame.Parent = gui
 
@@ -47,7 +47,7 @@ title.Parent = titleBar
 
 -- Body container
 local bodyContainer = Instance.new("Frame")
-bodyContainer.BackgroundTransparency = 1
+bodyContainer.BackgroundTransparency = 0.1
 bodyContainer.BorderSizePixel = 0
 bodyContainer.Position = UDim2.new(0, 0, 0, 32)
 bodyContainer.Size = UDim2.new(1, 0, 1, -32)
