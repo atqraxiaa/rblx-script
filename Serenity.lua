@@ -225,9 +225,9 @@ toggleSeeds.MouseButton1Click:Connect(function()
 				for _, seed in ipairs(seeds) do
 					ReplicatedStorage.GameEvents.BuySeedStock:FireServer(seed)
           logPurchase("Seed", seedName)
-					task.wait(0.2)
+					task.wait(0.1)
 				end
-				task.wait(3)
+				task.wait(0.1)
 			end
 		end)
 	end
@@ -287,9 +287,9 @@ toggleGears.MouseButton1Click:Connect(function()
 				for _, gear in ipairs(gears) do
 					ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gear)
           logPurchase("Gear", gearName)
-					task.wait(0.2)
+					task.wait(0.1)
 				end
-				task.wait(3)
+				task.wait(0.1)
 			end
 		end)
 	end
@@ -348,9 +348,9 @@ toggleEggs.MouseButton1Click:Connect(function()
 				for _, egg in ipairs(eggs) do
 					ReplicatedStorage.GameEvents.BuyEggStock:FireServer(egg)
           logPurchase("Egg", eggName)
-					task.wait(0.2)
+					task.wait(0.1)
 				end
-				task.wait(3)
+				task.wait(0.1)
 			end
 		end)
 	end
