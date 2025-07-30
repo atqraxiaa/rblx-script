@@ -15,7 +15,7 @@ gui.Parent = playerGui
 
 -- Fade in main frame
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 500, 0, 300)
+frame.Size = UDim2.new(0, 600, 0, 450)
 frame.Position = UDim2.new(0.5, 0, 0.5, 0)
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
