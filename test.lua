@@ -116,7 +116,7 @@ for i, name in ipairs(tabs) do
 	button.Parent = sidebar
 
 	local padding = Instance.new("UIPadding")
-	padding.PaddingLeft = UDim.new(0, 2)
+	padding.PaddingLeft = UDim.new(0, 10)
 	padding.Parent = button
 end
 
