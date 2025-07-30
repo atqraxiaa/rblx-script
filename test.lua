@@ -1,166 +1,126 @@
--- Wait until game is fully loaded
+-- Wait for game to fully load
 repeat task.wait() until game:IsLoaded()
 
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
-local UIS = game:GetService("UserInputService")
-
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
-local character = player.Character or player.CharacterAdded:Wait()
-local hrp = character:WaitForChild("HumanoidRootPart")
 
--- Create the GUI container
+-- Create ScreenGui
 local gui = Instance.new("ScreenGui")
-gui.Name = "MinimalGui"
-gui.ResetOnSpawn = false
+gui.Name = "OMGHubUI"
 gui.IgnoreGuiInset = true
+gui.ResetOnSpawn = false
 gui.Parent = playerGui
 
--- Main frame
+-- Fade in main frame
 local frame = Instance.new("Frame")
-local fullSize = UDim2.new(0.4, 0, 0.5, 0)
-local minimizedSize = UDim2.new(0.4, 0, 0, 30)
-frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.Size = UDim2.new(0.6, 0, 0.6, 0)
 frame.Position = UDim2.new(0.5, 0, 0.5, 0)
-frame.Size = fullSize
-frame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-frame.BackgroundTransparency = 1 -- start fully transparent for fade
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+frame.BackgroundTransparency = 1
 frame.BorderSizePixel = 0
 frame.Parent = gui
 
--- Rounded corners
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 10)
-corner.Parent = frame
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
+
+TweenService:Create(frame, TweenInfo.new(0.4), {BackgroundTransparency = 0.1}):Play()
 
 -- Title bar
 local titleBar = Instance.new("Frame")
-titleBar.Size = UDim2.new(1, 0, 0, 30)
-titleBar.Position = UDim2.new(0, 0, 0, 0)
-titleBar.BackgroundColor3 = Color3.fromRGB(34, 35, 39)
-titleBar.BackgroundTransparency = 1
-
+titleBar.Size = UDim2.new(1, 0, 0, 32)
+titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
 titleBar.BorderSizePixel = 0
 titleBar.Parent = frame
 
-local titleCorner = Instance.new("UICorner")
-titleCorner.CornerRadius = UDim.new(0, 10)
-titleCorner.Parent = titleBar
+Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 titleBar.ClipsDescendants = true
 
--- Minimize button
-local minBtn = Instance.new("TextButton")
-minBtn.Size = UDim2.new(0, 25, 0, 25)
-minBtn.Position = UDim2.new(1, -60, 0.5, -12)
-minBtn.BackgroundColor3 = titleBar.BackgroundColor3
-minBtn.BackgroundTransparency = 1
-minBtn.SelectionImageObject = nil
-minBtn.Text = "-"
-minBtn.Font = Enum.Font.SourceSansBold
-minBtn.TextSize = 18
-minBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-minBtn.TextTransparency = 1
-minBtn.Parent = titleBar
+-- Title text
+local title = Instance.new("TextLabel")
+title.Text = "Serenity v1.0 by kiyaa"
+title.Size = UDim2.new(1, -80, 1, 0)
+title.Position = UDim2.new(0, 10, 0, 0)
+title.TextColor3 = Color3.new(1, 1, 1)
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Font = Enum.Font.GothamSemibold
+title.TextSize = 14
+title.BackgroundTransparency = 1
+title.Parent = titleBar
 
--- Exit button
+-- Exit Button
 local exitBtn = Instance.new("TextButton")
 exitBtn.Size = UDim2.new(0, 25, 0, 25)
 exitBtn.Position = UDim2.new(1, -30, 0.5, -12)
-exitBtn.BackgroundColor3 = titleBar.BackgroundColor3
 exitBtn.BackgroundTransparency = 1
-exitBtn.SelectionImageObject = nil
 exitBtn.Text = "X"
-exitBtn.Font = Enum.Font.SourceSansBold
-exitBtn.TextSize = 14
+exitBtn.Font = Enum.Font.Gotham
+exitBtn.TextSize = 12
 exitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-exitBtn.TextTransparency = 1
 exitBtn.Parent = titleBar
 
--- Exit function
 exitBtn.MouseButton1Click:Connect(function()
-    local fadeInfo = TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    TweenService:Create(frame, fadeInfo, {BackgroundTransparency = 1}):Play()
-    TweenService:Create(titleBar, fadeInfo, {BackgroundTransparency = 1}):Play()
-    TweenService:Create(minBtn, fadeInfo, {TextTransparency = 1}):Play()
-    TweenService:Create(exitBtn, fadeInfo, {TextTransparency = 1}):Play()
-    task.delay(0.4, function()
-        gui:Destroy()
-    end)
+	TweenService:Create(frame, TweenInfo.new(0.3), {BackgroundTransparency = 1}):Play()
+	task.wait(0.3)
+	gui:Destroy()
 end)
 
--- Minimize logic
-local minimized = false
-minBtn.MouseButton1Click:Connect(function()
-    minimized = not minimized
-    for _, child in ipairs(frame:GetChildren()) do
-        if child ~= titleBar and child:IsA("GuiObject") then
-            child.Visible = not minimized
-        end
-    end
-    frame.Size = minimized and minimizedSize or fullSize
-end)
+-- Sidebar
+local sidebar = Instance.new("Frame")
+sidebar.Size = UDim2.new(0, 120, 1, -32)
+sidebar.Position = UDim2.new(0, 0, 0, 32)
+sidebar.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+sidebar.BorderSizePixel = 0
+sidebar.Parent = frame
 
--- Draggable
-local dragging, dragInput, startPos, startDrag
+local tabs = {"Garden", "Shop", "Crafting", "Event", "Calculate", "Pets", "Cosmetics", "Misc"}
 
-titleBar.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = true
-        startPos = input.Position
-        startDrag = frame.Position
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
-    end
-end)
+for i, name in ipairs(tabs) do
+	local button = Instance.new("TextButton")
+	button.Size = UDim2.new(1, 0, 0, 30)
+	button.Position = UDim2.new(0, 0, 0, (i - 1) * 32)
+	button.BackgroundTransparency = 1
+	button.Text = name
+	button.TextColor3 = Color3.fromRGB(200, 200, 200)
+	button.Font = Enum.Font.Gotham
+	button.TextSize = 12
+	button.TextXAlignment = Enum.TextXAlignment.Left
+	button.Parent = sidebar
+end
 
-titleBar.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement then
-        dragInput = input
-    end
-end)
+-- Main content area
+local content = Instance.new("Frame")
+content.Position = UDim2.new(0, 120, 0, 32)
+content.Size = UDim2.new(1, -120, 1, -32)
+content.BackgroundTransparency = 1
+content.Parent = frame
 
-UIS.InputChanged:Connect(function(input)
-    if input == dragInput and dragging then
-        local delta = input.Position - startPos
-        frame.Position = UDim2.new(startDrag.X.Scale, startDrag.X.Offset + delta.X, startDrag.Y.Scale, startDrag.Y.Offset + delta.Y)
-    end
-end)
+-- Example: Auto Sell section
+local header = Instance.new("TextLabel")
+header.Text = "Auto Sell"
+header.Font = Enum.Font.GothamBold
+header.TextSize = 20
+header.TextColor3 = Color3.fromRGB(255, 255, 255)
+header.BackgroundTransparency = 1
+header.Size = UDim2.new(1, -20, 0, 30)
+header.Position = UDim2.new(0, 10, 0, 10)
+header.TextXAlignment = Enum.TextXAlignment.Left
+header.Parent = content
 
--- Fade-in effect
-local fadeInfo = TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-TweenService:Create(frame, fadeInfo, {BackgroundTransparency = 0.2}):Play()
-TweenService:Create(titleBar, fadeInfo, {BackgroundTransparency = 0}):Play()
-TweenService:Create(minBtn, fadeInfo, {TextTransparency = 0}):Play()
-TweenService:Create(exitBtn, fadeInfo, {TextTransparency = 0}):Play()
+local toggle = Instance.new("TextButton")
+toggle.Size = UDim2.new(0, 100, 0, 30)
+toggle.Position = UDim2.new(0, 10, 0, 50)
+toggle.Text = "OFF"
+toggle.Font = Enum.Font.GothamSemibold
+toggle.TextSize = 14
+toggle.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggle.Parent = content
 
--- Sell Inventory Button
-local sellRemote = ReplicatedStorage:WaitForChild("GameEvents"):WaitForChild("Sell_Inventory")
-local sellCFrame = CFrame.new(
-    86.5844193, 2.99999976, 0.426782995,
-    -0.00156137196, -1.994675e-08, -0.999998808,
-    -8.30558018e-12, 1, -1.99467607e-08,
-    0.999998808, -2.2838743e-11, -0.00156137196
-)
-
-local sellBtn = Instance.new("TextButton")
-sellBtn.Size = UDim2.new(0, 160, 0, 40)
-sellBtn.Position = UDim2.new(0, 20, 0, 50)
-sellBtn.Text = "🛒 Sell Fruits"
-sellBtn.TextSize = 16
-sellBtn.Font = Enum.Font.SourceSansBold
-sellBtn.BackgroundColor3 = Color3.fromRGB(255, 210, 180)
-sellBtn.TextColor3 = Color3.new(0, 0, 0)
-sellBtn.Parent = frame
-
-sellBtn.MouseButton1Click:Connect(function()
-    hrp.CFrame = sellCFrame
-    task.wait(1)
-    pcall(function()
-        sellRemote:FireServer()
-    end)
+local toggled = false
+toggle.MouseButton1Click:Connect(function()
+	toggled = not toggled
+	toggle.Text = toggled and "ON" or "OFF"
+	-- Add your auto sell logic here
 end)
