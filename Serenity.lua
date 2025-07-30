@@ -11,11 +11,9 @@ gui.IgnoreGuiInset = true
 gui.ResetOnSpawn = false
 gui.Parent = playerGui
 
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 500, 0, 350)
-
 local fullSize = UDim2.new(0, 500, 0, 350)
-
+local frame = Instance.new("Frame")
+frame.Size = fullSize
 frame.Position = UDim2.new(0, 100, 0, 100)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
 frame.BackgroundTransparency = 0.1
@@ -53,6 +51,7 @@ bodyContainer.Position = UDim2.new(0, 0, 0, 32)
 bodyContainer.Size = UDim2.new(1, 0, 1, -32)
 bodyContainer.Parent = frame
 
+-- Minimize button
 local minimized = false
 local minBtn = Instance.new("TextButton")
 minBtn.Size = UDim2.new(0, 25, 0, 25)
@@ -64,6 +63,7 @@ minBtn.TextSize = 16
 minBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 minBtn.Parent = titleBar
 
+-- Exit button
 local exitBtn = Instance.new("TextButton")
 exitBtn.Size = UDim2.new(0, 25, 0, 25)
 exitBtn.Position = UDim2.new(1, -30, 0.5, -12)
@@ -98,15 +98,23 @@ local sidebar = Instance.new("Frame")
 sidebar.Size = UDim2.new(0, 120, 1, -32)
 sidebar.Position = UDim2.new(0, 0, 0, 0)
 sidebar.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-sidebar.BackgroundTransparency = 0.5
+sidebar.BackgroundTransparency = 0.1
 sidebar.BorderSizePixel = 0
 sidebar.Parent = bodyContainer
 
+-- Tabs
 local tabs = {"Main", "Shop", "Misc"}
+local contentFrames = {}
+
+local content = Instance.new("Frame")
+content.Position = UDim2.new(0, 120, 0, 0)
+content.Size = UDim2.new(1, -120, 1, 0)
+content.BackgroundTransparency = 1
+content.Parent = bodyContainer
 
 for i, name in ipairs(tabs) do
 	local button = Instance.new("TextButton")
-  button.Position = UDim2.new(0, 10, 0, (i - 1) * 32)
+	button.Position = UDim2.new(0, 10, 0, (i - 1) * 32)
 	button.Size = UDim2.new(1, -10, 0, 30)
 	button.BackgroundTransparency = 1
 	button.Text = name
@@ -118,16 +126,24 @@ for i, name in ipairs(tabs) do
 
 	local padding = Instance.new("UIPadding")
 	padding.PaddingLeft = UDim.new(0, 10)
-	padding.PaddingTop = UDim.new(0, 25)
 	padding.Parent = button
+
+	-- Tab content frames
+	local tabFrame = Instance.new("Frame")
+	tabFrame.Size = UDim2.new(1, 0, 1, 0)
+	tabFrame.BackgroundTransparency = 1
+	tabFrame.Visible = (i == 1) -- Show only first tab initially
+	tabFrame.Parent = content
+	contentFrames[name] = tabFrame
+
+	button.MouseButton1Click:Connect(function()
+		for _, f in pairs(contentFrames) do f.Visible = false end
+		tabFrame.Visible = true
+	end)
 end
 
--- Main content area
-local content = Instance.new("Frame")
-content.Position = UDim2.new(0, 120, 0, 0)
-content.Size = UDim2.new(1, -120, 1, 0)
-content.BackgroundTransparency = 1
-content.Parent = bodyContainer
+-- Auto Sell (inside "Main" tab)
+local mainTab = contentFrames["Main"]
 
 local header = Instance.new("TextLabel")
 header.Text = "Auto Sell"
@@ -138,7 +154,7 @@ header.BackgroundTransparency = 1
 header.Size = UDim2.new(1, -20, 0, 30)
 header.Position = UDim2.new(0, 10, 0, 10)
 header.TextXAlignment = Enum.TextXAlignment.Left
-header.Parent = content
+header.Parent = mainTab
 
 local toggle = Instance.new("TextButton")
 toggle.Size = UDim2.new(0, 100, 0, 30)
@@ -148,7 +164,7 @@ toggle.Font = Enum.Font.GothamSemibold
 toggle.TextSize = 14
 toggle.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
 toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggle.Parent = content
+toggle.Parent = mainTab
 
 local toggled = false
 local sellRemote = ReplicatedStorage:WaitForChild("GameEvents"):WaitForChild("Sell_Inventory")
@@ -167,16 +183,11 @@ task.spawn(function()
 				local hrp = player.Character:FindFirstChild("HumanoidRootPart")
 				if hrp then
 					local originalCFrame = hrp.CFrame
-
-					hrp.CFrame = sellCFrame
+					hrP.CFrame = sellCFrame
 					task.wait(1)
-
-					pcall(function()
-						sellRemote:FireServer()
-					end)
-
+					pcall(function() sellRemote:FireServer() end)
 					task.wait(0.5)
-					hrp.CFrame = originalCFrame
+					hrP.CFrame = originalCFrame
 				end
 			end
 		end
