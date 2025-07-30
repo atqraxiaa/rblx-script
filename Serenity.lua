@@ -224,7 +224,7 @@ toggleSeeds.MouseButton1Click:Connect(function()
 			while autoBuySeeds do
 				for _, seed in ipairs(seeds) do
 					ReplicatedStorage.GameEvents.BuySeedStock:FireServer(seed)
-          logPurchase("Seed", seedName)
+          logPurchase("Seed", seed)
 					task.wait(0.1)
 				end
 				task.wait(0.1)
@@ -286,7 +286,7 @@ toggleGears.MouseButton1Click:Connect(function()
 			while autoBuyGears do
 				for _, gear in ipairs(gears) do
 					ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gear)
-          logPurchase("Gear", gearName)
+          logPurchase("Gear", gear)
 					task.wait(0.1)
 				end
 				task.wait(0.1)
@@ -347,7 +347,7 @@ toggleEggs.MouseButton1Click:Connect(function()
 			while autoBuyEggs do
 				for _, egg in ipairs(eggs) do
 					ReplicatedStorage.GameEvents.BuyEggStock:FireServer(egg)
-          logPurchase("Egg", eggName)
+          logPurchase("Egg", egg)
 					task.wait(0.1)
 				end
 				task.wait(0.1)
