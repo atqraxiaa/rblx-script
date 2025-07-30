@@ -224,9 +224,10 @@ toggleSeeds.MouseButton1Click:Connect(function()
 			while autoBuySeeds do
 				for _, seed in ipairs(seeds) do
 					ReplicatedStorage.GameEvents.BuySeedStock:FireServer(seed)
+          logPurchase("Seed", seedName)
 					task.wait(0.2)
 				end
-				task.wait(30)
+				task.wait(3)
 			end
 		end)
 	end
@@ -285,6 +286,7 @@ toggleGears.MouseButton1Click:Connect(function()
 			while autoBuyGears do
 				for _, gear in ipairs(gears) do
 					ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gear)
+          logPurchase("Gear", gearName)
 					task.wait(0.2)
 				end
 				task.wait(3)
@@ -344,7 +346,8 @@ toggleEggs.MouseButton1Click:Connect(function()
 		task.spawn(function()
 			while autoBuyEggs do
 				for _, egg in ipairs(eggs) do
-					ReplicatedStorage.GameEvents.BuyEggStock:FireServer(egg) -- 🔁 adjust this if the remote is named differently
+					ReplicatedStorage.GameEvents.BuyEggStock:FireServer(egg)
+          logPurchase("Egg", eggName)
 					task.wait(0.2)
 				end
 				task.wait(3)
