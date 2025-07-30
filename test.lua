@@ -8,7 +8,7 @@ local playerGui = player:WaitForChild("PlayerGui")
 
 -- Create ScreenGui
 local gui = Instance.new("ScreenGui")
-gui.Name = "OMGHubUI"
+gui.Name = "SerenityUI"
 gui.IgnoreGuiInset = true
 gui.ResetOnSpawn = false
 gui.Parent = playerGui
@@ -70,7 +70,7 @@ end)
 local sidebar = Instance.new("Frame")
 sidebar.Size = UDim2.new(0, 120, 1, -32)
 sidebar.Position = UDim2.new(0, 0, 0, 32)
-sidebar.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+sidebar.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
 sidebar.BorderSizePixel = 0
 sidebar.Parent = frame
 
