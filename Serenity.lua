@@ -146,13 +146,13 @@ end
 local mainTab = contentFrames["Main"]
 
 local header = Instance.new("TextLabel")
-header.Text = "Auto Sell"
+header.Text = "Auto Sell Inventory"
 header.Font = Enum.Font.Gotham
-header.TextSize = 20
+header.TextSize = 12
 header.TextColor3 = Color3.fromRGB(255, 255, 255)
 header.BackgroundTransparency = 1
 header.Size = UDim2.new(1, -20, 0, 30)
-header.Position = UDim2.new(0, 10, 0, 10)
+header.Position = UDim2.new(0, 25, 0, 10)
 header.TextXAlignment = Enum.TextXAlignment.Left
 header.Parent = mainTab
 
