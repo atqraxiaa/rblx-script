@@ -130,34 +130,24 @@ end)
 
 task.spawn(function()
 	while true do
-		task.wait(1)
+		task.wait(10)
 		if toggled then
-			local backpack = player:FindFirstChild("Backpack")
-			local max = player:FindFirstChild("MaxBackpack")
+			if player.Character then
+				local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+				if hrp then
+					local originalCFrame = hrp.CFrame
 
-			if backpack and max and tonumber(backpack.Value) >= tonumber(max.Value) then
-				if player.Character then
-					local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-					if hrp then
-						local originalCFrame = hrp.CFrame -- Save current position
+					hrp.CFrame = sellCFrame
+					task.wait(1)
 
-						-- Teleport to Sell NPC
-						hrp.CFrame = sellCFrame
-						task.wait(1)
+					pcall(function()
+						sellRemote:FireServer()
+					end)
 
-						-- Attempt to sell
-						pcall(function()
-							sellRemote:FireServer()
-						end)
-
-						-- Go back to saved position
-						task.wait(0.5)
-						hrp.CFrame = originalCFrame
-					end
+					task.wait(0.5)
+					hrp.CFrame = originalCFrame
 				end
 			end
 		end
 	end
 end)
-
-
