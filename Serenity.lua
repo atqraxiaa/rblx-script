@@ -147,7 +147,7 @@ local mainTab = contentFrames["Main"]
 
 local header = Instance.new("TextLabel")
 header.Text = "Auto Sell"
-header.Font = Enum.Font.GothamBold
+header.Font = Enum.Font.Gotham
 header.TextSize = 20
 header.TextColor3 = Color3.fromRGB(255, 255, 255)
 header.BackgroundTransparency = 1
