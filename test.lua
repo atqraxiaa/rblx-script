@@ -5,14 +5,12 @@ local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- Create ScreenGui
 local gui = Instance.new("ScreenGui")
 gui.Name = "SerenityUI"
 gui.IgnoreGuiInset = true
 gui.ResetOnSpawn = false
 gui.Parent = playerGui
 
--- Main frame
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 500, 0, 350)
 
@@ -36,7 +34,6 @@ titleBar.Parent = frame
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 titleBar.ClipsDescendants = true
 
--- Title text
 local title = Instance.new("TextLabel")
 title.Text = "Serenity v1.0 by kiyaa"
 title.Size = UDim2.new(1, -80, 1, 0)
@@ -56,7 +53,6 @@ bodyContainer.Position = UDim2.new(0, 0, 0, 32)
 bodyContainer.Size = UDim2.new(1, 0, 1, -32)
 bodyContainer.Parent = frame
 
--- Minimize Button
 local minimized = false
 local minBtn = Instance.new("TextButton")
 minBtn.Size = UDim2.new(0, 25, 0, 25)
@@ -118,6 +114,10 @@ for i, name in ipairs(tabs) do
 	button.TextSize = 12
 	button.TextXAlignment = Enum.TextXAlignment.Left
 	button.Parent = sidebar
+
+	local padding = Instance.new("UIPadding")
+	padding.PaddingLeft = UDim.new(0, 2)
+	padding.Parent = button
 end
 
 -- Main content area
