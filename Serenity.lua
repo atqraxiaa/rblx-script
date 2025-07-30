@@ -98,6 +98,7 @@ local sidebar = Instance.new("Frame")
 sidebar.Size = UDim2.new(0, 120, 1, -32)
 sidebar.Position = UDim2.new(0, 0, 0, 0)
 sidebar.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+sidebar.BackgroundTransparency = 0.1
 sidebar.BorderSizePixel = 0
 sidebar.Parent = bodyContainer
 
@@ -109,7 +110,7 @@ for i, name in ipairs(tabs) do
 	button.Size = UDim2.new(1, -10, 0, 30)
 	button.BackgroundTransparency = 1
 	button.Text = name
-	button.TextColor3 = Color3.fromRGB(30, 30, 35)
+	button.TextColor3 = Color3.fromRGB(200, 200, 200)
 	button.Font = Enum.Font.Gotham
 	button.TextSize = 12
 	button.TextXAlignment = Enum.TextXAlignment.Left
