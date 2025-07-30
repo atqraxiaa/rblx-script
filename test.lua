@@ -119,8 +119,57 @@ toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggle.Parent = content
 
 local toggled = false
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local sellRemote = ReplicatedStorage:WaitForChild("GameEvents"):WaitForChild("Sell_Inventory")
+local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart") or player.CharacterAdded:Wait():WaitForChild("HumanoidRootPart")
+local sellCFrame = CFrame.new(86.5844193, 2.99999976, 0.426782995)
+
+local sellInterval = 5 -- default interval in seconds
+
+-- Create input box for custom interval
+local intervalInput = Instance.new("TextBox")
+intervalInput.Size = UDim2.new(0, 100, 0, 30)
+intervalInput.Position = UDim2.new(0, 120, 0, 50)
+intervalInput.PlaceholderText = "Interval (sec)"
+intervalInput.Text = tostring(sellInterval)
+intervalInput.Font = Enum.Font.Gotham
+intervalInput.TextSize = 14
+intervalInput.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+intervalInput.TextColor3 = Color3.new(1, 1, 1)
+intervalInput.Parent = content
+
 toggle.MouseButton1Click:Connect(function()
 	toggled = not toggled
 	toggle.Text = toggled and "ON" or "OFF"
-	-- Add your auto sell logic here
+end)
+
+task.spawn(function()
+	while true do
+		task.wait(1)
+		if toggled then
+			-- Update interval from input
+			local sec = tonumber(intervalInput.Text)
+			if sec and sec >= 1 then
+				sellInterval = sec
+			end
+
+			task.wait(sellInterval)
+
+			local backpack = player:FindFirstChild("Backpack")
+			local max = player:FindFirstChild("MaxBackpack")
+			if backpack and max and tonumber(backpack.Value) >= tonumber(max.Value) then
+				-- Teleport and fire sell
+				if player.Character then
+					local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+					if hrp then
+						hrp.CFrame = sellCFrame
+						task.wait(1)
+						pcall(function()
+							sellRemote:FireServer()
+						end)
+					end
+				end
+			end
+		end
+	end
 end)
