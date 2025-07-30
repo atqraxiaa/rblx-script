@@ -15,6 +15,9 @@ gui.Parent = playerGui
 -- Main frame
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 500, 0, 350)
+
+local fullSize = UDim2.new(0, 500, 0, 350)
+
 frame.Position = UDim2.new(0, 100, 0, 100)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
 frame.BackgroundTransparency = 0.1
@@ -65,7 +68,6 @@ minBtn.TextSize = 16
 minBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 minBtn.Parent = titleBar
 
--- Exit Button
 local exitBtn = Instance.new("TextButton")
 exitBtn.Size = UDim2.new(0, 25, 0, 25)
 exitBtn.Position = UDim2.new(1, -30, 0.5, -12)
@@ -80,17 +82,18 @@ exitBtn.MouseButton1Click:Connect(function()
 	gui:Destroy()
 end)
 
--- Minimize logic
 minBtn.MouseButton1Click:Connect(function()
 	minimized = not minimized
 	if minimized then
 		title.Size = UDim2.new(1, -60, 1, 0)
 		frame.Size = UDim2.new(0, 300, 0, 32)
 		bodyContainer.Visible = false
+		minBtn.Text = "+"
 	else
 		title.Size = UDim2.new(1, -80, 1, 0)
 		frame.Size = fullSize
 		bodyContainer.Visible = true
+		minBtn.Text = "-"
 	end
 end)
 
