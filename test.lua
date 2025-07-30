@@ -105,8 +105,8 @@ local tabs = {"Main", "Shop", "Misc"}
 
 for i, name in ipairs(tabs) do
 	local button = Instance.new("TextButton")
-	button.Size = UDim2.new(1, 0, 0, 30)
-	button.Position = UDim2.new(0, 0, 0, (i - 1) * 32)
+  button.Position = UDim2.new(0, 10, 0, (i - 1) * 32)
+	button.Size = UDim2.new(1, -10, 0, 30)
 	button.BackgroundTransparency = 1
 	button.Text = name
 	button.TextColor3 = Color3.fromRGB(200, 200, 200)
