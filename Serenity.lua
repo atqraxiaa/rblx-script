@@ -18,7 +18,7 @@ local fullSize = UDim2.new(0, 500, 0, 350)
 
 frame.Position = UDim2.new(0, 100, 0, 100)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-frame.BackgroundTransparency = 0.1
+frame.BackgroundTransparency = 0.5
 frame.BorderSizePixel = 0
 frame.Parent = gui
 
