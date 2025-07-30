@@ -47,7 +47,7 @@ title.Parent = titleBar
 
 -- Body container
 local bodyContainer = Instance.new("Frame")
-bodyContainer.BackgroundTransparency = 0.1
+bodyContainer.BackgroundTransparency = 1
 bodyContainer.BorderSizePixel = 0
 bodyContainer.Position = UDim2.new(0, 0, 0, 32)
 bodyContainer.Size = UDim2.new(1, 0, 1, -32)
