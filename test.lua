@@ -1,9 +1,15 @@
 -- Wait until game is fully loaded
 repeat task.wait() until game:IsLoaded()
 
-local player = game:GetService("Players").LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
+local UIS = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local character = player.Character or player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
 
 -- Create the GUI container
 local gui = Instance.new("ScreenGui")
@@ -34,11 +40,11 @@ local titleBar = Instance.new("Frame")
 titleBar.Size = UDim2.new(1, 0, 0, 30)
 titleBar.Position = UDim2.new(0, 0, 0, 0)
 titleBar.BackgroundColor3 = Color3.fromRGB(34, 35, 39)
-titleBar.BackgroundTransparency = 1 -- start transparent
+titleBar.BackgroundTransparency = 1
+
 titleBar.BorderSizePixel = 0
 titleBar.Parent = frame
 
--- Round title bar top only
 local titleCorner = Instance.new("UICorner")
 titleCorner.CornerRadius = UDim.new(0, 10)
 titleCorner.Parent = titleBar
@@ -55,7 +61,7 @@ minBtn.Text = "-"
 minBtn.Font = Enum.Font.SourceSansBold
 minBtn.TextSize = 18
 minBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-minBtn.TextTransparency = 1 -- start transparent
+minBtn.TextTransparency = 1
 minBtn.Parent = titleBar
 
 -- Exit button
@@ -69,75 +75,60 @@ exitBtn.Text = "X"
 exitBtn.Font = Enum.Font.SourceSansBold
 exitBtn.TextSize = 14
 exitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-exitBtn.TextTransparency = 1 -- start transparent
+exitBtn.TextTransparency = 1
 exitBtn.Parent = titleBar
 
 -- Exit function
 exitBtn.MouseButton1Click:Connect(function()
-	local TweenService = game:GetService("TweenService")
-	local fadeInfo = TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-
-	-- Create fade-out tweens
-	local frameTween = TweenService:Create(frame, fadeInfo, {BackgroundTransparency = 1})
-	local titleTween = TweenService:Create(titleBar, fadeInfo, {BackgroundTransparency = 1})
-	local minTextTween = TweenService:Create(minBtn, fadeInfo, {TextTransparency = 1})
-	local exitTextTween = TweenService:Create(exitBtn, fadeInfo, {TextTransparency = 1})
-
-	-- Play them
-	frameTween:Play()
-	titleTween:Play()
-	minTextTween:Play()
-	exitTextTween:Play()
-
-	-- Destroy GUI after fade
-	task.delay(0.4, function()
-		gui:Destroy()
-	end)
+    local fadeInfo = TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    TweenService:Create(frame, fadeInfo, {BackgroundTransparency = 1}):Play()
+    TweenService:Create(titleBar, fadeInfo, {BackgroundTransparency = 1}):Play()
+    TweenService:Create(minBtn, fadeInfo, {TextTransparency = 1}):Play()
+    TweenService:Create(exitBtn, fadeInfo, {TextTransparency = 1}):Play()
+    task.delay(0.4, function()
+        gui:Destroy()
+    end)
 end)
 
 -- Minimize logic
 local minimized = false
 minBtn.MouseButton1Click:Connect(function()
-	minimized = not minimized
-
-	for _, child in ipairs(frame:GetChildren()) do
-		if child ~= titleBar and child:IsA("GuiObject") then
-			child.Visible = not minimized
-		end
-	end
-
-	frame.Size = minimized and minimizedSize or fullSize
+    minimized = not minimized
+    for _, child in ipairs(frame:GetChildren()) do
+        if child ~= titleBar and child:IsA("GuiObject") then
+            child.Visible = not minimized
+        end
+    end
+    frame.Size = minimized and minimizedSize or fullSize
 end)
 
--- Draggable support
-local UIS = game:GetService("UserInputService")
+-- Draggable
 local dragging, dragInput, startPos, startDrag
 
 titleBar.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = true
-		startPos = input.Position
-		startDrag = frame.Position
-
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
-		end)
-	end
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        startPos = input.Position
+        startDrag = frame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
 end)
 
 titleBar.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement then
-		dragInput = input
-	end
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
 end)
 
 UIS.InputChanged:Connect(function(input)
-	if input == dragInput and dragging then
-		local delta = input.Position - startPos
-		frame.Position = UDim2.new(startDrag.X.Scale, startDrag.X.Offset + delta.X, startDrag.Y.Scale, startDrag.Y.Offset + delta.Y)
-	end
+    if input == dragInput and dragging then
+        local delta = input.Position - startPos
+        frame.Position = UDim2.new(startDrag.X.Scale, startDrag.X.Offset + delta.X, startDrag.Y.Scale, startDrag.Y.Offset + delta.Y)
+    end
 end)
 
 -- Fade-in effect
@@ -146,3 +137,30 @@ TweenService:Create(frame, fadeInfo, {BackgroundTransparency = 0.2}):Play()
 TweenService:Create(titleBar, fadeInfo, {BackgroundTransparency = 0}):Play()
 TweenService:Create(minBtn, fadeInfo, {TextTransparency = 0}):Play()
 TweenService:Create(exitBtn, fadeInfo, {TextTransparency = 0}):Play()
+
+-- Sell Inventory Button
+local sellRemote = ReplicatedStorage:WaitForChild("GameEvents"):WaitForChild("Sell_Inventory")
+local sellCFrame = CFrame.new(
+    86.5844193, 2.99999976, 0.426782995,
+    -0.00156137196, -1.994675e-08, -0.999998808,
+    -8.30558018e-12, 1, -1.99467607e-08,
+    0.999998808, -2.2838743e-11, -0.00156137196
+)
+
+local sellBtn = Instance.new("TextButton")
+sellBtn.Size = UDim2.new(0, 160, 0, 40)
+sellBtn.Position = UDim2.new(0, 20, 0, 50)
+sellBtn.Text = "🛒 Sell Fruits"
+sellBtn.TextSize = 16
+sellBtn.Font = Enum.Font.SourceSansBold
+sellBtn.BackgroundColor3 = Color3.fromRGB(255, 210, 180)
+sellBtn.TextColor3 = Color3.new(0, 0, 0)
+sellBtn.Parent = frame
+
+sellBtn.MouseButton1Click:Connect(function()
+    hrp.CFrame = sellCFrame
+    task.wait(1)
+    pcall(function()
+        sellRemote:FireServer()
+    end)
+end)
