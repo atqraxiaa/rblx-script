@@ -126,7 +126,7 @@ for i, name in ipairs(tabs) do
 
 	local padding = Instance.new("UIPadding")
 	padding.PaddingLeft = UDim.new(0, 10)
-  padding.PaddingTop = UDim.new(0, 20)
+	padding.PaddingTop = UDim.new(0, 20)
 	padding.Parent = button
 
 	local tabFrame = Instance.new("Frame")
@@ -142,29 +142,273 @@ for i, name in ipairs(tabs) do
 	end)
 end
 
--- Auto Sell (inside "Main" tab)
+-- Main Tab
 local mainTab = contentFrames["Main"]
 
 local header = Instance.new("TextLabel")
 header.Text = "Auto Sell Inventory"
-header.Font = Enum.Font.Gotham
-header.TextSize = 12
+header.Font = Enum.Font.GothamBold
+header.TextSize = 14
 header.TextColor3 = Color3.fromRGB(255, 255, 255)
 header.BackgroundTransparency = 1
-header.Size = UDim2.new(1, -20, 0, 30)
-header.Position = UDim2.new(0, 25, 0, 10)
+header.Size = UDim2.new(0, 150, 0, 30)
+header.Position = UDim2.new(0, 20, 0, 10)
 header.TextXAlignment = Enum.TextXAlignment.Left
 header.Parent = mainTab
 
 local toggle = Instance.new("TextButton")
-toggle.Size = UDim2.new(0, 100, 0, 30)
-toggle.Position = UDim2.new(0, 10, 0, 50)
+toggle.Size = UDim2.new(0, 60, 0, 20)
+toggle.Position = UDim2.new(0, 300, 0, 15)
 toggle.Text = "OFF"
-toggle.Font = Enum.Font.GothamSemibold
+toggle.Font = Enum.Font.Gotham
 toggle.TextSize = 14
 toggle.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
 toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggle.Parent = mainTab
+
+local description = Instance.new("TextLabel")
+description.Text = "Automatically sells items when your inventory is full."
+description.Font = Enum.Font.Gotham
+description.TextSize = 12
+description.TextColor3 = Color3.fromRGB(200, 200, 200)
+description.BackgroundTransparency = 1
+description.Size = UDim2.new(1, -40, 0, 20)
+description.Position = UDim2.new(0, 20, 0, 40)
+description.TextXAlignment = Enum.TextXAlignment.Left
+description.TextWrapped = true
+description.Parent = mainTab
+
+-- Shop Tab
+local shopTab = contentFrames["Shop"]
+
+local headerSeeds = Instance.new("TextLabel")
+headerSeeds.Text = "Auto Buy Seeds"
+headerSeeds.Font = Enum.Font.GothamBold
+headerSeeds.TextSize = 14
+headerSeeds.TextColor3 = Color3.fromRGB(255, 255, 255)
+headerSeeds.BackgroundTransparency = 1
+headerSeeds.Size = UDim2.new(0, 150, 0, 30)
+headerSeeds.Position = UDim2.new(0, 20, 0, 10)
+headerSeeds.TextXAlignment = Enum.TextXAlignment.Left
+headerSeeds.Parent = shopTab
+
+local toggleSeeds = Instance.new("TextButton")
+toggleSeeds.Size = UDim2.new(0, 60, 0, 20)
+toggleSeeds.Position = UDim2.new(0, 300, 0, 15)
+toggleSeeds.Text = "OFF"
+toggleSeeds.Font = Enum.Font.Gotham
+toggleSeeds.TextSize = 14
+toggleSeeds.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+toggleSeeds.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleSeeds.Parent = shopTab
+
+local seeds = {
+	"Carrot", "Strawberry", "Blueberry", "Orange Tulip", "Tomato",
+	"Corn", "Daffodil", "Watermelon", "Pumpkin", "Apple",
+	"Bamboo", "Coconut", "Cactus", "Dragon Fruit", "Mango",
+	"Grape", "Mushroom", "Pepper", "Cacao", "Beanstalk",
+	"Ember Lily", "Sugar Apple", "Burning Bud",
+	"Giant Pinecone", "Elder Strawberry"
+}
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local autoBuySeeds = false
+
+toggleSeeds.MouseButton1Click:Connect(function()
+	autoBuySeeds = not autoBuySeeds
+	toggleSeeds.Text = autoBuySeeds and "ON" or "OFF"
+	toggleSeeds.BackgroundColor3 = autoBuySeeds and Color3.fromRGB(70, 180, 70) or Color3.fromRGB(50, 50, 60)
+
+	if autoBuySeeds then
+		task.spawn(function()
+			while autoBuySeeds do
+				for _, seed in ipairs(seeds) do
+					ReplicatedStorage.GameEvents.BuySeedStock:FireServer(seed)
+					task.wait(0.2)
+				end
+				task.wait(30)
+			end
+		end)
+	end
+end)
+
+local descSeeds = Instance.new("TextLabel")
+descSeeds.Text = "Automatically buys all available seeds."
+descSeeds.Font = Enum.Font.Gotham
+descSeeds.TextSize = 12
+descSeeds.TextColor3 = Color3.fromRGB(200, 200, 200)
+descSeeds.BackgroundTransparency = 1
+descSeeds.Size = UDim2.new(1, -40, 0, 20)
+descSeeds.Position = UDim2.new(0, 20, 0, 40)
+descSeeds.TextXAlignment = Enum.TextXAlignment.Left
+descSeeds.TextWrapped = true
+descSeeds.Parent = shopTab
+
+local headerGears = Instance.new("TextLabel")
+headerGears.Text = "Auto Buy Gears"
+headerGears.Font = Enum.Font.GothamBold
+headerGears.TextSize = 14
+headerGears.TextColor3 = Color3.fromRGB(255, 255, 255)
+headerGears.BackgroundTransparency = 1
+headerGears.Size = UDim2.new(0, 150, 0, 30)
+headerGears.Position = UDim2.new(0, 20, 0, 70)
+headerGears.TextXAlignment = Enum.TextXAlignment.Left
+headerGears.Parent = shopTab
+
+local toggleGears = Instance.new("TextButton")
+toggleGears.Size = UDim2.new(0, 60, 0, 20)
+toggleGears.Position = UDim2.new(0, 300, 0, 75)
+toggleGears.Text = "OFF"
+toggleGears.Font = Enum.Font.Gotham
+toggleGears.TextSize = 14
+toggleGears.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+toggleGears.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleGears.Parent = shopTab
+
+local gears = {
+	"Watering Can", "Trowel", "Recall Wrench", "Basic Sprinkler", "Advanced Sprinkler",
+	"Medium Toy", "Medium Treat", "Godly Sprinkler", "Magnifying Glass", "Tanning Mirror",
+	"Master Sprinkler", "Cleaning Spray", "Favorite Tool", "Harvest Tool",
+	"Friendship Pot", "Levelup Lollipop"
+}
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local autoBuyGears = false
+
+toggleGears.MouseButton1Click:Connect(function()
+	autoBuyGears = not autoBuyGears
+	toggleGears.Text = autoBuyGears and "ON" or "OFF"
+	toggleGears.BackgroundColor3 = autoBuyGears and Color3.fromRGB(70, 180, 70) or Color3.fromRGB(50, 50, 60)
+
+	if autoBuyGears then
+		task.spawn(function()
+			while autoBuyGears do
+				for _, gear in ipairs(gears) do
+					ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gear)
+					task.wait(0.2)
+				end
+				task.wait(3)
+			end
+		end)
+	end
+end)
+
+local descGears = Instance.new("TextLabel")
+descGears.Text = "Automatically buys all available gears."
+descGears.Font = Enum.Font.Gotham
+descGears.TextSize = 12
+descGears.TextColor3 = Color3.fromRGB(200, 200, 200)
+descGears.BackgroundTransparency = 1
+descGears.Size = UDim2.new(1, -40, 0, 20)
+descGears.Position = UDim2.new(0, 20, 0, 100)
+descGears.TextXAlignment = Enum.TextXAlignment.Left
+descGears.TextWrapped = true
+descGears.Parent = shopTab
+
+-- Auto Buy Eggs
+local headerEggs = Instance.new("TextLabel")
+headerEggs.Text = "Auto Buy Eggs"
+headerEggs.Font = Enum.Font.GothamBold
+headerEggs.TextSize = 14
+headerEggs.TextColor3 = Color3.fromRGB(255, 255, 255)
+headerEggs.BackgroundTransparency = 1
+headerEggs.Size = UDim2.new(0, 150, 0, 30)
+headerEggs.Position = UDim2.new(0, 20, 0, 130)
+headerEggs.TextXAlignment = Enum.TextXAlignment.Left
+headerEggs.Parent = shopTab
+
+local toggleEggs = Instance.new("TextButton")
+toggleEggs.Size = UDim2.new(0, 60, 0, 20)
+toggleEggs.Position = UDim2.new(0, 300, 0, 135)
+toggleEggs.Text = "OFF"
+toggleEggs.Font = Enum.Font.Gotham
+toggleEggs.TextSize = 14
+toggleEggs.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+toggleEggs.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleEggs.Parent = shopTab
+
+local eggs = {
+	"Common Egg", "Common Summer Egg", "Rare Summer Egg",
+	"Mythical Egg", "Paradise Egg", "Bug Egg"
+}
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local autoBuyEggs = false
+
+toggleEggs.MouseButton1Click:Connect(function()
+	autoBuyEggs = not autoBuyEggs
+	toggleEggs.Text = autoBuyEggs and "ON" or "OFF"
+	toggleEggs.BackgroundColor3 = autoBuyEggs and Color3.fromRGB(70, 180, 70) or Color3.fromRGB(50, 50, 60)
+
+	if autoBuyEggs then
+		task.spawn(function()
+			while autoBuyEggs do
+				for _, egg in ipairs(eggs) do
+					ReplicatedStorage.GameEvents.BuyEggStock:FireServer(egg) -- 🔁 adjust this if the remote is named differently
+					task.wait(0.2)
+				end
+				task.wait(3)
+			end
+		end)
+	end
+end)
+
+local descEggs = Instance.new("TextLabel")
+descEggs.Text = "Automatically buys all available eggs."
+descEggs.Font = Enum.Font.Gotham
+descEggs.TextSize = 12
+descEggs.TextColor3 = Color3.fromRGB(200, 200, 200)
+descEggs.BackgroundTransparency = 1
+descEggs.Size = UDim2.new(1, -40, 0, 20)
+descEggs.Position = UDim2.new(0, 20, 0, 160)
+descEggs.TextXAlignment = Enum.TextXAlignment.Left
+descEggs.TextWrapped = true
+descEggs.Parent = shopTab
+
+-- Status box frame
+local statusBox = Instance.new("Frame")
+statusBox.Size = UDim2.new(1, -40, 0, 100)
+statusBox.Position = UDim2.new(0, 20, 0, 190)
+statusBox.BackgroundTransparency = 0.2
+statusBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+statusBox.BorderSizePixel = 0
+statusBox.Parent = shopTab
+
+-- Layout for messages
+local layout = Instance.new("UIListLayout")
+layout.Padding = UDim.new(0, 4)
+layout.SortOrder = Enum.SortOrder.LayoutOrder
+layout.Parent = statusBox
+
+-- Log function
+local function logPurchase(category, itemName)
+	local label = Instance.new("TextLabel")
+	label.Size = UDim2.new(1, -10, 0, 20)
+	label.Text = "✔ [" .. category .. "] x1 " .. itemName .. " (" .. os.date("%X") .. ")"
+	label.TextColor3 = Color3.fromRGB(180, 255, 180)
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.Gotham
+	label.TextSize = 12
+	label.TextXAlignment = Enum.TextXAlignment.Left
+	label.Parent = statusBox
+
+	local maxLines = 5
+	local count = 0
+	for _, child in ipairs(statusBox:GetChildren()) do
+		if child:IsA("TextLabel") then
+			count += 1
+		end
+	end
+	if count > maxLines then
+		for _, child in ipairs(statusBox:GetChildren()) do
+			if child:IsA("TextLabel") then
+				child:Destroy()
+				break
+			end
+		end
+	end
+end
+
 
 local toggled = false
 local sellRemote = ReplicatedStorage:WaitForChild("GameEvents"):WaitForChild("Sell_Inventory")
