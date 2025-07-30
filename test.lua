@@ -74,7 +74,7 @@ sidebar.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
 sidebar.BorderSizePixel = 0
 sidebar.Parent = frame
 
-local tabs = {"Garden", "Shop", "Crafting", "Event", "Calculate", "Pets", "Cosmetics", "Misc"}
+local tabs = {"Main", "Shop", "Misc"}
 
 for i, name in ipairs(tabs) do
 	local button = Instance.new("TextButton")
