@@ -126,13 +126,13 @@ for i, name in ipairs(tabs) do
 
 	local padding = Instance.new("UIPadding")
 	padding.PaddingLeft = UDim.new(0, 10)
+  padding.PaddingTop = UDim.new(0, 20)
 	padding.Parent = button
 
-	-- Tab content frames
 	local tabFrame = Instance.new("Frame")
 	tabFrame.Size = UDim2.new(1, 0, 1, 0)
 	tabFrame.BackgroundTransparency = 1
-	tabFrame.Visible = (i == 1) -- Show only first tab initially
+	tabFrame.Visible = (i == 1)
 	tabFrame.Parent = content
 	contentFrames[name] = tabFrame
 
