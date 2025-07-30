@@ -117,7 +117,7 @@ for i, name in ipairs(tabs) do
 
 	local padding = Instance.new("UIPadding")
 	padding.PaddingLeft = UDim.new(0, 10)
-	padding.PaddingTop = UDim.new(0, 2)
+	padding.PaddingTop = UDim.new(0, 3)
 	padding.Parent = button
 end
 
