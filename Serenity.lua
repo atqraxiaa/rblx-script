@@ -133,7 +133,7 @@ minBtn.MouseButton1Click:Connect(function()
 		bodyContainer.Visible = false
 		minBtn.Text = "+"
 
-		fpsLabel.Position = UDim2.new(0, 80, 0, 0)
+		fpsLabel.Position = UDim2.new(0, 70, 0, 0)
 		pingLabel.Position = UDim2.new(0, 130, 0, 0)
 	else
 		title.Text = "Serenity v1.0 by kiyaa"
