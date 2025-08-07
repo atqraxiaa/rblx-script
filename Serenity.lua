@@ -43,6 +43,52 @@ title.TextSize = 14
 title.BackgroundTransparency = 1
 title.Parent = titleBar
 
+-- Ping label
+local pingLabel = Instance.new("TextLabel")
+pingLabel.Size = UDim2.new(0, 100, 1, 0)
+pingLabel.Position = UDim2.new(0, 200, 0, 0)
+pingLabel.Font = Enum.Font.GothamSemibold
+pingLabel.TextSize = 14
+pingLabel.TextColor3 = Color3.new(1, 1, 1)
+pingLabel.TextXAlignment = Enum.TextXAlignment.Right
+pingLabel.BackgroundTransparency = 1
+pingLabel.Text = "Ping: -- ms"
+pingLabel.RichText = true
+pingLabel.Parent = titleBar
+
+-- FPS label
+local fpsLabel = Instance.new("TextLabel")
+fpsLabel.Size = UDim2.new(0, 60, 1, 0)
+fpsLabel.Position = UDim2.new(0, 300, 0, 0)
+fpsLabel.Font = Enum.Font.GothamSemibold
+fpsLabel.TextSize = 14
+fpsLabel.TextColor3 = Color3.new(1, 1, 1)
+fpsLabel.TextXAlignment = Enum.TextXAlignment.Right
+fpsLabel.BackgroundTransparency = 1
+fpsLabel.Text = "FPS: --"
+fpsLabel.RichText = true
+fpsLabel.Parent = titleBar
+
+local Stats = game:GetService("Stats")
+local RunService = game:GetService("RunService")
+
+task.spawn(function()
+	while true do
+		local ping = math.floor(Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
+		local pingColor = (ping <= 100 and "rgb(100,255,100)") or (ping <= 500 and "rgb(255,255,100)") or "rgb(255,100,100)"
+		pingLabel.Text = `Ping: <font color="{pingColor}">{ping} ms</font>`
+
+		local fps = math.floor(1 / RunService.RenderStepped:Wait())
+		local fpsColor = (fps >= 60 and "rgb(100,255,100)") or (fps >= 30 and "rgb(255,255,100)") or "rgb(255,100,100)"
+		fpsLabel.Text = `FPS: <font color="{fpsColor}">{fps}</font>`
+
+		pingLabel.RichText = true
+		fpsLabel.RichText = true
+
+		task.wait(1)
+	end
+end)
+
 -- Body container
 local bodyContainer = Instance.new("Frame")
 bodyContainer.BackgroundTransparency = 1
@@ -81,15 +127,23 @@ end)
 minBtn.MouseButton1Click:Connect(function()
 	minimized = not minimized
 	if minimized then
+		title.Text = "Serenity v1.0"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		frame.Size = UDim2.new(0, 300, 0, 32)
 		bodyContainer.Visible = false
 		minBtn.Text = "+"
+
+		fpsLabel.Position = UDim2.new(0, 90, 0, 0)
+		pingLabel.Position = UDim2.new(0, 130, 0, 0)
 	else
+		title.Text = "Serenity v1.0 by kiyaa"
 		title.Size = UDim2.new(1, -80, 1, 0)
 		frame.Size = fullSize
 		bodyContainer.Visible = true
 		minBtn.Text = "-"
+
+		pingLabel.Position = UDim2.new(0, 200, 0, 0)
+		fpsLabel.Position = UDim2.new(1, 300, 0, 0)
 	end
 end)
 
