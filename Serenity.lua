@@ -46,7 +46,7 @@ title.Parent = titleBar
 -- Ping label
 local pingLabel = Instance.new("TextLabel")
 pingLabel.Size = UDim2.new(0, 100, 1, 0)
-pingLabel.Position = UDim2.new(0, 200, 0, 0)
+pingLabel.Position = UDim2.new(0, 180, 0, 0)
 pingLabel.Font = Enum.Font.GothamSemibold
 pingLabel.TextSize = 14
 pingLabel.TextColor3 = Color3.new(1, 1, 1)
@@ -59,7 +59,7 @@ pingLabel.Parent = titleBar
 -- FPS label
 local fpsLabel = Instance.new("TextLabel")
 fpsLabel.Size = UDim2.new(0, 60, 1, 0)
-fpsLabel.Position = UDim2.new(0, 300, 0, 0)
+fpsLabel.Position = UDim2.new(0, 320, 0, 0)
 fpsLabel.Font = Enum.Font.GothamSemibold
 fpsLabel.TextSize = 14
 fpsLabel.TextColor3 = Color3.new(1, 1, 1)
@@ -129,7 +129,7 @@ minBtn.MouseButton1Click:Connect(function()
 	if minimized then
 		title.Text = "Serenity v1.0"
 		title.Size = UDim2.new(1, -60, 1, 0)
-		frame.Size = UDim2.new(0, 340, 0, 32)
+		frame.Size = UDim2.new(0, 335, 0, 32)
 		bodyContainer.Visible = false
 		minBtn.Text = "+"
 
@@ -142,8 +142,8 @@ minBtn.MouseButton1Click:Connect(function()
 		bodyContainer.Visible = true
 		minBtn.Text = "-"
 
-		pingLabel.Position = UDim2.new(0, 200, 0, 0)
-		fpsLabel.Position = UDim2.new(0, 300, 0, 0)
+		pingLabel.Position = UDim2.new(0, 180, 0, 0)
+		fpsLabel.Position = UDim2.new(0, 320, 0, 0)
 	end
 end)
 
@@ -435,88 +435,6 @@ pingLabel.Size = UDim2.new(0, 120, 0, 30)
 pingLabel.Position = UDim2.new(0, 20, 0, 10)
 pingLabel.TextXAlignment = Enum.TextXAlignment.Left
 pingLabel.Parent = miscTab
-
-local pingValue = Instance.new("TextLabel")
-pingValue.Text = "-- ms"
-pingValue.Font = Enum.Font.GothamBold
-pingValue.TextSize = 14
-pingValue.TextColor3 = Color3.fromRGB(255, 255, 255)
-pingValue.BackgroundTransparency = 1
-pingValue.Size = UDim2.new(0, 80, 0, 30)
-pingValue.Position = UDim2.new(0, 110, 0, 10)
-pingValue.TextXAlignment = Enum.TextXAlignment.Left
-pingValue.Parent = miscTab
-
-task.spawn(function()
-	while true do
-		local stats = game:GetService("Stats")
-		local pingStat = stats.Network.ServerStatsItem["Data Ping"]
-
-		if pingStat then
-			local ping = math.floor(pingStat:GetValue())
-			pingValue.Text = ping .. " ms"
-
-			if ping <= 100 then
-				pingValue.TextColor3 = Color3.fromRGB(0, 255, 0)
-			elseif ping <= 500 then
-				pingValue.TextColor3 = Color3.fromRGB(255, 255, 0)
-			else
-				pingValue.TextColor3 = Color3.fromRGB(255, 0, 0)
-			end
-		else
-			pingValue.Text = "N/A"
-			pingValue.TextColor3 = Color3.fromRGB(255, 255, 255)
-		end
-
-		task.wait(1)
-	end
-end)
-
-local RunService = game:GetService("RunService")
-
-local fpsLabel = Instance.new("TextLabel")
-fpsLabel.Size = UDim2.new(0, 200, 0, 20)
-fpsLabel.Position = UDim2.new(0, 20, 0, 40)
-fpsLabel.Font = Enum.Font.GothamBold
-fpsLabel.TextSize = 14
-fpsLabel.TextXAlignment = Enum.TextXAlignment.Left
-fpsLabel.BackgroundTransparency = 1
-fpsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-fpsLabel.RichText = true
-fpsLabel.Text = "FPS: --"
-fpsLabel.Parent = miscTab
-
-task.spawn(function()
-	local frames = 0
-	local lastTime = tick()
-
-	RunService.RenderStepped:Connect(function()
-		frames += 1
-	end)
-
-	while true do
-		local now = tick()
-		local delta = now - lastTime
-		local fps = math.floor(frames / delta)
-
-		local color
-		if fps >= 60 then
-			color = Color3.fromRGB(100, 255, 100)
-		elseif fps >= 30 then
-			color = Color3.fromRGB(255, 255, 0)
-		else
-			color = Color3.fromRGB(255, 100, 100)
-		end
-
-		local r, g, b = math.floor(color.R * 255), math.floor(color.G * 255), math.floor(color.B * 255)
-		fpsLabel.Text = `FPS: <font color="rgb({r},{g},{b})">{fps}</font>`
-
-		frames = 0
-		lastTime = now
-
-		task.wait(1)
-	end
-end)
 
 -- Status box frame
 local statusBox = Instance.new("Frame")
