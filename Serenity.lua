@@ -129,7 +129,7 @@ minBtn.MouseButton1Click:Connect(function()
 	if minimized then
 		title.Text = "Serenity v1.0"
 		title.Size = UDim2.new(1, -60, 1, 0)
-		frame.Size = UDim2.new(0, 335, 0, 32)
+		frame.Size = UDim2.new(0, 340, 0, 32)
 		bodyContainer.Visible = false
 		minBtn.Text = "+"
 
