@@ -425,16 +425,27 @@ descEggs.Parent = shopTab
 -- Misc Tab
 local miscTab = contentFrames["Misc"]
 
-local pingLabel = Instance.new("TextLabel")
-pingLabel.Text = "Current Ping:"
-pingLabel.Font = Enum.Font.GothamBold
-pingLabel.TextSize = 14
-pingLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-pingLabel.BackgroundTransparency = 1
-pingLabel.Size = UDim2.new(0, 120, 0, 30)
-pingLabel.Position = UDim2.new(0, 20, 0, 10)
-pingLabel.TextXAlignment = Enum.TextXAlignment.Left
-pingLabel.Parent = miscTab
+local jobIdTitle = Instance.new("TextLabel")
+jobIdTitle.Text = "Current Job ID:"
+jobIdTitle.Font = Enum.Font.GothamBold
+jobIdTitle.TextSize = 12
+jobIdTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+jobIdTitle.BackgroundTransparency = 1
+jobIdTitle.Size = UDim2.new(0, 130, 0, 30)
+jobIdTitle.Position = UDim2.new(0, 20, 0, 10)
+jobIdTitle.TextXAlignment = Enum.TextXAlignment.Left
+jobIdTitle.Parent = miscTab
+
+local jobIdValue = Instance.new("TextLabel")
+jobIdValue.Text = game.JobId
+jobIdValue.Font = Enum.Font.Gotham
+jobIdValue.TextSize = 12
+jobIdValue.TextColor3 = Color3.fromRGB(255, 255, 255)
+jobIdValue.BackgroundTransparency = 1
+jobIdValue.Size = UDim2.new(0, 200, 0, 30)
+jobIdValue.Position = UDim2.new(0, 110, 0, 10)
+jobIdValue.TextXAlignment = Enum.TextXAlignment.Left
+jobIdValue.Parent = miscTab
 
 -- Status box frame
 local statusBox = Instance.new("Frame")
