@@ -389,7 +389,7 @@ pingValue.TextSize = 14
 pingValue.TextColor3 = Color3.fromRGB(255, 255, 255)
 pingValue.BackgroundTransparency = 1
 pingValue.Size = UDim2.new(0, 80, 0, 30)
-pingValue.Position = UDim2.new(0, 130, 0, 10)
+pingValue.Position = UDim2.new(0, 120, 0, 10)
 pingValue.TextXAlignment = Enum.TextXAlignment.Left
 pingValue.Parent = miscTab
 
@@ -413,6 +413,41 @@ task.spawn(function()
 			pingValue.Text = "N/A"
 			pingValue.TextColor3 = Color3.fromRGB(255, 255, 255)
 		end
+
+		task.wait(1)
+	end
+end)
+
+local Stats = game:GetService("Stats")
+local RunService = game:GetService("RunService")
+
+local fpsLabel = Instance.new("TextLabel")
+fpsLabel.Size = UDim2.new(0, 200, 0, 20)
+fpsLabel.Position = UDim2.new(0, 20, 0, 40)
+fpsLabel.Font = Enum.Font.GothamBold
+fpsLabel.TextSize = 14
+fpsLabel.TextXAlignment = Enum.TextXAlignment.Left
+fpsLabel.BackgroundTransparency = 1
+fpsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+fpsLabel.Text = "FPS: --"
+fpsLabel.Parent = miscTab
+
+task.spawn(function()
+	while true do
+		local fps = math.floor(Stats.Workspace:GetRealPhysicsFPS())
+		local color
+
+		if fps >= 60 then
+			color = Color3.fromRGB(100, 255, 100)
+		elseif fps >= 30 then
+			color = Color3.fromRGB(255, 255, 0)
+		else
+			color = Color3.fromRGB(255, 100, 100)
+		end
+
+		fpsLabel.Text = "FPS: "
+		fpsLabel.Text ..= `<font color="rgb({color.R * 255},{color.G * 255},{color.B * 255})">{fps}</font>`
+		fpsLabel.RichText = true
 
 		task.wait(1)
 	end
