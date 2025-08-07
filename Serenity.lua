@@ -224,7 +224,7 @@ toggleSeeds.MouseButton1Click:Connect(function()
 			while autoBuySeeds do
 				for _, seed in ipairs(seeds) do
 					ReplicatedStorage.GameEvents.BuySeedStock:FireServer(seed)
-          logPurchase("Seed", seed)
+					logPurchase("Seed", seed)
 					task.wait(0.1)
 				end
 				task.wait(0.1)
@@ -286,7 +286,7 @@ toggleGears.MouseButton1Click:Connect(function()
 			while autoBuyGears do
 				for _, gear in ipairs(gears) do
 					ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gear)
-          logPurchase("Gear", gear)
+					logPurchase("Gear", gear)
 					task.wait(0.1)
 				end
 				task.wait(0.1)
@@ -347,7 +347,7 @@ toggleEggs.MouseButton1Click:Connect(function()
 			while autoBuyEggs do
 				for _, egg in ipairs(eggs) do
 					ReplicatedStorage.GameEvents.BuyEggStock:FireServer(egg)
-          logPurchase("Egg", egg)
+					logPurchase("Egg", egg)
 					task.wait(0.1)
 				end
 				task.wait(0.1)
@@ -367,6 +367,56 @@ descEggs.Position = UDim2.new(0, 20, 0, 160)
 descEggs.TextXAlignment = Enum.TextXAlignment.Left
 descEggs.TextWrapped = true
 descEggs.Parent = shopTab
+
+-- Misc Tab
+local miscTab = contentFrames["Misc"]
+
+local pingLabel = Instance.new("TextLabel")
+pingLabel.Text = "Current Ping:"
+pingLabel.Font = Enum.Font.GothamBold
+pingLabel.TextSize = 14
+pingLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+pingLabel.BackgroundTransparency = 1
+pingLabel.Size = UDim2.new(0, 120, 0, 30)
+pingLabel.Position = UDim2.new(0, 20, 0, 10)
+pingLabel.TextXAlignment = Enum.TextXAlignment.Left
+pingLabel.Parent = miscTab
+
+local pingValue = Instance.new("TextLabel")
+pingValue.Text = "-- ms"
+pingValue.Font = Enum.Font.GothamBold
+pingValue.TextSize = 14
+pingValue.TextColor3 = Color3.fromRGB(255, 255, 255)
+pingValue.BackgroundTransparency = 1
+pingValue.Size = UDim2.new(0, 80, 0, 30)
+pingValue.Position = UDim2.new(0, 130, 0, 10)
+pingValue.TextXAlignment = Enum.TextXAlignment.Left
+pingValue.Parent = miscTab
+
+task.spawn(function()
+	while true do
+		local stats = game:GetService("Stats")
+		local pingStat = stats.Network.ServerStatsItem["Data Ping"]
+
+		if pingStat then
+			local ping = math.floor(pingStat:GetValue())
+			pingValue.Text = ping .. " ms"
+
+			if ping <= 100 then
+				pingValue.TextColor3 = Color3.fromRGB(0, 255, 0)
+			elseif ping <= 500 then
+				pingValue.TextColor3 = Color3.fromRGB(255, 255, 0)
+			else
+				pingValue.TextColor3 = Color3.fromRGB(255, 0, 0)
+			end
+		else
+			pingValue.Text = "N/A"
+			pingValue.TextColor3 = Color3.fromRGB(255, 255, 255)
+		end
+
+		task.wait(1)
+	end
+end)
 
 -- Status box frame
 local statusBox = Instance.new("Frame")
