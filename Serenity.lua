@@ -46,7 +46,7 @@ title.Parent = titleBar
 -- Ping label
 local pingLabel = Instance.new("TextLabel")
 pingLabel.Size = UDim2.new(0, 100, 1, 0)
-pingLabel.Position = UDim2.new(0, 180, 0, 0)
+pingLabel.Position = UDim2.new(0, 200, 0, 0)
 pingLabel.Font = Enum.Font.GothamSemibold
 pingLabel.TextSize = 14
 pingLabel.TextColor3 = Color3.new(1, 1, 1)
@@ -59,7 +59,7 @@ pingLabel.Parent = titleBar
 -- FPS label
 local fpsLabel = Instance.new("TextLabel")
 fpsLabel.Size = UDim2.new(0, 60, 1, 0)
-fpsLabel.Position = UDim2.new(0, 320, 0, 0)
+fpsLabel.Position = UDim2.new(0, 340, 0, 0)
 fpsLabel.Font = Enum.Font.GothamSemibold
 fpsLabel.TextSize = 14
 fpsLabel.TextColor3 = Color3.new(1, 1, 1)
@@ -133,8 +133,8 @@ minBtn.MouseButton1Click:Connect(function()
 		bodyContainer.Visible = false
 		minBtn.Text = "+"
 
-		fpsLabel.Position = UDim2.new(0, 100, 0, 0)
-		pingLabel.Position = UDim2.new(0, 150, 0, 0)
+		fpsLabel.Position = UDim2.new(0, 115, 0, 0)
+		pingLabel.Position = UDim2.new(0, 180, 0, 0)
 	else
 		title.Text = "Serenity v1.0 by kiyaa"
 		title.Size = UDim2.new(1, -80, 1, 0)
@@ -142,8 +142,8 @@ minBtn.MouseButton1Click:Connect(function()
 		bodyContainer.Visible = true
 		minBtn.Text = "-"
 
-		pingLabel.Position = UDim2.new(0, 180, 0, 0)
-		fpsLabel.Position = UDim2.new(0, 320, 0, 0)
+		pingLabel.Position = UDim2.new(0, 200, 0, 0)
+		fpsLabel.Position = UDim2.new(0, 340, 0, 0)
 	end
 end)
 
