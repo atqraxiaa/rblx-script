@@ -129,12 +129,12 @@ minBtn.MouseButton1Click:Connect(function()
 	if minimized then
 		title.Text = "Serenity v1.0"
 		title.Size = UDim2.new(1, -60, 1, 0)
-		frame.Size = UDim2.new(0, 300, 0, 32)
+		frame.Size = UDim2.new(0, 325, 0, 32)
 		bodyContainer.Visible = false
 		minBtn.Text = "+"
 
-		fpsLabel.Position = UDim2.new(0, 75, 0, 0)
-		pingLabel.Position = UDim2.new(0, 130, 0, 0)
+		fpsLabel.Position = UDim2.new(0, 100, 0, 0)
+		pingLabel.Position = UDim2.new(0, 150, 0, 0)
 	else
 		title.Text = "Serenity v1.0 by kiyaa"
 		title.Size = UDim2.new(1, -80, 1, 0)
