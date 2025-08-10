@@ -2,7 +2,10 @@
 repeat task.wait() until game:IsLoaded()
 -- if game.PlaceId ~= 126884695634066 then return end
 
+-- variables needed para sa script
 local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local Stats = game:GetService("Stats")
 
 -- container sa gui
 local gui = Instance.new("ScreenGui")
@@ -21,17 +24,15 @@ frame.BackgroundTransparency = 0
 frame.BorderSizePixel = 0
 frame.ClipsDescendants = true
 frame.Parent = gui
-
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
 
--- Title bar
+-- title bar
 local titleBar = Instance.new("Frame")
 titleBar.Size = UDim2.new(1, 0, 0, 32)
 titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
 titleBar.BorderSizePixel = 0
 titleBar.Parent = frame
 titleBar.ClipsDescendants = true
-
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
@@ -104,9 +105,6 @@ task.spawn(function()
 	end
 end)
 
-local Stats = game:GetService("Stats")
-local RunService = game:GetService("RunService")
-
 task.spawn(function()
 	while true do
 		local ping = math.floor(Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
@@ -124,7 +122,6 @@ task.spawn(function()
 	end
 end)
 
--- Body container
 local bodyContainer = Instance.new("Frame")
 bodyContainer.BackgroundTransparency = 1
 bodyContainer.BorderSizePixel = 0
@@ -132,7 +129,6 @@ bodyContainer.Position = UDim2.new(0, 0, 0, 32)
 bodyContainer.Size = UDim2.new(1, 0, 1, -32)
 bodyContainer.Parent = frame
 
--- Sidebar
 local sidebar = Instance.new("Frame")
 sidebar.Size = UDim2.new(0, 120, 1, -32)
 sidebar.Position = UDim2.new(0, 0, 0, 10)
@@ -141,7 +137,7 @@ sidebar.BackgroundTransparency = 0
 sidebar.BorderSizePixel = 0
 sidebar.Parent = bodyContainer
 
--- bulshit animation
+-- animation pang minimize/maximize
 local function tweenFrameSize(targetSize, duration)
 	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 	local tween = TweenService:Create(frame, tweenInfo, {Size = targetSize})
@@ -149,8 +145,6 @@ local function tweenFrameSize(targetSize, duration)
 	return tween
 end
 
--- Minimize button
-local minimized = false
 local minBtn = Instance.new("TextButton")
 minBtn.Size = UDim2.new(0, 25, 0, 25)
 minBtn.AnchorPoint = Vector2.new(1, 0.5)
@@ -162,7 +156,6 @@ minBtn.TextSize = 16
 minBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 minBtn.Parent = titleBar
 
--- Exit button
 local exitBtn = Instance.new("TextButton")
 exitBtn.Size = UDim2.new(0, 25, 0, 25)
 exitBtn.AnchorPoint = Vector2.new(1, 0.5)
@@ -174,46 +167,47 @@ exitBtn.TextSize = 12
 exitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 exitBtn.Parent = titleBar
 
-exitBtn.MouseButton1Click:Connect(function()
-	gui:Destroy()
-end)
+local minimized = true
 
 minBtn.MouseButton1Click:Connect(function()
-	minimized = not minimized
 	local tweenDuration = 0.3
-
+	
+	minimized = not minimized
 	if minimized then
 		pingLabel.Visible = true
 		fpsLabel.Visible = true
 		timeLabel.Visible = false
 		bodyContainer.Visible = false
-		
+
 		title.Text = "Serenity v1.0.1"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		minBtn.Text = "+"
-		
+
 		fpsLabel.Position = UDim2.new(0, 115, 0, 0)
 		pingLabel.Position = UDim2.new(0, 180, 0, 0)
-		
+
 		tweenFrameSize(UDim2.new(0, 335, 0, 32), tweenDuration):Wait()
 	else
 		pingLabel.Visible = false
 		fpsLabel.Visible = false
 		timeLabel.Visible = true
 		bodyContainer.Visible = true
-		
+
 		title.Text = "Serenity v1.0.1 by kiyaa"
 		title.Size = UDim2.new(1, -80, 1, 0)
 		minBtn.Text = "-"
 
 		pingLabel.Position = UDim2.new(0, 200, 0, 0)
 		fpsLabel.Position = UDim2.new(0, 340, 0, 0)
-		
+
 		tweenFrameSize(fullSize, tweenDuration):Wait()
 	end
 end)
 
--- Tabs
+exitBtn.MouseButton1Click:Connect(function()
+	gui:Destroy()
+end)
+
 local tabs = {"Main", "Shop", "Misc"}
 local contentFrames = {}
 
@@ -271,8 +265,8 @@ for i, name in ipairs(tabs) do
 		button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 		button.TextColor3 = Color3.new(1, 1, 1)
 	else
-		border.BackgroundTransparency = 1  -- hide border on unselected
-		button.BackgroundTransparency = 0  -- make opaque
+		border.BackgroundTransparency = 1
+		button.BackgroundTransparency = 0
 		button.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
 		button.TextColor3 = Color3.fromRGB(200, 200, 200)
 	end
@@ -467,7 +461,6 @@ descGears.TextXAlignment = Enum.TextXAlignment.Left
 descGears.TextWrapped = true
 descGears.Parent = shopTab
 
--- Auto Buy Eggs
 local headerEggs = Instance.new("TextLabel")
 headerEggs.Text = "Auto Buy Eggs"
 headerEggs.Font = Enum.Font.GothamBold
@@ -552,51 +545,6 @@ jobIdValue.Size = UDim2.new(0, 200, 0, 30)
 jobIdValue.Position = UDim2.new(0, 110, 0, 10)
 jobIdValue.TextXAlignment = Enum.TextXAlignment.Left
 jobIdValue.Parent = miscTab
-
--- Status box frame
-local statusBox = Instance.new("Frame")
-statusBox.Size = UDim2.new(1, -40, 0, 100)
-statusBox.Position = UDim2.new(0, 20, 0, 190)
-statusBox.BackgroundTransparency = 0.2
-statusBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-statusBox.BorderSizePixel = 0
-statusBox.Parent = shopTab
-
--- Layout for messages
-local layout = Instance.new("UIListLayout")
-layout.Padding = UDim.new(0, 4)
-layout.SortOrder = Enum.SortOrder.LayoutOrder
-layout.Parent = statusBox
-
--- Log function
-local function logPurchase(category, itemName)
-	local label = Instance.new("TextLabel")
-	label.Size = UDim2.new(1, -10, 0, 20)
-	label.Text = "✔ [" .. category .. "] x1 " .. itemName .. " (" .. os.date("%X") .. ")"
-	label.TextColor3 = Color3.fromRGB(180, 255, 180)
-	label.BackgroundTransparency = 1
-	label.Font = Enum.Font.Gotham
-	label.TextSize = 12
-	label.TextXAlignment = Enum.TextXAlignment.Left
-	label.Parent = statusBox
-
-	local maxLines = 5
-	local count = 0
-	for _, child in ipairs(statusBox:GetChildren()) do
-		if child:IsA("TextLabel") then
-			count += 1
-		end
-	end
-	if count > maxLines then
-		for _, child in ipairs(statusBox:GetChildren()) do
-			if child:IsA("TextLabel") then
-				child:Destroy()
-				break
-			end
-		end
-	end
-end
-
 
 local toggled = false
 local sellRemote = ReplicatedStorage:WaitForChild("GameEvents"):WaitForChild("Sell_Inventory")
