@@ -1,22 +1,21 @@
+-- mo run ra ang script kung "Grow a Garden" ang current game, og mo execute after ma fully loaded ang game 
 repeat task.wait() until game:IsLoaded()
+-- if game.PlaceId ~= 126884695634066 then return end
 
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
+-- container sa gui
 local gui = Instance.new("ScreenGui")
 gui.Name = "SerenityUI"
 gui.IgnoreGuiInset = true
 gui.ResetOnSpawn = false
-gui.Parent = playerGui
+gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
+-- main frame
 local fullSize = UDim2.new(0, 500, 0, 350)
 local frame = Instance.new("Frame")
 frame.Size = fullSize
 frame.Position = UDim2.new(0, 100, 0, 100)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-frame.BackgroundTransparency = 0.1
+frame.BackgroundTransparency = 0
 frame.BorderSizePixel = 0
 frame.Parent = gui
 
@@ -33,7 +32,7 @@ Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 titleBar.ClipsDescendants = true
 
 local title = Instance.new("TextLabel")
-title.Text = "Serenity v1.0 by kiyaa"
+title.Text = "Serenity v1.0.1 by kiyaa"
 title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.TextColor3 = Color3.new(1, 1, 1)
@@ -43,7 +42,6 @@ title.TextSize = 14
 title.BackgroundTransparency = 1
 title.Parent = titleBar
 
--- Ping label
 local pingLabel = Instance.new("TextLabel")
 pingLabel.Size = UDim2.new(0, 100, 1, 0)
 pingLabel.Position = UDim2.new(0, 200, 0, 0)
@@ -54,9 +52,9 @@ pingLabel.TextXAlignment = Enum.TextXAlignment.Left
 pingLabel.BackgroundTransparency = 1
 pingLabel.Text = "Ping: -- ms"
 pingLabel.RichText = true
+pingLabel.Visible = false
 pingLabel.Parent = titleBar
 
--- FPS label
 local fpsLabel = Instance.new("TextLabel")
 fpsLabel.Size = UDim2.new(0, 60, 1, 0)
 fpsLabel.Position = UDim2.new(0, 340, 0, 0)
@@ -67,7 +65,41 @@ fpsLabel.TextXAlignment = Enum.TextXAlignment.Left
 fpsLabel.BackgroundTransparency = 1
 fpsLabel.Text = "FPS: --"
 fpsLabel.RichText = true
+fpsLabel.Visible = false
 fpsLabel.Parent = titleBar
+
+local timeLabel = Instance.new("TextLabel")
+timeLabel.ZIndex = 5
+timeLabel.Size = UDim2.new(0, 150, 1, 0)
+timeLabel.Position = UDim2.new(0, 240, 0, 0)
+timeLabel.Font = Enum.Font.GothamSemibold
+timeLabel.TextSize = 14
+timeLabel.TextColor3 = Color3.new(1, 1, 1)
+timeLabel.TextXAlignment = Enum.TextXAlignment.Left
+timeLabel.BackgroundTransparency = 1
+timeLabel.RichText = true
+timeLabel.Parent = titleBar
+
+local function updateTime()
+	local t = os.date("*t")
+	local monthName = os.date("%b", os.time(t))
+	local day = string.format("%02d", t.day)
+	local hour = t.hour % 12
+	if hour == 0 then hour = 12 end
+	local ampm = (t.hour < 12) and "am" or "pm"
+
+	local formatted = string.format("%s %s     %d:%02d %s",
+		monthName, day, hour, t.min, ampm)
+
+	timeLabel.Text = formatted
+end
+
+task.spawn(function()
+	while true do
+		updateTime()
+		task.wait(1)
+	end
+end)
 
 local Stats = game:GetService("Stats")
 local RunService = game:GetService("RunService")
@@ -101,7 +133,8 @@ bodyContainer.Parent = frame
 local minimized = false
 local minBtn = Instance.new("TextButton")
 minBtn.Size = UDim2.new(0, 25, 0, 25)
-minBtn.Position = UDim2.new(1, -60, 0.5, -12)
+minBtn.AnchorPoint = Vector2.new(1, 0.5)
+minBtn.Position = UDim2.new(1, -40, 0.5, 0)
 minBtn.BackgroundTransparency = 1
 minBtn.Text = "-"
 minBtn.Font = Enum.Font.Gotham
@@ -112,7 +145,8 @@ minBtn.Parent = titleBar
 -- Exit button
 local exitBtn = Instance.new("TextButton")
 exitBtn.Size = UDim2.new(0, 25, 0, 25)
-exitBtn.Position = UDim2.new(1, -30, 0.5, -12)
+exitBtn.AnchorPoint = Vector2.new(1, 0.5)
+exitBtn.Position = UDim2.new(1, -10, 0.5, 0)
 exitBtn.BackgroundTransparency = 1
 exitBtn.Text = "X"
 exitBtn.Font = Enum.Font.Gotham
@@ -126,15 +160,21 @@ end)
 
 minBtn.MouseButton1Click:Connect(function()
 	minimized = not minimized
+
 	if minimized then
-		title.Text = "Serenity v1.0"
+		title.Text = "Serenity v1.0.1"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		frame.Size = UDim2.new(0, 335, 0, 32)
 		bodyContainer.Visible = false
 		minBtn.Text = "+"
 
+		pingLabel.Visible = true
+		fpsLabel.Visible = true
+		timeLabel.Visible = false
+
 		fpsLabel.Position = UDim2.new(0, 115, 0, 0)
 		pingLabel.Position = UDim2.new(0, 180, 0, 0)
+
 	else
 		title.Text = "Serenity v1.0 by kiyaa"
 		title.Size = UDim2.new(1, -80, 1, 0)
@@ -142,6 +182,10 @@ minBtn.MouseButton1Click:Connect(function()
 		bodyContainer.Visible = true
 		minBtn.Text = "-"
 
+		pingLabel.Visible = false
+		fpsLabel.Visible = false
+		timeLabel.Visible = true
+		
 		pingLabel.Position = UDim2.new(0, 200, 0, 0)
 		fpsLabel.Position = UDim2.new(0, 340, 0, 0)
 	end
