@@ -2,6 +2,8 @@
 repeat task.wait() until game:IsLoaded()
 -- if game.PlaceId ~= 126884695634066 then return end
 
+local TweenService = game:GetService("TweenService")
+
 -- container sa gui
 local gui = Instance.new("ScreenGui")
 gui.Name = "SerenityUI"
@@ -133,14 +135,13 @@ bodyContainer.Parent = frame
 -- Sidebar
 local sidebar = Instance.new("Frame")
 sidebar.Size = UDim2.new(0, 120, 1, -32)
-sidebar.Position = UDim2.new(0, 0, 0, 0)
+sidebar.Position = UDim2.new(0, 0, 0, 10)
 sidebar.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-sidebar.BackgroundTransparency = 0.1
+sidebar.BackgroundTransparency = 0
 sidebar.BorderSizePixel = 0
 sidebar.Parent = bodyContainer
 
 -- bulshit animation
-local TweenService = game:GetService("TweenService")
 local function tweenFrameSize(targetSize, duration)
 	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 	local tween = TweenService:Create(frame, tweenInfo, {Size = targetSize})
@@ -226,6 +227,7 @@ for i, name in ipairs(tabs) do
 	local button = Instance.new("TextButton")
 	button.Position = UDim2.new(0, 10, 0, (i - 1) * 32)
 	button.Size = UDim2.new(1, -10, 0, 30)
+	button.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
 	button.BackgroundTransparency = 1
 	button.Text = name
 	button.TextColor3 = Color3.fromRGB(200, 200, 200)
@@ -235,9 +237,26 @@ for i, name in ipairs(tabs) do
 	button.Parent = sidebar
 
 	local padding = Instance.new("UIPadding")
-	padding.PaddingLeft = UDim.new(0, 10)
-	padding.PaddingTop = UDim.new(0, 20)
+	padding.PaddingLeft = UDim.new(0, 10)	
 	padding.Parent = button
+
+	local border = Instance.new("Frame")
+	border.Name = "Border"
+	border.Size = UDim2.new(1, 0, 1, 0)
+	border.Position = UDim2.new(0, 0, 0, 0)
+	border.BackgroundTransparency = 1
+	border.BorderColor3 = Color3.fromRGB(150, 150, 150)
+	border.BorderSizePixel = 1
+	border.ZIndex = button.ZIndex + 1
+	border.Parent = button
+
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, 6)
+	corner.Parent = button
+
+	local borderCorner = Instance.new("UICorner")
+	borderCorner.CornerRadius = UDim.new(0, 6)
+	borderCorner.Parent = border
 
 	local tabFrame = Instance.new("Frame")
 	tabFrame.Size = UDim2.new(1, 0, 1, 0)
@@ -246,9 +265,40 @@ for i, name in ipairs(tabs) do
 	tabFrame.Parent = content
 	contentFrames[name] = tabFrame
 
+	if i == 1 then
+		border.BackgroundTransparency = 1
+		button.BackgroundTransparency = 0
+		button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+		button.TextColor3 = Color3.new(1, 1, 1)
+	else
+		border.BackgroundTransparency = 1  -- hide border on unselected
+		button.BackgroundTransparency = 0  -- make opaque
+		button.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+		button.TextColor3 = Color3.fromRGB(200, 200, 200)
+	end
+
 	button.MouseButton1Click:Connect(function()
-		for _, f in pairs(contentFrames) do f.Visible = false end
+		for _, f in pairs(contentFrames) do
+			f.Visible = false
+		end
+
+		for _, btn in pairs(sidebar:GetChildren()) do
+			if btn:IsA("TextButton") then
+				local b = btn:FindFirstChild("Border")
+				if b then
+					b.BackgroundTransparency = 1
+				end
+				btn.BackgroundTransparency = 1
+				btn.TextColor3 = Color3.fromRGB(200, 200, 200)
+			end
+		end
+
 		tabFrame.Visible = true
+
+		border.BackgroundTransparency = 1
+		button.BackgroundTransparency = 0
+		button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+		button.TextColor3 = Color3.new(1, 1, 1)
 	end)
 end
 
