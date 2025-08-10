@@ -17,6 +17,7 @@ frame.Position = UDim2.new(0, 100, 0, 100)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
 frame.BackgroundTransparency = 0
 frame.BorderSizePixel = 0
+frame.ClipsDescendants = true
 frame.Parent = gui
 
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
@@ -27,9 +28,9 @@ titleBar.Size = UDim2.new(1, 0, 0, 32)
 titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
 titleBar.BorderSizePixel = 0
 titleBar.Parent = frame
+titleBar.ClipsDescendants = true
 
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
-titleBar.ClipsDescendants = true
 
 local title = Instance.new("TextLabel")
 title.Text = "Serenity v1.0.1 by kiyaa"
@@ -129,6 +130,24 @@ bodyContainer.Position = UDim2.new(0, 0, 0, 32)
 bodyContainer.Size = UDim2.new(1, 0, 1, -32)
 bodyContainer.Parent = frame
 
+-- Sidebar
+local sidebar = Instance.new("Frame")
+sidebar.Size = UDim2.new(0, 120, 1, -32)
+sidebar.Position = UDim2.new(0, 0, 0, 0)
+sidebar.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+sidebar.BackgroundTransparency = 0.1
+sidebar.BorderSizePixel = 0
+sidebar.Parent = bodyContainer
+
+-- bulshit animation
+local TweenService = game:GetService("TweenService")
+local function tweenFrameSize(targetSize, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+	local tween = TweenService:Create(frame, tweenInfo, {Size = targetSize})
+	tween:Play()
+	return tween
+end
+
 -- Minimize button
 local minimized = false
 local minBtn = Instance.new("TextButton")
@@ -160,45 +179,38 @@ end)
 
 minBtn.MouseButton1Click:Connect(function()
 	minimized = not minimized
+	local tweenDuration = 0.3
 
 	if minimized then
-		title.Text = "Serenity v1.0.1"
-		title.Size = UDim2.new(1, -60, 1, 0)
-		frame.Size = UDim2.new(0, 335, 0, 32)
-		bodyContainer.Visible = false
-		minBtn.Text = "+"
-
 		pingLabel.Visible = true
 		fpsLabel.Visible = true
 		timeLabel.Visible = false
-
+		bodyContainer.Visible = false
+		
+		title.Text = "Serenity v1.0.1"
+		title.Size = UDim2.new(1, -60, 1, 0)
+		minBtn.Text = "+"
+		
 		fpsLabel.Position = UDim2.new(0, 115, 0, 0)
 		pingLabel.Position = UDim2.new(0, 180, 0, 0)
-
+		
+		tweenFrameSize(UDim2.new(0, 335, 0, 32), tweenDuration):Wait()
 	else
-		title.Text = "Serenity v1.0 by kiyaa"
-		title.Size = UDim2.new(1, -80, 1, 0)
-		frame.Size = fullSize
-		bodyContainer.Visible = true
-		minBtn.Text = "-"
-
 		pingLabel.Visible = false
 		fpsLabel.Visible = false
 		timeLabel.Visible = true
+		bodyContainer.Visible = true
 		
+		title.Text = "Serenity v1.0.1 by kiyaa"
+		title.Size = UDim2.new(1, -80, 1, 0)
+		minBtn.Text = "-"
+
 		pingLabel.Position = UDim2.new(0, 200, 0, 0)
 		fpsLabel.Position = UDim2.new(0, 340, 0, 0)
+		
+		tweenFrameSize(fullSize, tweenDuration):Wait()
 	end
 end)
-
--- Sidebar
-local sidebar = Instance.new("Frame")
-sidebar.Size = UDim2.new(0, 120, 1, -32)
-sidebar.Position = UDim2.new(0, 0, 0, 0)
-sidebar.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-sidebar.BackgroundTransparency = 0.1
-sidebar.BorderSizePixel = 0
-sidebar.Parent = bodyContainer
 
 -- Tabs
 local tabs = {"Main", "Shop", "Misc"}
