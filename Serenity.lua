@@ -345,7 +345,7 @@ gameVerTitle.TextXAlignment = Enum.TextXAlignment.Left
 gameVerTitle.Parent = mainTab
 
 local gameVerValue = Instance.new("TextLabel")
-gameVerValue.Text = game.JobId
+gameVerValue.Text = game.PlaceVersion
 gameVerValue.Font = Enum.Font.Gotham
 gameVerValue.TextSize = 12
 gameVerValue.TextColor3 = Color3.fromRGB(255, 255, 255)
