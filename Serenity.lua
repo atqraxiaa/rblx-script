@@ -355,6 +355,39 @@ gameVerValue.Position = UDim2.new(0, 110, 0, 55)
 gameVerValue.TextXAlignment = Enum.TextXAlignment.Left
 gameVerValue.Parent = mainTab
 
+local copyIdButton = Instance.new("TextButton")
+copyIdButton.Size = UDim2.new(0, 160, 0, 20)
+copyIdButton.Position = UDim2.new(0, 20, 0, 90)
+copyIdButton.Text = "Copy Job ID"
+copyIdButton.Font = Enum.Font.Gotham
+copyIdButton.TextSize = 12
+copyIdButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+copyIdButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+copyIdButton.Parent = mainTab
+Instance.new("UICorner", copyIdButton).CornerRadius = UDim.new(0, 8)
+
+local serverHopButton = Instance.new("TextButton")
+serverHopButton.Size = UDim2.new(0, 160, 0, 20)
+serverHopButton.Position = UDim2.new(0, 200, 0, 90)
+serverHopButton.Text = "Random Server Hop"
+serverHopButton.Font = Enum.Font.Gotham
+serverHopButton.TextSize = 12
+serverHopButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+serverHopButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+serverHopButton.Parent = mainTab
+Instance.new("UICorner", serverHopButton).CornerRadius = UDim.new(0, 8)
+
+local mainHeader = Instance.new("TextLabel")
+mainHeader.Text = "-- Script Settings --"
+mainHeader.Font = Enum.Font.GothamBold
+mainHeader.TextSize = 14
+mainHeader.TextColor3 = Color3.fromRGB(255, 255, 255)
+mainHeader.BackgroundTransparency = 1
+mainHeader.Size = UDim2.new(0, 150, 0, 30)
+mainHeader.Position = UDim2.new(0, 20, 0, 120)
+mainHeader.TextXAlignment = Enum.TextXAlignment.Left
+mainHeader.Parent = mainTab
+
 -- Shop Tab
 local shopTab = contentFrames["Shop"]
 
