@@ -171,7 +171,7 @@ local minimized = true
 
 minBtn.MouseButton1Click:Connect(function()
 	local tweenDuration = 0.3
-	
+
 	minimized = not minimized
 	if minimized then
 		pingLabel.Visible = true
@@ -299,38 +299,61 @@ end
 -- Main Tab
 local mainTab = contentFrames["Main"]
 
-local header = Instance.new("TextLabel")
-header.Text = "Auto Sell Inventory"
-header.Font = Enum.Font.GothamBold
-header.TextSize = 14
-header.TextColor3 = Color3.fromRGB(255, 255, 255)
-header.BackgroundTransparency = 1
-header.Size = UDim2.new(0, 150, 0, 30)
-header.Position = UDim2.new(0, 20, 0, 10)
-header.TextXAlignment = Enum.TextXAlignment.Left
-header.Parent = mainTab
+-- not tested but will use this for reference
+local mainHeader = Instance.new("TextLabel")
+mainHeader.Text = "-- Server Properties --"
+mainHeader.Font = Enum.Font.GothamBold
+mainHeader.TextSize = 14
+mainHeader.TextColor3 = Color3.fromRGB(255, 255, 255)
+mainHeader.BackgroundTransparency = 1
+mainHeader.Size = UDim2.new(0, 150, 0, 30)
+mainHeader.Position = UDim2.new(0, 20, 0, 10)
+mainHeader.TextXAlignment = Enum.TextXAlignment.Left
+mainHeader.Parent = mainTab
 
-local toggle = Instance.new("TextButton")
-toggle.Size = UDim2.new(0, 60, 0, 20)
-toggle.Position = UDim2.new(0, 300, 0, 15)
-toggle.Text = "OFF"
-toggle.Font = Enum.Font.Gotham
-toggle.TextSize = 14
-toggle.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
-toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggle.Parent = mainTab
+local jobIdTitle = Instance.new("TextLabel")
+jobIdTitle.Text = "Job ID:"
+jobIdTitle.Font = Enum.Font.GothamBold
+jobIdTitle.TextSize = 12
+jobIdTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+jobIdTitle.BackgroundTransparency = 1
+jobIdTitle.Size = UDim2.new(0, 130, 0, 30)
+jobIdTitle.Position = UDim2.new(0, 20, 0, 35)
+jobIdTitle.TextXAlignment = Enum.TextXAlignment.Left
+jobIdTitle.Parent = mainTab
 
-local description = Instance.new("TextLabel")
-description.Text = "Automatically sells items when your inventory is full."
-description.Font = Enum.Font.Gotham
-description.TextSize = 12
-description.TextColor3 = Color3.fromRGB(200, 200, 200)
-description.BackgroundTransparency = 1
-description.Size = UDim2.new(1, -40, 0, 20)
-description.Position = UDim2.new(0, 20, 0, 40)
-description.TextXAlignment = Enum.TextXAlignment.Left
-description.TextWrapped = true
-description.Parent = mainTab
+local jobIdValue = Instance.new("TextLabel")
+jobIdValue.Text = game.JobId
+jobIdValue.Font = Enum.Font.Gotham
+jobIdValue.TextSize = 12
+jobIdValue.TextColor3 = Color3.fromRGB(255, 255, 255)
+jobIdValue.BackgroundTransparency = 1
+jobIdValue.Size = UDim2.new(0, 200, 0, 30)
+jobIdValue.Position = UDim2.new(0, 110, 0, 35)
+jobIdValue.TextXAlignment = Enum.TextXAlignment.Left
+jobIdValue.Parent = mainTab
+
+local gameVerTitle = Instance.new("TextLabel")
+gameVerTitle.Text = "Game Version:"
+gameVerTitle.Font = Enum.Font.GothamBold
+gameVerTitle.TextSize = 12
+gameVerTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+gameVerTitle.BackgroundTransparency = 1
+gameVerTitle.Size = UDim2.new(0, 130, 0, 30)
+gameVerTitle.Position = UDim2.new(0, 20, 0, 55)
+gameVerTitle.TextXAlignment = Enum.TextXAlignment.Left
+gameVerTitle.Parent = mainTab
+
+local gameVerValue = Instance.new("TextLabel")
+gameVerValue.Text = game.JobId
+gameVerValue.Font = Enum.Font.Gotham
+gameVerValue.TextSize = 12
+gameVerValue.TextColor3 = Color3.fromRGB(255, 255, 255)
+gameVerValue.BackgroundTransparency = 1
+gameVerValue.Size = UDim2.new(0, 200, 0, 30)
+gameVerValue.Position = UDim2.new(0, 110, 0, 55)
+gameVerValue.TextXAlignment = Enum.TextXAlignment.Left
+gameVerValue.Parent = mainTab
 
 -- Shop Tab
 local shopTab = contentFrames["Shop"]
@@ -524,27 +547,38 @@ descEggs.Parent = shopTab
 -- Misc Tab
 local miscTab = contentFrames["Misc"]
 
-local jobIdTitle = Instance.new("TextLabel")
-jobIdTitle.Text = "Current Job ID:"
-jobIdTitle.Font = Enum.Font.GothamBold
-jobIdTitle.TextSize = 12
-jobIdTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-jobIdTitle.BackgroundTransparency = 1
-jobIdTitle.Size = UDim2.new(0, 130, 0, 30)
-jobIdTitle.Position = UDim2.new(0, 20, 0, 10)
-jobIdTitle.TextXAlignment = Enum.TextXAlignment.Left
-jobIdTitle.Parent = miscTab
+local header = Instance.new("TextLabel")
+header.Text = "Auto Sell Inventory"
+header.Font = Enum.Font.GothamBold
+header.TextSize = 14
+header.TextColor3 = Color3.fromRGB(255, 255, 255)
+header.BackgroundTransparency = 1
+header.Size = UDim2.new(0, 150, 0, 30)
+header.Position = UDim2.new(0, 20, 0, 10)
+header.TextXAlignment = Enum.TextXAlignment.Left
+header.Parent = miscTab
 
-local jobIdValue = Instance.new("TextLabel")
-jobIdValue.Text = game.JobId
-jobIdValue.Font = Enum.Font.Gotham
-jobIdValue.TextSize = 12
-jobIdValue.TextColor3 = Color3.fromRGB(255, 255, 255)
-jobIdValue.BackgroundTransparency = 1
-jobIdValue.Size = UDim2.new(0, 200, 0, 30)
-jobIdValue.Position = UDim2.new(0, 110, 0, 10)
-jobIdValue.TextXAlignment = Enum.TextXAlignment.Left
-jobIdValue.Parent = miscTab
+local toggle = Instance.new("TextButton")
+toggle.Size = UDim2.new(0, 60, 0, 20)
+toggle.Position = UDim2.new(0, 300, 0, 15)
+toggle.Text = "OFF"
+toggle.Font = Enum.Font.Gotham
+toggle.TextSize = 14
+toggle.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggle.Parent = miscTab
+
+local description = Instance.new("TextLabel")
+description.Text = "Automatically sells items when your inventory is full."
+description.Font = Enum.Font.Gotham
+description.TextSize = 12
+description.TextColor3 = Color3.fromRGB(200, 200, 200)
+description.BackgroundTransparency = 1
+description.Size = UDim2.new(1, -40, 0, 20)
+description.Position = UDim2.new(0, 20, 0, 40)
+description.TextXAlignment = Enum.TextXAlignment.Left
+description.TextWrapped = true
+description.Parent = miscTab
 
 local toggled = false
 local sellRemote = ReplicatedStorage:WaitForChild("GameEvents"):WaitForChild("Sell_Inventory")
