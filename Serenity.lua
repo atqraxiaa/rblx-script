@@ -367,15 +367,15 @@ copyIdButton.Parent = mainTab
 Instance.new("UICorner", copyIdButton).CornerRadius = UDim.new(0, 8)
 
 copyIdButton.MouseButton1Click:Connect(function()
-    if setclipboard then
-        setclipboard(game.JobId)
-        copyIdButton.Text = "Copied!"
-        task.delay(1.5, function()
-            copyIdButton.Text = "Copy Job ID"
-        end)
-    else
-        warn("Your executor does not support setclipboard.")
-    end
+	if setclipboard then
+		setclipboard(game.JobId)
+		copyIdButton.Text = "Copied!"
+		task.delay(1.5, function()
+			copyIdButton.Text = "Copy Job ID"
+		end)
+	else
+		warn("Your executor does not support setclipboard.")
+	end
 end)
 
 local serverHopButton = Instance.new("TextButton")
@@ -390,54 +390,54 @@ serverHopButton.Parent = mainTab
 Instance.new("UICorner", serverHopButton).CornerRadius = UDim.new(0, 8)
 
 serverHopButton.MouseButton1Click:Connect(function()
-    local HttpService = game:GetService("HttpService")
-    local TeleportService = game:GetService("TeleportService")
-    local Players = game:GetService("Players")
+	local HttpService = game:GetService("HttpService")
+	local TeleportService = game:GetService("TeleportService")
+	local Players = game:GetService("Players")
 
-    local currentJobId = game.JobId
-    local placeId = game.PlaceId
+	local currentJobId = game.JobId
+	local placeId = game.PlaceId
 
-    local function getRandomServer()
-        local servers = {}
-        local cursor = ""
-        local foundServer = nil
+	local function getRandomServer()
+		local servers = {}
+		local cursor = ""
+		local foundServer = nil
 
-        repeat
-            local url = string.format(
-                "https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100%s",
-                placeId,
-                cursor ~= "" and "&cursor=" .. cursor or ""
-            )
+		repeat
+			local url = string.format(
+				"https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100%s",
+				placeId,
+				cursor ~= "" and "&cursor=" .. cursor or ""
+			)
 
-            local success, response = pcall(function()
-                return HttpService:JSONDecode(game:HttpGet(url))
-            end)
+			local success, response = pcall(function()
+				return HttpService:JSONDecode(game:HttpGet(url))
+			end)
 
-            if success and response and response.data then
-                for _, server in ipairs(response.data) do
-                    if server.id ~= currentJobId and server.playing < server.maxPlayers then
-                        table.insert(servers, server.id)
-                    end
-                end
-                cursor = response.nextPageCursor or ""
-            else
-                break
-            end
-        until cursor == "" or #servers >= 1
+			if success and response and response.data then
+				for _, server in ipairs(response.data) do
+					if server.id ~= currentJobId and server.playing < server.maxPlayers then
+						table.insert(servers, server.id)
+					end
+				end
+				cursor = response.nextPageCursor or ""
+			else
+				break
+			end
+		until cursor == "" or #servers >= 1
 
-        if #servers > 0 then
-            foundServer = servers[math.random(1, #servers)]
-        end
+		if #servers > 0 then
+			foundServer = servers[math.random(1, #servers)]
+		end
 
-        return foundServer
-    end
+		return foundServer
+	end
 
-    local newServerId = getRandomServer()
-    if newServerId then
-        TeleportService:TeleportToPlaceInstance(placeId, newServerId, Players.LocalPlayer)
-    else
-        warn("No available servers found.")
-    end
+	local newServerId = getRandomServer()
+	if newServerId then
+		TeleportService:TeleportToPlaceInstance(placeId, newServerId, Players.LocalPlayer)
+	else
+		warn("No available servers found.")
+	end
 end)
 
 local mainHeader = Instance.new("TextLabel")
@@ -450,6 +450,66 @@ mainHeader.Size = UDim2.new(0, 150, 0, 30)
 mainHeader.Position = UDim2.new(0, 20, 0, 120)
 mainHeader.TextXAlignment = Enum.TextXAlignment.Left
 mainHeader.Parent = mainTab
+
+local autoReconTitle = Instance.new("TextLabel")
+autoReconTitle.Text = "Auto Reconnect"
+autoReconTitle.Font = Enum.Font.GothamBold
+autoReconTitle.TextSize = 12
+autoReconTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+autoReconTitle.BackgroundTransparency = 1
+autoReconTitle.Size = UDim2.new(0, 130, 0, 30)
+autoReconTitle.Position = UDim2.new(0, 20, 0, 150)
+autoReconTitle.TextXAlignment = Enum.TextXAlignment.Left
+autoReconTitle.Parent = mainTab
+
+local toggleTrack = Instance.new("Frame")
+toggleTrack.Size = UDim2.new(0, 30, 0, 12)
+toggleTrack.AnchorPoint = Vector2.new(0.5, 0.5)
+toggleTrack.Position = UDim2.new(0, 550, 0, 295)
+toggleTrack.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+toggleTrack.BorderSizePixel = 0
+toggleTrack.Parent = gui
+
+local knob = Instance.new("Frame")
+knob.Size = UDim2.new(0, 16, 0, 16)
+knob.AnchorPoint = Vector2.new(0.5, 0.5)
+knob.Position = UDim2.new(0, 7, 0.5, 0)
+knob.BackgroundColor3 = Color3.new(1, 1, 1)
+knob.BorderSizePixel = 0
+knob.Parent = toggleTrack
+
+local cornerTrack = Instance.new("UICorner")
+cornerTrack.CornerRadius = UDim.new(1, 0)
+cornerTrack.Parent = toggleTrack
+
+local cornerKnob = Instance.new("UICorner")
+cornerKnob.CornerRadius = UDim.new(1, 0)
+cornerKnob.Parent = knob
+
+local toggled = false
+toggleTrack.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		toggled = not toggled
+
+		if toggled then
+			TweenService:Create(knob, TweenInfo.new(0.2), {
+				Position = UDim2.new(1, -7, 0.5, 0)
+			}):Play()
+
+			TweenService:Create(toggleTrack, TweenInfo.new(0.2), {
+				BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+			}):Play()
+		else
+			TweenService:Create(knob, TweenInfo.new(0.2), {
+				Position = UDim2.new(0, 7, 0.5, 0)
+			}):Play()
+
+			TweenService:Create(toggleTrack, TweenInfo.new(0.2), {
+				BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+			}):Play()
+		end
+	end
+end)
 
 -- Shop Tab
 local shopTab = contentFrames["Shop"]
