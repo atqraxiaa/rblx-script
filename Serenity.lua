@@ -366,6 +366,18 @@ copyIdButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 copyIdButton.Parent = mainTab
 Instance.new("UICorner", copyIdButton).CornerRadius = UDim.new(0, 8)
 
+copyIdButton.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard(game.JobId)
+        copyIdButton.Text = "Copied!"
+        task.delay(1.5, function()
+            copyIdButton.Text = "Copy Job ID"
+        end)
+    else
+        warn("Your executor does not support setclipboard.")
+    end
+end)
+
 local serverHopButton = Instance.new("TextButton")
 serverHopButton.Size = UDim2.new(0, 160, 0, 20)
 serverHopButton.Position = UDim2.new(0, 200, 0, 90)
@@ -376,6 +388,57 @@ serverHopButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 serverHopButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 serverHopButton.Parent = mainTab
 Instance.new("UICorner", serverHopButton).CornerRadius = UDim.new(0, 8)
+
+serverHopButton.MouseButton1Click:Connect(function()
+    local HttpService = game:GetService("HttpService")
+    local TeleportService = game:GetService("TeleportService")
+    local Players = game:GetService("Players")
+
+    local currentJobId = game.JobId
+    local placeId = game.PlaceId
+
+    local function getRandomServer()
+        local servers = {}
+        local cursor = ""
+        local foundServer = nil
+
+        repeat
+            local url = string.format(
+                "https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100%s",
+                placeId,
+                cursor ~= "" and "&cursor=" .. cursor or ""
+            )
+
+            local success, response = pcall(function()
+                return HttpService:JSONDecode(game:HttpGet(url))
+            end)
+
+            if success and response and response.data then
+                for _, server in ipairs(response.data) do
+                    if server.id ~= currentJobId and server.playing < server.maxPlayers then
+                        table.insert(servers, server.id)
+                    end
+                end
+                cursor = response.nextPageCursor or ""
+            else
+                break
+            end
+        until cursor == "" or #servers >= 1
+
+        if #servers > 0 then
+            foundServer = servers[math.random(1, #servers)]
+        end
+
+        return foundServer
+    end
+
+    local newServerId = getRandomServer()
+    if newServerId then
+        TeleportService:TeleportToPlaceInstance(placeId, newServerId, Players.LocalPlayer)
+    else
+        warn("No available servers found.")
+    end
+end)
 
 local mainHeader = Instance.new("TextLabel")
 mainHeader.Text = "-- Script Settings --"
