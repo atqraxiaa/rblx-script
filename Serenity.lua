@@ -84,19 +84,16 @@ end
 
 loadConfig()
 
--- variables needed para sa script
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Stats = game:GetService("Stats")
 
--- container sa gui
 local gui = Instance.new("ScreenGui")
 gui.Name = "SerenityUI"
 gui.IgnoreGuiInset = true
 gui.ResetOnSpawn = false
 gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
--- main frame
 local fullSize = UDim2.new(0, 500, 0, 350)
 local frame = Instance.new("Frame")
 frame.Size = fullSize
@@ -105,11 +102,10 @@ frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
 frame.BackgroundTransparency = 0
 frame.BorderSizePixel = 0
 frame.ClipsDescendants = true
-frame.ZIndex = 99999
+--frame.ZIndex = 99999
 frame.Parent = gui
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
 
--- title bar
 local titleBar = Instance.new("Frame")
 titleBar.Size = UDim2.new(1, 0, 0, 32)
 titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
