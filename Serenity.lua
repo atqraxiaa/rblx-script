@@ -118,7 +118,7 @@ titleBar.ClipsDescendants = true
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
-title.Text = "Serenity v1.0.4c by mystixie"
+title.Text = "Serenity v1.0.4d by mystixie"
 title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.TextColor3 = Color3.new(1, 1, 1)
@@ -261,7 +261,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = false
 		bodyContainer.Visible = false
 
-		title.Text = "Serenity v1.0.4c"
+		title.Text = "Serenity v1.0.4d"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		minBtn.Text = "+"
 
@@ -275,7 +275,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = true
 		bodyContainer.Visible = true
 
-		title.Text = "Serenity v1.0.4c by mystixie"
+		title.Text = "Serenity v1.0.4d by mystixie"
 		title.Size = UDim2.new(1, -80, 1, 0)
 		minBtn.Text = "-"
 		
@@ -997,7 +997,7 @@ local player = Players.LocalPlayer
 local seedShopFrame = player.PlayerGui:WaitForChild("Seed_Shop").Frame.ScrollingFrame
 
 local toggled = config.autoBuySeeds or false
-local buyTask
+local buySeedTask
 
 local function updateSeedsToggleVisual(state)
 	if state then
@@ -1021,7 +1021,7 @@ trackSeeds.Active = true
 
 updateSeedsToggleVisual(toggled)
 
-local function getStockCount(seedName)
+local function getSeedStockCount(seedName)
 	local seedFrame = seedShopFrame:FindFirstChild(seedName)
 	if seedFrame and seedFrame:FindFirstChild("Main_Frame") and seedFrame.Main_Frame:FindFirstChild("Stock_Text") then
 		local stockText = seedFrame.Main_Frame.Stock_Text.Text
@@ -1031,7 +1031,7 @@ local function getStockCount(seedName)
 	return 0
 end
 
-local function formatTime(hour, minute)
+function formatTime(hour, minute, second)
 	local ampm = "AM"
 	local displayHour = hour
 
@@ -1050,52 +1050,58 @@ local function formatTime(hour, minute)
 		displayMinute = "0" .. minute
 	end
 
-	return string.format("%d:%s %s", displayHour, displayMinute, ampm)
+	local displaySecond = "00"
+	if second then
+		displaySecond = tostring(second)
+		if second < 10 then
+			displaySecond = "0" .. second
+		end
+	end
+
+	return string.format("%d:%s:%s %s", displayHour, displayMinute, displaySecond, ampm)
 end
 
-local function waitUntilNextFiveMinuteMark()
+function waitUntilNextFiveMinuteMark()
 	local now = os.date("*t")
 	local hour = now.hour
 	local minute = now.min
 	local second = now.sec
 
 	local nextMinute = math.ceil(minute / 5) * 5
-
-	if nextMinute == minute and second == 0 then
-		print("[Auto Buy Seeds] Restocking now!")
-		return
-	end
-
-	if nextMinute == minute and second > 0 then
-		nextMinute = nextMinute + 5
-	end
-
-	if nextMinute >= 60 then
-		nextMinute = nextMinute - 60
+	if nextMinute == 60 then
+		nextMinute = 0
 		hour = (hour + 1) % 24
 	end
 
+	local targetSecond = 5
+
 	local waitSeconds
-	if nextMinute > minute then
-		waitSeconds = (nextMinute - minute) * 60 - second
+
+	if nextMinute > minute or (nextMinute == minute and second < targetSecond) then
+		waitSeconds = (nextMinute - minute) * 60 + (targetSecond - second)
 	else
-		waitSeconds = (60 - minute + nextMinute) * 60 - second
+		waitSeconds = (60 - minute + nextMinute) * 60 + (targetSecond - second)
 	end
 
-	local nextTimeString = formatTime(hour, nextMinute)
-	print("[Auto Buy Seeds] Restocking on " .. nextTimeString .. "...")
+	local nextTimeHour = hour
+	local nextTimeMinute = nextMinute
+	local nextTimeSecond = targetSecond
+
+	local nextTimeString = formatTime(nextTimeHour, nextTimeMinute, nextTimeSecond)
+
+	print("[Auto Buy Stocks] Restocking on " .. nextTimeString .. "...")
 
 	if waitSeconds > 0 then
 		task.wait(waitSeconds)
 	end
 end
 
-local function startAutoBuyLoop()
-	if buyTask then return end
-	buyTask = task.spawn(function()
+local function startAutoBuySeedLoop()
+	if buySeedTask then return end
+	buySeedTask = task.spawn(function()
 		while toggled do
 			for _, seedName in ipairs(seeds) do
-				local stock = getStockCount(seedName)
+				local stock = getSeedStockCount(seedName)
 				if stock > 0 then
 					print("Buying " .. stock .. " of " .. seedName)
 					for i = 1, stock do
@@ -1107,23 +1113,21 @@ local function startAutoBuyLoop()
 				end
 				task.wait(0.1)
 			end
-			print("[Auto Buy Seeds] Waiting until next 5-minute mark...")
 			waitUntilNextFiveMinuteMark()
 		end
-		buyTask = nil
+		buySeedTask = nil
 	end)
 end
 
 trackSeeds.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		print("trackSeeds clicked")
 		toggled = not toggled
 		config.autoBuySeeds = toggled
 		saveConfig()
 		updateSeedsToggleVisual(toggled)
 
 		if toggled then
-			startAutoBuyLoop()
+			startAutoBuySeedLoop()
 		end
 	end
 end)
@@ -1131,131 +1135,133 @@ end)
 updateSeedsToggleVisual(toggled)
 
 if toggled then
-	startAutoBuyLoop()
+	startAutoBuySeedLoop()
 end
 
---local headerGears = Instance.new("TextLabel")
---headerGears.Text = "Auto Buy Gears"
---headerGears.Font = Enum.Font.GothamBold
---headerGears.TextSize = 12
---headerGears.TextColor3 = Color3.fromRGB(255, 255, 255)
---headerGears.BackgroundTransparency = 1
---headerGears.Size = UDim2.new(0, 130, 0, 30)
---headerGears.Position = UDim2.new(0, 20, 0, 65)
---headerGears.TextXAlignment = Enum.TextXAlignment.Left
---headerGears.Parent = shopTab
+local headerGears = Instance.new("TextLabel")
+headerGears.Text = "Auto Buy Gears"
+headerGears.Font = Enum.Font.GothamBold
+headerGears.TextSize = 12
+headerGears.TextColor3 = Color3.fromRGB(255, 255, 255)
+headerGears.BackgroundTransparency = 1
+headerGears.Size = UDim2.new(0, 130, 0, 30)
+headerGears.Position = UDim2.new(0, 20, 0, 65)
+headerGears.TextXAlignment = Enum.TextXAlignment.Left
+headerGears.Parent = shopTab
 
---local toggleGears = Instance.new("TextButton")
---toggleGears.Size = UDim2.new(0, 60, 0, 20)
---toggleGears.Position = UDim2.new(0, 300, 0, 75)
---toggleGears.Text = "OFF"
---toggleGears.Font = Enum.Font.Gotham
---toggleGears.TextSize = 14
---toggleGears.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
---toggleGears.TextColor3 = Color3.fromRGB(255, 255, 255)
---toggleGears.Parent = shopTab
+local trackGears = Instance.new("Frame")
+trackGears.Size = UDim2.new(0, 30, 0, 12)
+trackGears.AnchorPoint = Vector2.new(0.5, 0.5)
+trackGears.Position = UDim2.new(0, 345, 0, 81)
+trackGears.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+trackGears.BorderSizePixel = 0
+trackGears.Parent = shopTab
 
---local gears = {
---	"Watering Can", "Trading Ticket", "Trowel", "Recall Wrench", "Basic Sprinkler", "Advanced Sprinkler",
---	"Medium Toy", "Medium Treat", "Godly Sprinkler", "Magnifying Glass", 
---	"Master Sprinkler", "Cleaning Spray", "Favorite Tool", "Harvest Tool",
---	"Friendship Pot", "Levelup Lollipop"
---}
+local knobGears = Instance.new("Frame")
+knobGears.Size = UDim2.new(0, 16, 0, 16)
+knobGears.AnchorPoint = Vector2.new(0.5, 0.5)
+knobGears.Position = UDim2.new(0, 7, 0.5, 0)
+knobGears.BackgroundColor3 = Color3.new(1, 1, 1)
+knobGears.BorderSizePixel = 0
+knobGears.Parent = trackGears
 
---local Players = game:GetService("Players")
---local player = Players.LocalPlayer
---local gearShopFrame = player.PlayerGui:WaitForChild("Gear_Shop").Frame.ScrollingFrame
---local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local cornerTrack = Instance.new("UICorner")
+cornerTrack.CornerRadius = UDim.new(1, 0)
+cornerTrack.Parent = trackGears
 
---local autoBuyGears = false
---local autoBuyTask
+local cornerKnob = Instance.new("UICorner")
+cornerKnob.CornerRadius = UDim.new(1, 0)
+cornerKnob.Parent = knobGears
 
---local function getStockCount(gearName)
---	local gearFrame = gearShopFrame:FindFirstChild(gearName)
---	if gearFrame and gearFrame:FindFirstChild("Main_Frame") and gearFrame.Main_Frame:FindFirstChild("Stock_Text") then
---		local stockText = gearFrame.Main_Frame.Stock_Text.Text
---		local stockCount = tonumber(stockText:match("X(%d+)")) or 0
---		return stockCount
---	end
---	return 0
---end
+local gears = {
+	"Watering Can", "Trading Ticket", "Trowel", "Recall Wrench", "Basic Sprinkler", "Advanced Sprinkler",
+	"Medium Toy", "Medium Treat", "Godly Sprinkler", "Magnifying Glass", 
+	"Master Sprinkler", "Cleaning Spray", "Favorite Tool", "Harvest Tool",
+	"Friendship Pot", "Levelup Lollipop"
+}
 
---local function logAllStocks()
---	print("Current Gear Stocks:")
---	for _, gearName in ipairs(gears) do
---		local stock = getStockCount(gearName)
---		print(string.format("  %s stock count: %d", gearName, stock))
---	end
---end
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
---local function buyGearsBasedOnStock()
---	for _, gearName in ipairs(gears) do
---		local stock = getStockCount(gearName)
---		if stock > 0 then
---			print(string.format("Buying %d of %s", stock, gearName))
---			for i = 1, stock do
---				ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gearName)
---				task.wait(0.1)
---			end
---		else
---			print(string.format("%s is out of stock or not available.", gearName))
---		end
---	end
---end
+local player = Players.LocalPlayer
+local gearShopFrame = player.PlayerGui:WaitForChild("Gear_Shop").Frame.ScrollingFrame
 
---local function waitUntilNextFiveMinute()
---	while true do
---		local time = os.date("*t")
---		local minute = time.min
---		local second = time.sec
---		local waitSeconds = ((5 - (minute % 5)) * 60) - second
---		if waitSeconds <= 0 then
---			waitSeconds = 0
---		end
---		task.wait(waitSeconds)
---		break
---	end
---end
+local toggled = config.autoBuyGears or false
+local buyGearTask
 
---local autoBuyGears = config.autoBuyGears or false
+local function updateGearsToggleVisual(state)
+	if state then
+		TweenService:Create(knobGears, TweenInfo.new(0.2), {
+			Position = UDim2.new(1, -7, 0.5, 0)
+		}):Play()
+		TweenService:Create(trackGears, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+		}):Play()
+	else
+		TweenService:Create(knobGears, TweenInfo.new(0.2), {
+			Position = UDim2.new(0, 7, 0.5, 0)
+		}):Play()
+		TweenService:Create(trackGears, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+		}):Play()
+	end
+end
 
---toggleGears.MouseButton1Click:Connect(function()
---	autoBuyGears = not autoBuyGears
---	toggleGears.Text = autoBuyGears and "ON" or "OFF"
---	toggleGears.BackgroundColor3 = autoBuyGears and Color3.fromRGB(70, 180, 70) or Color3.fromRGB(50, 50, 60)
+trackGears.Active = true
 
---	if autoBuyGears then
---		autoBuyTask = task.spawn(function()
---			while autoBuyGears do
---				waitUntilNextFiveMinute()
+updateGearsToggleVisual(toggled)
 
---				print("=== Running gear stock check and buy at " .. os.date("%X") .. " ===")
+local function getGearStockCount(gearName)
+	local gearFrame = gearShopFrame:FindFirstChild(gearName)
+	if gearFrame and gearFrame:FindFirstChild("Main_Frame") and gearFrame.Main_Frame:FindFirstChild("Stock_Text") then
+		local stockText = gearFrame.Main_Frame.Stock_Text.Text
+		local stockCount = tonumber(stockText:match("X(%d+)")) or 0
+		return stockCount
+	end
+	return 0
+end
 
---				logAllStocks()
---				buyGearsBasedOnStock()
---				task.wait(1)
---				logAllStocks()
---			end
---		end)
---	else
---		if autoBuyTask then
---			task.cancel(autoBuyTask)
---			autoBuyTask = nil
---		end
---	end
---end)
+local function startAutoBuyGearLoop()
+	if buyGearTask then return end
+	buyGearTask = task.spawn(function()
+		while toggled do
+			for _, gearName in ipairs(gears) do
+				local stock = getGearStockCount(gearName)
+				if stock > 0 then
+					print("Buying " .. stock .. " of " .. gearName)
+					for i = 1, stock do
+						ReplicatedStorage.GameEvents.BuySeedStock:FireServer(gearName)
+						task.wait(0.1)
+					end
+				else
+					print(gearName .. " out of stock")
+				end
+				task.wait(0.1)
+			end
+			waitUntilNextFiveMinuteMark()
+		end
+		buyGearTask = nil
+	end)
+end
 
---local descGears = Instance.new("TextLabel")
---descGears.Text = "Automatically buys all available gears."
---descGears.Font = Enum.Font.Gotham
---descGears.TextSize = 12
---descGears.TextColor3 = Color3.fromRGB(200, 200, 200)
---descGears.BackgroundTransparency = 1
---descGears.Size = UDim2.new(1, -40, 0, 20)
---descGears.Position = UDim2.new(0, 20, 0, 100)
---descGears.TextXAlignment = Enum.TextXAlignment.Left
---descGears.TextWrapped = true
---descGears.Parent = shopTab
+trackGears.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		toggled = not toggled
+		config.autoBuyGears = toggled
+		saveConfig()
+		updateGearsToggleVisual(toggled)
+
+		if toggled then
+			startAutoBuyGearLoop()
+		end
+	end
+end)
+
+updateGearsToggleVisual(toggled)
+
+if toggled then
+	startAutoBuyGearLoop()
+end
 
 --local headerEggs = Instance.new("TextLabel")
 --headerEggs.Text = "Auto Buy Eggs"
