@@ -118,7 +118,7 @@ titleBar.ClipsDescendants = true
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
-title.Text = "Serenity v1.0.4b by mystixie"
+title.Text = "Serenity v1.0.4c by mystixie"
 title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.TextColor3 = Color3.new(1, 1, 1)
@@ -261,7 +261,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = false
 		bodyContainer.Visible = false
 
-		title.Text = "Serenity v1.0.4b"
+		title.Text = "Serenity v1.0.4c"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		minBtn.Text = "+"
 
@@ -275,7 +275,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = true
 		bodyContainer.Visible = true
 
-		title.Text = "Serenity v1.0.4b by mystixie"
+		title.Text = "Serenity v1.0.4c by mystixie"
 		title.Size = UDim2.new(1, -80, 1, 0)
 		minBtn.Text = "-"
 		
@@ -1031,23 +1031,59 @@ local function getStockCount(seedName)
 	return 0
 end
 
+local function formatTime(hour, minute)
+	local ampm = "AM"
+	local displayHour = hour
+
+	if hour == 0 then
+		displayHour = 12
+		ampm = "AM"
+	elseif hour == 12 then
+		ampm = "PM"
+	elseif hour > 12 then
+		displayHour = hour - 12
+		ampm = "PM"
+	end
+
+	local displayMinute = tostring(minute)
+	if minute < 10 then
+		displayMinute = "0" .. minute
+	end
+
+	return string.format("%d:%s %s", displayHour, displayMinute, ampm)
+end
+
 local function waitUntilNextFiveMinuteMark()
 	local now = os.date("*t")
+	local hour = now.hour
 	local minute = now.min
 	local second = now.sec
 
 	local nextMinute = math.ceil(minute / 5) * 5
+
 	if nextMinute == minute and second == 0 then
+		print("[Auto Buy Seeds] Restocking now!")
 		return
 	end
 
-	local waitSeconds
-	if nextMinute >= 60 then
-		nextMinute = 0
-		waitSeconds = (60 - minute) * 60 - second
-	else
-		waitSeconds = (nextMinute - minute) * 60 - second
+	if nextMinute == minute and second > 0 then
+		nextMinute = nextMinute + 5
 	end
+
+	if nextMinute >= 60 then
+		nextMinute = nextMinute - 60
+		hour = (hour + 1) % 24
+	end
+
+	local waitSeconds
+	if nextMinute > minute then
+		waitSeconds = (nextMinute - minute) * 60 - second
+	else
+		waitSeconds = (60 - minute + nextMinute) * 60 - second
+	end
+
+	local nextTimeString = formatTime(hour, nextMinute)
+	print("[Auto Buy Seeds] Restocking on " .. nextTimeString .. "...")
 
 	if waitSeconds > 0 then
 		task.wait(waitSeconds)
@@ -1071,7 +1107,7 @@ local function startAutoBuyLoop()
 				end
 				task.wait(0.1)
 			end
-			print("[AutoBuySeeds] Waiting until next 5-minute mark...")
+			print("[Auto Buy Seeds] Waiting until next 5-minute mark...")
 			waitUntilNextFiveMinuteMark()
 		end
 		buyTask = nil
