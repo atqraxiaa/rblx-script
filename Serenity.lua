@@ -115,7 +115,7 @@ titleBar.ClipsDescendants = true
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
-title.Text = "Serenity v1.0.3a by mystixie"
+title.Text = "Serenity v1.0.3b by mystixie"
 title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.TextColor3 = Color3.new(1, 1, 1)
@@ -258,7 +258,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = false
 		bodyContainer.Visible = false
 
-		title.Text = "Serenity v1.0.3a"
+		title.Text = "Serenity v1.0.3b"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		minBtn.Text = "+"
 
@@ -272,7 +272,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = true
 		bodyContainer.Visible = true
 
-		title.Text = "Serenity v1.0.3a by mystixie"
+		title.Text = "Serenity v1.0.3b by mystixie"
 		title.Size = UDim2.new(1, -80, 1, 0)
 		minBtn.Text = "-"
 		
@@ -615,7 +615,13 @@ local function startHopLoop()
 	hopLoop = task.spawn(function()
 		while hopToggled do
 			if game.PlaceVersion == desiredVersion then
-				warn("[Auto Hop] Found desired version:", desiredVersion)
+				hopToggled = false
+				config.autoServerHop = false
+				saveConfig()
+				updateHopToggleVisual(false)
+
+				gameVersionBox.Text = ""
+
 				break
 			end
 
@@ -684,7 +690,6 @@ updateHopToggleVisual(hopToggled)
 
 if hopToggled then
 	if not config.desiredGameVersion or config.desiredGameVersion == "" then
-		warn("[Auto Hop] Config says ON, but no desired version set. Disabling.")
 		hopToggled = false
 		config.autoServerHop = false
 		saveConfig()
