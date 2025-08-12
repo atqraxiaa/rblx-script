@@ -88,6 +88,8 @@ local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Stats = game:GetService("Stats")
 
+local buyTask
+
 local gui = Instance.new("ScreenGui")
 gui.Name = "SerenityUI"
 gui.IgnoreGuiInset = true
@@ -114,7 +116,7 @@ titleBar.ClipsDescendants = true
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
-title.Text = "Serenity v1.0.6 by mystixie"
+title.Text = "Serenity v1.0.6a by mystixie"
 title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.TextColor3 = Color3.new(1, 1, 1)
@@ -257,7 +259,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = false
 		bodyContainer.Visible = false
 
-		title.Text = "Serenity v1.0.6"
+		title.Text = "Serenity v1.0.6a"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		minBtn.Text = "+"
 
@@ -271,7 +273,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = true
 		bodyContainer.Visible = true
 
-		title.Text = "Serenity v1.0.6 by mystixie"
+		title.Text = "Serenity v1.0.6a by mystixie"
 		title.Size = UDim2.new(1, -80, 1, 0)
 		minBtn.Text = "-"
 
@@ -993,7 +995,6 @@ local player = Players.LocalPlayer
 local seedShopFrame = player.PlayerGui:WaitForChild("Seed_Shop").Frame.ScrollingFrame
 
 local toggled = config.autoBuySeeds or false
-local buySeedTask
 
 local function updateSeedsToggleVisual(state)
 	if state then
@@ -1070,27 +1071,20 @@ local function waitForInGameSeedRestockTimerPolling()
 	print("[Auto Buy Seeds] Restock timer reached zero, proceeding with buying.")
 end
 
-local function startAutoBuySeedLoop()
-	if buySeedTask then return end
-	buySeedTask = task.spawn(function()
-		while toggled do
-			for _, seedName in ipairs(seeds) do
-				local stock = getSeedStockCount(seedName)
-				if stock > 0 then
-					print("Buying " .. stock .. " of " .. seedName)
-					for i = 1, stock do
-						ReplicatedStorage.GameEvents.BuySeedStock:FireServer(seedName)
-						task.wait(0.1)
-					end
-				else
-					print(seedName .. " out of stock")
-				end
+local function buyAllSeedsOnce()
+	for _, seedName in ipairs(seeds) do
+		local stock = getSeedStockCount(seedName)
+		if stock > 0 then
+			print("Buying " .. stock .. " of " .. seedName)
+			for i = 1, stock do
+				ReplicatedStorage.GameEvents.BuySeedStock:FireServer(seedName)
 				task.wait(0.1)
 			end
-			waitForInGameSeedRestockTimerPolling()
+		else
+			print(seedName .. " out of stock")
 		end
-		buySeedTask = nil
-	end)
+		task.wait(0.1)
+	end
 end
 
 trackSeeds.InputBegan:Connect(function(input)
@@ -1100,8 +1094,10 @@ trackSeeds.InputBegan:Connect(function(input)
 		saveConfig()
 		updateSeedsToggleVisual(toggled)
 
-		if toggled then
-			startAutoBuySeedLoop()
+		if config.autoBuySeeds or config.autoBuyGears or config.autoBuyEggs then
+			startAutoBuySequence()
+		else
+			buyTask = nil
 		end
 	end
 end)
@@ -1109,7 +1105,7 @@ end)
 updateSeedsToggleVisual(toggled)
 
 if toggled then
-	startAutoBuySeedLoop()
+	buyAllSeedsOnce()
 end
 
 local headerGears = Instance.new("TextLabel")
@@ -1161,7 +1157,6 @@ local player = Players.LocalPlayer
 local gearShopFrame = player.PlayerGui:WaitForChild("Gear_Shop").Frame.ScrollingFrame
 
 local toggled = config.autoBuyGears or false
-local buyGearTask
 
 local function updateGearsToggleVisual(state)
 	if state then
@@ -1221,27 +1216,20 @@ local function waitForInGameGearRestockTimerPolling()
 	print("[Auto Buy Gears] Restock timer reached zero, proceeding with buying.")
 end
 
-local function startAutoBuyGearLoop()
-	if buyGearTask then return end
-	buyGearTask = task.spawn(function()
-		while toggled do
-			for _, gearName in ipairs(gears) do
-				local stock = getGearStockCount(gearName)
-				if stock > 0 then
-					print("Buying " .. stock .. " of " .. gearName)
-					for i = 1, stock do
-						ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gearName)
-						task.wait(0.1)
-					end
-				else
-					print(gearName .. " out of stock")
-				end
+local function buyAllGearsOnce()
+	for _, gearName in ipairs(gears) do
+		local stock = getGearStockCount(gearName)
+		if stock > 0 then
+			print("Buying " .. stock .. " of " .. gearName)
+			for i = 1, stock do
+				ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gearName)
 				task.wait(0.1)
 			end
-			waitForInGameGearRestockTimerPolling()
+		else
+			print(gearName .. " out of stock")
 		end
-		buyGearTask = nil
-	end)
+		task.wait(0.1)
+	end
 end
 
 trackGears.InputBegan:Connect(function(input)
@@ -1251,8 +1239,10 @@ trackGears.InputBegan:Connect(function(input)
 		saveConfig()
 		updateGearsToggleVisual(toggled)
 
-		if toggled then
-			startAutoBuyGearLoop()
+		if config.autoBuySeeds or config.autoBuyGears or config.autoBuyEggs then
+			startAutoBuySequence()
+		else
+			buyTask = nil
 		end
 	end
 end)
@@ -1260,7 +1250,7 @@ end)
 updateGearsToggleVisual(toggled)
 
 if toggled then
-	startAutoBuyGearLoop()
+	buyAllGearsOnce()
 end
 
 local headerEggs = Instance.new("TextLabel")
@@ -1310,7 +1300,6 @@ local player = Players.LocalPlayer
 local eggShopFrame = player.PlayerGui:WaitForChild("PetShop_UI").Frame.ScrollingFrame
 
 local toggled = config.autoBuyEggs or false
-local buyEggTask
 
 local function updateEggsToggleVisual(state)
 	if state then
@@ -1370,28 +1359,20 @@ local function waitForInGameEggRestockTimerPolling()
 	print("[Auto Buy Eggs] Restock timer reached zero, proceeding with buying.")
 end
 
-
-local function startAutoBuyEggLoop()
-	if buyEggTask then return end
-	buyEggTask = task.spawn(function()
-		while toggled do
-			for _, eggName in ipairs(eggs) do
-				local stock = getEggStockCount(eggName)
-				if stock > 0 then
-					print("Buying " .. stock .. " of " .. eggName)
-					for i = 1, stock do
-						ReplicatedStorage.GameEvents.BuyPetEgg:FireServer(eggName)
-						task.wait(0.1)
-					end
-				else
-					print(eggName .. " out of stock")
-				end
+local function buyAllEggsOnce()
+	for _, eggName in ipairs(eggs) do
+		local stock = getEggStockCount(eggName)
+		if stock > 0 then
+			print("Buying " .. stock .. " of " .. eggName)
+			for i = 1, stock do
+				ReplicatedStorage.GameEvents.BuyPetEgg:FireServer(eggName)
 				task.wait(0.1)
 			end
-			waitForInGameEggRestockTimerPolling()
+		else
+			print(eggName .. " out of stock")
 		end
-		buyEggTask = nil
-	end)
+		task.wait(0.1)
+	end
 end
 
 trackEggs.InputBegan:Connect(function(input)
@@ -1401,8 +1382,10 @@ trackEggs.InputBegan:Connect(function(input)
 		saveConfig()
 		updateEggsToggleVisual(toggled)
 
-		if toggled then
-			startAutoBuyEggLoop()
+		if config.autoBuySeeds or config.autoBuyGears or config.autoBuyEggs then
+			startAutoBuySequence()
+		else
+			buyTask = nil
 		end
 	end
 end)
@@ -1410,7 +1393,28 @@ end)
 updateEggsToggleVisual(toggled)
 
 if toggled then
-	startAutoBuyEggLoop()
+	buyAllEggsOnce()
+end
+
+function startAutoBuySequence()
+	if buyTask then return end
+	buyTask = task.spawn(function()
+		while config.autoBuySeeds or config.autoBuyGears or config.autoBuyEggs do
+			if config.autoBuySeeds then
+				buyAllSeedsOnce()
+				waitForInGameSeedRestockTimerPolling()
+			end
+			if config.autoBuyGears then
+				buyAllGearsOnce()
+				waitForInGameGearRestockTimerPolling()
+			end
+			if config.autoBuyEggs then
+				buyAllEggsOnce()
+				waitForInGameEggRestockTimerPolling()
+			end
+		end
+		buyTask = nil
+	end)
 end
 
 -- Misc Tab
