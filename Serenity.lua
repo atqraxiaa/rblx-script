@@ -1092,204 +1092,189 @@ end)
 
 updateSeedsToggleVisual(autoBuySeeds)
 
-local descSeeds = Instance.new("TextLabel")
-descSeeds.Text = "Automatically buys all available seeds."
-descSeeds.Font = Enum.Font.Gotham
-descSeeds.TextSize = 12
-descSeeds.TextColor3 = Color3.fromRGB(200, 200, 200)
-descSeeds.BackgroundTransparency = 1
-descSeeds.Size = UDim2.new(1, -40, 0, 20)
-descSeeds.Position = UDim2.new(0, 20, 0, 40)
-descSeeds.TextXAlignment = Enum.TextXAlignment.Left
-descSeeds.TextWrapped = true
-descSeeds.Parent = shopTab
+--local headerGears = Instance.new("TextLabel")
+--headerGears.Text = "Auto Buy Gears"
+--headerGears.Font = Enum.Font.GothamBold
+--headerGears.TextSize = 12
+--headerGears.TextColor3 = Color3.fromRGB(255, 255, 255)
+--headerGears.BackgroundTransparency = 1
+--headerGears.Size = UDim2.new(0, 130, 0, 30)
+--headerGears.Position = UDim2.new(0, 20, 0, 65)
+--headerGears.TextXAlignment = Enum.TextXAlignment.Left
+--headerGears.Parent = shopTab
 
-local headerGears = Instance.new("TextLabel")
-headerGears.Text = "Auto Buy Gears"
-headerGears.Font = Enum.Font.GothamBold
-headerGears.TextSize = 12
-headerGears.TextColor3 = Color3.fromRGB(255, 255, 255)
-headerGears.BackgroundTransparency = 1
-headerGears.Size = UDim2.new(0, 130, 0, 30)
-headerGears.Position = UDim2.new(0, 20, 0, 65)
-headerGears.TextXAlignment = Enum.TextXAlignment.Left
-headerGears.Parent = shopTab
+--local toggleGears = Instance.new("TextButton")
+--toggleGears.Size = UDim2.new(0, 60, 0, 20)
+--toggleGears.Position = UDim2.new(0, 300, 0, 75)
+--toggleGears.Text = "OFF"
+--toggleGears.Font = Enum.Font.Gotham
+--toggleGears.TextSize = 14
+--toggleGears.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+--toggleGears.TextColor3 = Color3.fromRGB(255, 255, 255)
+--toggleGears.Parent = shopTab
 
+--local gears = {
+--	"Watering Can", "Trading Ticket", "Trowel", "Recall Wrench", "Basic Sprinkler", "Advanced Sprinkler",
+--	"Medium Toy", "Medium Treat", "Godly Sprinkler", "Magnifying Glass", 
+--	"Master Sprinkler", "Cleaning Spray", "Favorite Tool", "Harvest Tool",
+--	"Friendship Pot", "Levelup Lollipop"
+--}
 
+--local Players = game:GetService("Players")
+--local player = Players.LocalPlayer
+--local gearShopFrame = player.PlayerGui:WaitForChild("Gear_Shop").Frame.ScrollingFrame
+--local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+--local autoBuyGears = false
+--local autoBuyTask
 
-local toggleGears = Instance.new("TextButton")
-toggleGears.Size = UDim2.new(0, 60, 0, 20)
-toggleGears.Position = UDim2.new(0, 300, 0, 75)
-toggleGears.Text = "OFF"
-toggleGears.Font = Enum.Font.Gotham
-toggleGears.TextSize = 14
-toggleGears.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
-toggleGears.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleGears.Parent = shopTab
+--local function getStockCount(gearName)
+--	local gearFrame = gearShopFrame:FindFirstChild(gearName)
+--	if gearFrame and gearFrame:FindFirstChild("Main_Frame") and gearFrame.Main_Frame:FindFirstChild("Stock_Text") then
+--		local stockText = gearFrame.Main_Frame.Stock_Text.Text
+--		local stockCount = tonumber(stockText:match("X(%d+)")) or 0
+--		return stockCount
+--	end
+--	return 0
+--end
 
-local gears = {
-	"Watering Can", "Trading Ticket", "Trowel", "Recall Wrench", "Basic Sprinkler", "Advanced Sprinkler",
-	"Medium Toy", "Medium Treat", "Godly Sprinkler", "Magnifying Glass", 
-	"Master Sprinkler", "Cleaning Spray", "Favorite Tool", "Harvest Tool",
-	"Friendship Pot", "Levelup Lollipop"
-}
+--local function logAllStocks()
+--	print("Current Gear Stocks:")
+--	for _, gearName in ipairs(gears) do
+--		local stock = getStockCount(gearName)
+--		print(string.format("  %s stock count: %d", gearName, stock))
+--	end
+--end
 
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local gearShopFrame = player.PlayerGui:WaitForChild("Gear_Shop").Frame.ScrollingFrame
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+--local function buyGearsBasedOnStock()
+--	for _, gearName in ipairs(gears) do
+--		local stock = getStockCount(gearName)
+--		if stock > 0 then
+--			print(string.format("Buying %d of %s", stock, gearName))
+--			for i = 1, stock do
+--				ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gearName)
+--				task.wait(0.1)
+--			end
+--		else
+--			print(string.format("%s is out of stock or not available.", gearName))
+--		end
+--	end
+--end
 
-local autoBuyGears = false
-local autoBuyTask
+--local function waitUntilNextFiveMinute()
+--	while true do
+--		local time = os.date("*t")
+--		local minute = time.min
+--		local second = time.sec
+--		local waitSeconds = ((5 - (minute % 5)) * 60) - second
+--		if waitSeconds <= 0 then
+--			waitSeconds = 0
+--		end
+--		task.wait(waitSeconds)
+--		break
+--	end
+--end
 
-local function getStockCount(gearName)
-	local gearFrame = gearShopFrame:FindFirstChild(gearName)
-	if gearFrame and gearFrame:FindFirstChild("Main_Frame") and gearFrame.Main_Frame:FindFirstChild("Stock_Text") then
-		local stockText = gearFrame.Main_Frame.Stock_Text.Text
-		local stockCount = tonumber(stockText:match("X(%d+)")) or 0
-		return stockCount
-	end
-	return 0
-end
+--local autoBuyGears = config.autoBuyGears or false
 
-local function logAllStocks()
-	print("Current Gear Stocks:")
-	for _, gearName in ipairs(gears) do
-		local stock = getStockCount(gearName)
-		print(string.format("  %s stock count: %d", gearName, stock))
-	end
-end
+--toggleGears.MouseButton1Click:Connect(function()
+--	autoBuyGears = not autoBuyGears
+--	toggleGears.Text = autoBuyGears and "ON" or "OFF"
+--	toggleGears.BackgroundColor3 = autoBuyGears and Color3.fromRGB(70, 180, 70) or Color3.fromRGB(50, 50, 60)
 
-local function buyGearsBasedOnStock()
-	for _, gearName in ipairs(gears) do
-		local stock = getStockCount(gearName)
-		if stock > 0 then
-			print(string.format("Buying %d of %s", stock, gearName))
-			for i = 1, stock do
-				ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gearName)
-				task.wait(0.1)
-			end
-		else
-			print(string.format("%s is out of stock or not available.", gearName))
-		end
-	end
-end
+--	if autoBuyGears then
+--		autoBuyTask = task.spawn(function()
+--			while autoBuyGears do
+--				waitUntilNextFiveMinute()
 
-local function waitUntilNextFiveMinute()
-	while true do
-		local time = os.date("*t")
-		local minute = time.min
-		local second = time.sec
-		local waitSeconds = ((5 - (minute % 5)) * 60) - second
-		if waitSeconds <= 0 then
-			waitSeconds = 0
-		end
-		task.wait(waitSeconds)
-		break
-	end
-end
+--				print("=== Running gear stock check and buy at " .. os.date("%X") .. " ===")
 
-local autoBuyGears = config.autoBuyGears or false
+--				logAllStocks()
+--				buyGearsBasedOnStock()
+--				task.wait(1)
+--				logAllStocks()
+--			end
+--		end)
+--	else
+--		if autoBuyTask then
+--			task.cancel(autoBuyTask)
+--			autoBuyTask = nil
+--		end
+--	end
+--end)
 
-toggleGears.MouseButton1Click:Connect(function()
-	autoBuyGears = not autoBuyGears
-	toggleGears.Text = autoBuyGears and "ON" or "OFF"
-	toggleGears.BackgroundColor3 = autoBuyGears and Color3.fromRGB(70, 180, 70) or Color3.fromRGB(50, 50, 60)
+--local descGears = Instance.new("TextLabel")
+--descGears.Text = "Automatically buys all available gears."
+--descGears.Font = Enum.Font.Gotham
+--descGears.TextSize = 12
+--descGears.TextColor3 = Color3.fromRGB(200, 200, 200)
+--descGears.BackgroundTransparency = 1
+--descGears.Size = UDim2.new(1, -40, 0, 20)
+--descGears.Position = UDim2.new(0, 20, 0, 100)
+--descGears.TextXAlignment = Enum.TextXAlignment.Left
+--descGears.TextWrapped = true
+--descGears.Parent = shopTab
 
-	if autoBuyGears then
-		autoBuyTask = task.spawn(function()
-			while autoBuyGears do
-				waitUntilNextFiveMinute()
-
-				print("=== Running gear stock check and buy at " .. os.date("%X") .. " ===")
-
-				logAllStocks()
-				buyGearsBasedOnStock()
-				task.wait(1)
-				logAllStocks()
-			end
-		end)
-	else
-		if autoBuyTask then
-			task.cancel(autoBuyTask)
-			autoBuyTask = nil
-		end
-	end
-end)
-
-local descGears = Instance.new("TextLabel")
-descGears.Text = "Automatically buys all available gears."
-descGears.Font = Enum.Font.Gotham
-descGears.TextSize = 12
-descGears.TextColor3 = Color3.fromRGB(200, 200, 200)
-descGears.BackgroundTransparency = 1
-descGears.Size = UDim2.new(1, -40, 0, 20)
-descGears.Position = UDim2.new(0, 20, 0, 100)
-descGears.TextXAlignment = Enum.TextXAlignment.Left
-descGears.TextWrapped = true
-descGears.Parent = shopTab
-
-local headerEggs = Instance.new("TextLabel")
-headerEggs.Text = "Auto Buy Eggs"
-headerEggs.Font = Enum.Font.GothamBold
-headerEggs.TextSize = 12
-headerEggs.TextColor3 = Color3.fromRGB(255, 255, 255)
-headerEggs.BackgroundTransparency = 1
-headerEggs.Size = UDim2.new(0, 130, 0, 30)
-headerEggs.Position = UDim2.new(0, 20, 0, 95)
-headerEggs.TextXAlignment = Enum.TextXAlignment.Left
-headerEggs.Parent = shopTab
+--local headerEggs = Instance.new("TextLabel")
+--headerEggs.Text = "Auto Buy Eggs"
+--headerEggs.Font = Enum.Font.GothamBold
+--headerEggs.TextSize = 12
+--headerEggs.TextColor3 = Color3.fromRGB(255, 255, 255)
+--headerEggs.BackgroundTransparency = 1
+--headerEggs.Size = UDim2.new(0, 130, 0, 30)
+--headerEggs.Position = UDim2.new(0, 20, 0, 95)
+--headerEggs.TextXAlignment = Enum.TextXAlignment.Left
+--headerEggs.Parent = shopTab
 
 
 
-local toggleEggs = Instance.new("TextButton")
-toggleEggs.Size = UDim2.new(0, 60, 0, 20)
-toggleEggs.Position = UDim2.new(0, 300, 0, 135)
-toggleEggs.Text = "OFF"
-toggleEggs.Font = Enum.Font.Gotham
-toggleEggs.TextSize = 14
-toggleEggs.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
-toggleEggs.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleEggs.Parent = shopTab
+--local toggleEggs = Instance.new("TextButton")
+--toggleEggs.Size = UDim2.new(0, 60, 0, 20)
+--toggleEggs.Position = UDim2.new(0, 300, 0, 135)
+--toggleEggs.Text = "OFF"
+--toggleEggs.Font = Enum.Font.Gotham
+--toggleEggs.TextSize = 14
+--toggleEggs.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+--toggleEggs.TextColor3 = Color3.fromRGB(255, 255, 255)
+--toggleEggs.Parent = shopTab
 
-local eggs = {
-	"Common Egg", "Common Summer Egg", "Rare Summer Egg",
-	"Mythical Egg", "Paradise Egg", "Bug Egg"
-}
+--local eggs = {
+--	"Common Egg", "Common Summer Egg", "Rare Summer Egg",
+--	"Mythical Egg", "Paradise Egg", "Bug Egg"
+--}
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local autoBuyEggs = false
+--local ReplicatedStorage = game:GetService("ReplicatedStorage")
+--local autoBuyEggs = false
 
-toggleEggs.MouseButton1Click:Connect(function()
-	autoBuyEggs = not autoBuyEggs
-	toggleEggs.Text = autoBuyEggs and "ON" or "OFF"
-	toggleEggs.BackgroundColor3 = autoBuyEggs and Color3.fromRGB(70, 180, 70) or Color3.fromRGB(50, 50, 60)
+--toggleEggs.MouseButton1Click:Connect(function()
+--	autoBuyEggs = not autoBuyEggs
+--	toggleEggs.Text = autoBuyEggs and "ON" or "OFF"
+--	toggleEggs.BackgroundColor3 = autoBuyEggs and Color3.fromRGB(70, 180, 70) or Color3.fromRGB(50, 50, 60)
 
-	if autoBuyEggs then
-		task.spawn(function()
-			while autoBuyEggs do
-				for _, egg in ipairs(eggs) do
-					ReplicatedStorage.GameEvents.BuyEggStock:FireServer(egg)
-					task.wait(0.1)
-				end
-				task.wait(0.1)
-			end
-		end)
-	end
-end)
+--	if autoBuyEggs then
+--		task.spawn(function()
+--			while autoBuyEggs do
+--				for _, egg in ipairs(eggs) do
+--					ReplicatedStorage.GameEvents.BuyEggStock:FireServer(egg)
+--					task.wait(0.1)
+--				end
+--				task.wait(0.1)
+--			end
+--		end)
+--	end
+--end)
 
-local descEggs = Instance.new("TextLabel")
-descEggs.Text = "Automatically buys all available eggs."
-descEggs.Font = Enum.Font.Gotham
-descEggs.TextSize = 12
-descEggs.TextColor3 = Color3.fromRGB(200, 200, 200)
-descEggs.BackgroundTransparency = 1
-descEggs.Size = UDim2.new(1, -40, 0, 20)
-descEggs.Position = UDim2.new(0, 20, 0, 160)
-descEggs.TextXAlignment = Enum.TextXAlignment.Left
-descEggs.TextWrapped = true
-descEggs.Parent = shopTab
+--local descEggs = Instance.new("TextLabel")
+--descEggs.Text = "Automatically buys all available eggs."
+--descEggs.Font = Enum.Font.Gotham
+--descEggs.TextSize = 12
+--descEggs.TextColor3 = Color3.fromRGB(200, 200, 200)
+--descEggs.BackgroundTransparency = 1
+--descEggs.Size = UDim2.new(1, -40, 0, 20)
+--descEggs.Position = UDim2.new(0, 20, 0, 160)
+--descEggs.TextXAlignment = Enum.TextXAlignment.Left
+--descEggs.TextWrapped = true
+--descEggs.Parent = shopTab
 
 -- Misc Tab
 local miscTab = contentFrames["Misc"]
