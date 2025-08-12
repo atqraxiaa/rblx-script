@@ -1,55 +1,55 @@
 repeat task.wait() until game:IsLoaded()
 
---if game.PlaceId ~= 126884695634066 then
---	local TweenService = game:GetService("TweenService")
---	local PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+if game.PlaceId ~= 126884695634066 then
+	local TweenService = game:GetService("TweenService")
+	local PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
---	local gui = Instance.new("ScreenGui")
---	gui.Name = "SerenityUI"
---	gui.IgnoreGuiInset = true
---	gui.ResetOnSpawn = false
---	gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+	local gui = Instance.new("ScreenGui")
+	gui.Name = "SerenityUI"
+	gui.IgnoreGuiInset = true
+	gui.ResetOnSpawn = false
+	gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
---	local notif = Instance.new("Frame")
---	notif.Size = UDim2.new(0, 320, 0, 50)
---	notif.Position = UDim2.new(1, 340, 1, -10)
---	notif.AnchorPoint = Vector2.new(1, 1)
---	notif.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
---	notif.BorderSizePixel = 0
---	notif.Parent = gui
+	local notif = Instance.new("Frame")
+	notif.Size = UDim2.new(0, 320, 0, 50)
+	notif.Position = UDim2.new(1, 340, 1, -10)
+	notif.AnchorPoint = Vector2.new(1, 1)
+	notif.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	notif.BorderSizePixel = 0
+	notif.Parent = gui
 
---	local text = Instance.new("TextLabel")
---	text.Size = UDim2.new(1, -20, 1, 0)
---	text.Position = UDim2.new(0, 10, 0, 0)
---	text.BackgroundTransparency = 1
---	text.Text = "❌ This script only supports Grow a Garden."
---	text.Font = Enum.Font.Gotham
---	text.TextSize = 14
---	text.TextColor3 = Color3.fromRGB(255, 255, 255)
---	text.TextXAlignment = Enum.TextXAlignment.Center
---	text.Parent = notif
+	local text = Instance.new("TextLabel")
+	text.Size = UDim2.new(1, -20, 1, 0)
+	text.Position = UDim2.new(0, 10, 0, 0)
+	text.BackgroundTransparency = 1
+	text.Text = "❌ This script only supports Grow a Garden."
+	text.Font = Enum.Font.Gotham
+	text.TextSize = 14
+	text.TextColor3 = Color3.fromRGB(255, 255, 255)
+	text.TextXAlignment = Enum.TextXAlignment.Center
+	text.Parent = notif
 
---	local tweenIn = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
---		Position = UDim2.new(1, -20, 1, -20)
---	})
---	local tweenOut = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
---		Position = UDim2.new(1, 270, 1, -20)
---	})
+	local tweenIn = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+		Position = UDim2.new(1, -20, 1, -20)
+	})
+	local tweenOut = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
+		Position = UDim2.new(1, 270, 1, -20)
+	})
 
---	Instance.new("UICorner", notif).CornerRadius = UDim.new(0, 12)
+	Instance.new("UICorner", notif).CornerRadius = UDim.new(0, 12)
 
---	tweenIn:Play()
---	tweenIn.Completed:Wait()
+	tweenIn:Play()
+	tweenIn.Completed:Wait()
 
---	task.wait(10)
+	task.wait(10)
 
---	tweenOut:Play()
---	tweenOut.Completed:Wait()
+	tweenOut:Play()
+	tweenOut.Completed:Wait()
 
---	notif:Destroy()
+	notif:Destroy()
 
---	return
---end
+	return
+end
 
 local CONFIG_FILE = "SerenityConfig.json"
 local HttpService = game:GetService("HttpService")
@@ -105,6 +105,7 @@ frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
 frame.BackgroundTransparency = 0
 frame.BorderSizePixel = 0
 frame.ClipsDescendants = true
+frame.ZIndex = 99999
 frame.Parent = gui
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
 
@@ -118,7 +119,7 @@ titleBar.ClipsDescendants = true
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
-title.Text = "Serenity v1.0.5 by mystixie"
+title.Text = "Serenity v1.0.6 by mystixie"
 title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.TextColor3 = Color3.new(1, 1, 1)
@@ -261,7 +262,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = false
 		bodyContainer.Visible = false
 
-		title.Text = "Serenity v1.0.5"
+		title.Text = "Serenity v1.0.6"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		minBtn.Text = "+"
 
@@ -275,7 +276,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = true
 		bodyContainer.Visible = true
 
-		title.Text = "Serenity v1.0.5 by mystixie"
+		title.Text = "Serenity v1.0.6 by mystixie"
 		title.Size = UDim2.new(1, -80, 1, 0)
 		minBtn.Text = "-"
 
@@ -1031,69 +1032,47 @@ local function getSeedStockCount(seedName)
 	return 0
 end
 
-function formatTime(hour, minute, second)
-	local ampm = "AM"
-	local displayHour = hour
+function parseRestockTimerText(text)
+	local minutes = 0
+	local seconds = 0
 
-	if hour == 0 then
-		displayHour = 12
-		ampm = "AM"
-	elseif hour == 12 then
-		ampm = "PM"
-	elseif hour > 12 then
-		displayHour = hour - 12
-		ampm = "PM"
+	local m = text:match("(%d+)%s*m")
+	if m then
+		minutes = tonumber(m)
 	end
 
-	local displayMinute = tostring(minute)
-	if minute < 10 then
-		displayMinute = "0" .. minute
+	local s = text:match("(%d+)%s*s")
+	if s then
+		seconds = tonumber(s)
 	end
 
-	local displaySecond = "00"
-	if second then
-		displaySecond = tostring(second)
-		if second < 10 then
-			displaySecond = "0" .. second
-		end
-	end
-
-	return string.format("%d:%s:%s %s", displayHour, displayMinute, displaySecond, ampm)
+	return (minutes * 60) + seconds
 end
 
-function waitUntilNextFiveMinuteMark()
-	local now = os.date("*t")
-	local hour = now.hour
-	local minute = now.min
-	local second = now.sec
+local function waitForInGameSeedRestockTimerPolling()
+	local player = game:GetService("Players").LocalPlayer
+	local seedShopGui = player.PlayerGui:WaitForChild("Seed_Shop")
+	local timerLabel = seedShopGui.Frame.Frame:FindFirstChild("Timer")
 
-	local nextMinute = math.ceil(minute / 5) * 5
-	if nextMinute == 60 then
-		nextMinute = 0
-		hour = (hour + 1) % 24
+	if not timerLabel or not timerLabel:IsA("TextLabel") then
+		warn("Restock timer label not found, defaulting to 5 minutes wait")
+		task.wait(300)
+		return
 	end
 
-	local targetSecond = 5
+	while true do
+		local timeText = timerLabel.Text
+		local timeLeft = parseRestockTimerText(timeText)
 
-	local waitSeconds
+		if timeLeft <= 2 then
+			task.wait(2)
+			break
+		end
 
-	if nextMinute > minute or (nextMinute == minute and second < targetSecond) then
-		waitSeconds = (nextMinute - minute) * 60 + (targetSecond - second)
-	else
-		waitSeconds = (60 - minute + nextMinute) * 60 + (targetSecond - second)
+		task.wait(1)
 	end
 
-	local nextTimeHour = hour
-	local nextTimeMinute = nextMinute
-	local nextTimeSecond = targetSecond
-
-	local nextTimeString = formatTime(nextTimeHour, nextTimeMinute, nextTimeSecond)
-
-	print("[Auto Buy Stocks] Restocking on " .. nextTimeString .. "...")
-
-	if waitSeconds > 0 then
-		task.wait(waitSeconds)
-	end
+	print("[Auto Buy Seeds] Restock timer reached zero, proceeding with buying.")
 end
 
 local function startAutoBuySeedLoop()
@@ -1113,7 +1092,7 @@ local function startAutoBuySeedLoop()
 				end
 				task.wait(0.1)
 			end
-			waitUntilNextFiveMinuteMark()
+			waitForInGameSeedRestockTimerPolling()
 		end
 		buySeedTask = nil
 	end)
@@ -1214,11 +1193,37 @@ updateGearsToggleVisual(toggled)
 local function getGearStockCount(gearName)
 	local gearFrame = gearShopFrame:FindFirstChild(gearName)
 	if gearFrame and gearFrame:FindFirstChild("Main_Frame") and gearFrame.Main_Frame:FindFirstChild("Stock_Text") then
-		local stockText = gearFrame.Main_Frame.Gear_Text.Text
+		local stockText = gearFrame.Main_Frame.Stock_Text.Text
 		local stockCount = tonumber(stockText:match("X(%d+)")) or 0
 		return stockCount
 	end
 	return 0
+end
+
+local function waitForInGameGearRestockTimerPolling()
+	local player = game:GetService("Players").LocalPlayer
+	local gearShopGui = player.PlayerGui:WaitForChild("Gear_Shop")
+	local timerLabel = gearShopGui.Frame.Frame:FindFirstChild("Timer")
+
+	if not timerLabel or not timerLabel:IsA("TextLabel") then
+		warn("Gear restock timer label not found, defaulting to 5 minutes wait")
+		task.wait(300)
+		return
+	end
+
+	while true do
+		local timeText = timerLabel.Text
+		local timeLeft = parseRestockTimerText(timeText)
+
+		if timeLeft <= 2 then
+			task.wait(2)
+			break
+		end
+
+		task.wait(1)
+	end
+
+	print("[Auto Buy Gears] Restock timer reached zero, proceeding with buying.")
 end
 
 local function startAutoBuyGearLoop()
@@ -1238,7 +1243,7 @@ local function startAutoBuyGearLoop()
 				end
 				task.wait(0.1)
 			end
-			waitUntilNextFiveMinuteMark()
+			waitForInGameGearRestockTimerPolling()
 		end
 		buyGearTask = nil
 	end)
@@ -1344,6 +1349,33 @@ local function getEggStockCount(eggName)
 	return 0
 end
 
+local function waitForInGameEggRestockTimerPolling()
+	local player = game:GetService("Players").LocalPlayer
+	local eggShopGui = player.PlayerGui:WaitForChild("PetShop_UI")
+	local timerLabel = eggShopGui.Frame.Frame:FindFirstChild("Timer")
+
+	if not timerLabel or not timerLabel:IsA("TextLabel") then
+		warn("Egg restock timer label not found, defaulting to 30 minutes wait")
+		task.wait(1800)
+		return
+	end
+
+	while true do
+		local timeText = timerLabel.Text
+		local timeLeft = parseRestockTimerText(timeText)
+
+		if timeLeft <= 2 then
+			task.wait(2)
+			break
+		end
+
+		task.wait(1)
+	end
+
+	print("[Auto Buy Eggs] Restock timer reached zero, proceeding with buying.")
+end
+
+
 local function startAutoBuyEggLoop()
 	if buyEggTask then return end
 	buyEggTask = task.spawn(function()
@@ -1361,7 +1393,7 @@ local function startAutoBuyEggLoop()
 				end
 				task.wait(0.1)
 			end
-			waitUntilNextFiveMinuteMark()
+			waitForInGameEggRestockTimerPolling()
 		end
 		buyEggTask = nil
 	end)
