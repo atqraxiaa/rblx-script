@@ -682,13 +682,13 @@ autoReconToggleTrack.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
 autoReconToggleTrack.BorderSizePixel = 0
 autoReconToggleTrack.Parent = mainTab
 
-local knob = Instance.new("Frame")
-knob.Size = UDim2.new(0, 16, 0, 16)
-knob.AnchorPoint = Vector2.new(0.5, 0.5)
-knob.Position = UDim2.new(0, 7, 0.5, 0)
-knob.BackgroundColor3 = Color3.new(1, 1, 1)
-knob.BorderSizePixel = 0
-knob.Parent = autoReconToggleTrack
+local autoReconToggleKnob = Instance.new("Frame")
+autoReconToggleKnob.Size = UDim2.new(0, 16, 0, 16)
+autoReconToggleKnob.AnchorPoint = Vector2.new(0.5, 0.5)
+autoReconToggleKnob.Position = UDim2.new(0, 7, 0.5, 0)
+autoReconToggleKnob.BackgroundColor3 = Color3.new(1, 1, 1)
+autoReconToggleKnob.BorderSizePixel = 0
+autoReconToggleKnob.Parent = autoReconToggleTrack
 
 local cornerTrack = Instance.new("UICorner")
 cornerTrack.CornerRadius = UDim.new(1, 0)
@@ -696,20 +696,20 @@ cornerTrack.Parent = autoReconToggleTrack
 
 local cornerKnob = Instance.new("UICorner")
 cornerKnob.CornerRadius = UDim.new(1, 0)
-cornerKnob.Parent = knob
+cornerKnob.Parent = autoReconToggleKnob
 
-local toggled = config.autoReconnect or false
+local reconToggled = config.autoReconnect or false
 
 local function updateReconToggleVisual(state)
 	if state then
-		TweenService:Create(knob, TweenInfo.new(0.2), {
+		TweenService:Create(autoReconToggleKnob, TweenInfo.new(0.2), {
 			Position = UDim2.new(1, -7, 0.5, 0)
 		}):Play()
 		TweenService:Create(autoReconToggleTrack, TweenInfo.new(0.2), {
 			BackgroundColor3 = Color3.fromRGB(0, 170, 0)
 		}):Play()
 	else
-		TweenService:Create(knob, TweenInfo.new(0.2), {
+		TweenService:Create(autoReconToggleKnob, TweenInfo.new(0.2), {
 			Position = UDim2.new(0, 7, 0.5, 0)
 		}):Play()
 		TweenService:Create(autoReconToggleTrack, TweenInfo.new(0.2), {
@@ -717,57 +717,40 @@ local function updateReconToggleVisual(state)
 		}):Play()
 	end
 end
-
-updateReconToggleVisual(toggled)
+updateReconToggleVisual(reconToggled)
 
 autoReconToggleTrack.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1
-		or input.UserInputType == Enum.UserInputType.Touch then
-
-		toggled = not toggled
-		config.autoReconnect = toggled
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		reconToggled = not reconToggled
+		config.autoReconnect = reconToggled
 		saveConfig()
-
-		updateReconToggleVisual(toggled)
+		updateReconToggleVisual(reconToggled)
 	end
 end)
 
-local CoreGui = game:GetService("CoreGui")
-local VirtualInputManager = game:GetService("VirtualInputManager")
+local function startReconnectLoop()
+	task.spawn(function()
+		local ts = game:GetService("TeleportService")
 
-local function clickReconnect()
-	local promptOverlay = CoreGui:FindFirstChild("RobloxPromptGui", true)
-	if not promptOverlay then return end
+		repeat task.wait() until game.CoreGui:FindFirstChild("RobloxPromptGui")
+		local po = game.CoreGui.RobloxPromptGui:FindFirstChild("promptOverlay")
 
-	local reconnectButton = promptOverlay:FindFirstChild("TextButton", true)
-	if reconnectButton and reconnectButton.Text:lower():find("reconnect") then
-		local absPos = reconnectButton.AbsolutePosition
-		local absSize = reconnectButton.AbsoluteSize
-		VirtualInputManager:SendMouseButtonEvent(
-			absPos.X + absSize.X / 2,
-			absPos.Y + absSize.Y / 2,
-			0, true, nil, 0
-		)
-		VirtualInputManager:SendMouseButtonEvent(
-			absPos.X + absSize.X / 2,
-			absPos.Y + absSize.Y / 2,
-			0, false, nil, 0
-		)
-		warn("[Auto Reconnect] Reconnect button clicked!")
-	end
+		if po then
+			po.ChildAdded:Connect(function(a)
+				if reconToggled and a.Name == "ErrorPrompt" then
+					while reconToggled do
+						ts:Teleport(game.PlaceId)
+						task.wait(2)
+					end
+				end
+			end)
+		end
+	end)
 end
 
-task.spawn(function()
-	while true do
-		task.wait(1)
-		if toggled then
-			local prompt = CoreGui:FindFirstChild("RobloxPromptGui", true)
-			if prompt and prompt:FindFirstChild("LostConnectionPrompt", true) then
-				clickReconnect()
-			end
-		end
-	end
-end)
+if reconToggled then
+	startReconnectLoop()
+end
 
 local antiAfkTitle = Instance.new("TextLabel")
 antiAfkTitle.Text = "Anti AFK"
