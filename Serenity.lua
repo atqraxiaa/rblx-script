@@ -118,7 +118,7 @@ titleBar.ClipsDescendants = true
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
-title.Text = "Serenity v1.0.4a by mystixie"
+title.Text = "Serenity v1.0.4b by mystixie"
 title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.TextColor3 = Color3.new(1, 1, 1)
@@ -261,7 +261,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = false
 		bodyContainer.Visible = false
 
-		title.Text = "Serenity v1.0.4a"
+		title.Text = "Serenity v1.0.4b"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		minBtn.Text = "+"
 
@@ -275,7 +275,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = true
 		bodyContainer.Visible = true
 
-		title.Text = "Serenity v1.0.4a by mystixie"
+		title.Text = "Serenity v1.0.4b by mystixie"
 		title.Size = UDim2.new(1, -80, 1, 0)
 		minBtn.Text = "-"
 		
@@ -1028,8 +1028,8 @@ local seeds = {
 
 local function getStockCount(seedName)
 	local seedFrame = seedShopFrame:FindFirstChild(seedName)
-	if seedFrame and seedFrame:FindFirstChild("Main_Frame") and seedFrame.Main_Frame:FindFirstChild("Seed_Text") then
-		local stockText = seedFrame.Main_Frame.Seed_Text.Text
+	if seedFrame and seedFrame:FindFirstChild("Main_Frame") and seedFrame.Main_Frame:FindFirstChild("Stock_Text") then
+		local stockText = seedFrame.Main_Frame.Stock_Text.Text
 		local stockCount = tonumber(stockText:match("X(%d+)")) or 0
 		return stockCount
 	end
