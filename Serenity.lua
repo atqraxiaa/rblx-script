@@ -1,6 +1,55 @@
--- mo run ra ang script kung "Grow a Garden" ang current game, og mo execute after ma fully loaded ang game 
 repeat task.wait() until game:IsLoaded()
--- if game.PlaceId ~= 126884695634066 then return end
+
+if game.PlaceId ~= 126884695634066 then
+	local TweenService = game:GetService("TweenService")
+	local PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+	
+	local gui = Instance.new("ScreenGui")
+	gui.Name = "SerenityUI"
+	gui.IgnoreGuiInset = true
+	gui.ResetOnSpawn = false
+	gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+	
+	local notif = Instance.new("Frame")
+	notif.Size = UDim2.new(0, 320, 0, 50)
+	notif.Position = UDim2.new(1, 340, 1, -10)
+	notif.AnchorPoint = Vector2.new(1, 1)
+	notif.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	notif.BorderSizePixel = 0
+	notif.Parent = gui
+
+	local text = Instance.new("TextLabel")
+	text.Size = UDim2.new(1, -20, 1, 0)
+	text.Position = UDim2.new(0, 10, 0, 0)
+	text.BackgroundTransparency = 1
+	text.Text = "❌ This script only supports Grow a Garden."
+	text.Font = Enum.Font.Gotham
+	text.TextSize = 14
+	text.TextColor3 = Color3.fromRGB(255, 255, 255)
+	text.TextXAlignment = Enum.TextXAlignment.Center
+	text.Parent = notif
+
+	local tweenIn = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+		Position = UDim2.new(1, -20, 1, -20)
+	})
+	local tweenOut = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
+		Position = UDim2.new(1, 270, 1, -20)
+	})
+	
+	Instance.new("UICorner", notif).CornerRadius = UDim.new(0, 12)
+
+	tweenIn:Play()
+	tweenIn.Completed:Wait()
+
+	task.wait(3)
+
+	tweenOut:Play()
+	tweenOut.Completed:Wait()
+
+	notif:Destroy()
+
+	return
+end
 
 local CONFIG_FILE = "SerenityConfig.json"
 local HttpService = game:GetService("HttpService")
@@ -66,7 +115,7 @@ titleBar.ClipsDescendants = true
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
-title.Text = "Serenity v1.0.2 by kiyaa"
+title.Text = "Serenity v1.0.3 by mystixie"
 title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.TextColor3 = Color3.new(1, 1, 1)
@@ -105,7 +154,7 @@ fpsLabel.Parent = titleBar
 local timeLabel = Instance.new("TextLabel")
 timeLabel.ZIndex = 5
 timeLabel.Size = UDim2.new(0, 150, 1, 0)
-timeLabel.Position = UDim2.new(0, 240, 0, 0)
+timeLabel.Position = UDim2.new(0, 259, 0, 0)
 timeLabel.Font = Enum.Font.GothamMedium
 timeLabel.TextSize = 14
 timeLabel.TextColor3 = Color3.new(1, 1, 1)
@@ -209,7 +258,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = false
 		bodyContainer.Visible = false
 
-		title.Text = "Serenity v1.0.2"
+		title.Text = "Serenity v1.0.3"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		minBtn.Text = "+"
 
@@ -223,12 +272,11 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = true
 		bodyContainer.Visible = true
 
-		title.Text = "Serenity v1.0.2 by kiyaa"
+		title.Text = "Serenity v1.0.3 by mystixie"
 		title.Size = UDim2.new(1, -80, 1, 0)
 		minBtn.Text = "-"
-
-		pingLabel.Position = UDim2.new(0, 200, 0, 0)
-		fpsLabel.Position = UDim2.new(0, 340, 0, 0)
+		
+		timeLabel.Position = UDim2.new(0, 259, 0, 0)
 
 		tweenFrameSize(fullSize, tweenDuration):Wait()
 	end
@@ -520,13 +568,13 @@ autoServerHopTrack.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
 autoServerHopTrack.BorderSizePixel = 0
 autoServerHopTrack.Parent = mainTab
 
-local knob = Instance.new("Frame")
-knob.Size = UDim2.new(0, 16, 0, 16)
-knob.AnchorPoint = Vector2.new(0.5, 0.5)
-knob.Position = UDim2.new(0, 7, 0.5, 0)
-knob.BackgroundColor3 = Color3.new(1, 1, 1)
-knob.BorderSizePixel = 0
-knob.Parent = autoServerHopTrack
+local autoServerHopKnob = Instance.new("Frame")
+autoServerHopKnob.Size = UDim2.new(0, 16, 0, 16)
+autoServerHopKnob.AnchorPoint = Vector2.new(0.5, 0.5)
+autoServerHopKnob.Position = UDim2.new(0, 7, 0.5, 0)
+autoServerHopKnob.BackgroundColor3 = Color3.new(1, 1, 1)
+autoServerHopKnob.BorderSizePixel = 0
+autoServerHopKnob.Parent = autoServerHopTrack
 
 local cornerTrack = Instance.new("UICorner")
 cornerTrack.CornerRadius = UDim.new(1, 0)
@@ -534,21 +582,24 @@ cornerTrack.Parent = autoServerHopTrack
 
 local cornerKnob = Instance.new("UICorner")
 cornerKnob.CornerRadius = UDim.new(1, 0)
-cornerKnob.Parent = knob
+cornerKnob.Parent = autoServerHopKnob
+
+local hopToggled = config.autoServerHop or false
+local hopLoop
 
 local hopToggled = config.autoServerHop or false
 local hopLoop
 
 local function updateHopToggleVisual(state)
 	if state then
-		TweenService:Create(knob, TweenInfo.new(0.2), {
+		TweenService:Create(autoServerHopKnob, TweenInfo.new(0.2), {
 			Position = UDim2.new(1, -7, 0.5, 0)
 		}):Play()
 		TweenService:Create(autoServerHopTrack, TweenInfo.new(0.2), {
 			BackgroundColor3 = Color3.fromRGB(0, 170, 0)
 		}):Play()
 	else
-		TweenService:Create(knob, TweenInfo.new(0.2), {
+		TweenService:Create(autoServerHopKnob, TweenInfo.new(0.2), {
 			Position = UDim2.new(0, 7, 0.5, 0)
 		}):Play()
 		TweenService:Create(autoServerHopTrack, TweenInfo.new(0.2), {
@@ -557,16 +608,78 @@ local function updateHopToggleVisual(state)
 	end
 end
 
-updateHopToggleVisual(config.autoServerHop)
+local function startHopLoop()
+	if hopLoop then task.cancel(hopLoop) end
+	local HttpService = game:GetService("HttpService")
+	local TeleportService = game:GetService("TeleportService")
+	local Players = game:GetService("Players")
+	local desiredVersion = tonumber(config.desiredGameVersion)
+	local placeId = game.PlaceId
 
-if config.autoServerHop then
+	hopLoop = task.spawn(function()
+		while hopToggled do
+			if game.PlaceVersion == desiredVersion then
+				warn("[Auto Hop] Found desired version:", desiredVersion)
+				break
+			end
+
+			local servers = {}
+			local cursor = ""
+
+			repeat
+				local url = string.format(
+					"https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100%s",
+					placeId,
+					cursor ~= "" and "&cursor=" .. cursor or ""
+				)
+
+				local success, response = pcall(function()
+					return HttpService:JSONDecode(game:HttpGet(url))
+				end)
+
+				if success and response and response.data then
+					for _, server in ipairs(response.data) do
+						if server.id ~= game.JobId and server.playing < server.maxPlayers then
+							table.insert(servers, server.id)
+						end
+					end
+					cursor = response.nextPageCursor or ""
+				else
+					break
+				end
+			until cursor == "" or #servers >= 1
+
+			if #servers > 0 then
+				local newServerId = servers[math.random(1, #servers)]
+				warn("[Auto Hop] Hopping to new server:", newServerId)
+				TeleportService:TeleportToPlaceInstance(placeId, newServerId, Players.LocalPlayer)
+			else
+				warn("[Auto Hop] No available servers found, retrying...")
+				task.wait(3)
+			end
+		end
+	end)
+end
+
+local function stopHopLoop()
+	if hopLoop then
+		task.cancel(hopLoop)
+		hopLoop = nil
+		warn("[Auto Hop] Stopped.")
+	end
+end
+
+updateHopToggleVisual(hopToggled)
+
+if hopToggled then
 	if not config.desiredGameVersion or config.desiredGameVersion == "" then
 		warn("[Auto Hop] Config says ON, but no desired version set. Disabling.")
+		hopToggled = false
 		config.autoServerHop = false
 		saveConfig()
 		updateHopToggleVisual(false)
 	else
-		hopToggled = true
+		startHopLoop()
 	end
 end
 
@@ -590,63 +703,9 @@ autoServerHopTrack.InputBegan:Connect(function(input)
 				gameVersionBox:CaptureFocus()
 				return
 			end
-
-			local HttpService = game:GetService("HttpService")
-			local TeleportService = game:GetService("TeleportService")
-			local Players = game:GetService("Players")
-			local desiredVersion = tonumber(config.desiredGameVersion)
-			local placeId = game.PlaceId
-
-			hopLoop = task.spawn(function()
-				while hopToggled do
-					if game.PlaceVersion == desiredVersion then
-						warn("[Auto Hop] Found desired version:", desiredVersion)
-						break
-					end
-
-					local servers = {}
-					local cursor = ""
-
-					repeat
-						local url = string.format(
-							"https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100%s",
-							placeId,
-							cursor ~= "" and "&cursor=" .. cursor or ""
-						)
-
-						local success, response = pcall(function()
-							return HttpService:JSONDecode(game:HttpGet(url))
-						end)
-
-						if success and response and response.data then
-							for _, server in ipairs(response.data) do
-								if server.id ~= game.JobId and server.playing < server.maxPlayers then
-									table.insert(servers, server.id)
-								end
-							end
-							cursor = response.nextPageCursor or ""
-						else
-							break
-						end
-					until cursor == "" or #servers >= 1
-
-					if #servers > 0 then
-						local newServerId = servers[math.random(1, #servers)]
-						warn("[Auto Hop] Hopping to new server:", newServerId)
-						TeleportService:TeleportToPlaceInstance(placeId, newServerId, Players.LocalPlayer)
-					else
-						warn("[Auto Hop] No available servers found, retrying...")
-						task.wait(3)
-					end
-				end
-			end)
-
+			startHopLoop()
 		else
-			if hopLoop then
-				task.cancel(hopLoop)
-				hopLoop = nil
-				warn("[Auto Hop] Stopped.")
-			end
+			stopHopLoop()
 		end
 	end
 end)
@@ -1140,3 +1199,51 @@ UserInputService.InputChanged:Connect(function(input)
 		)
 	end
 end)
+
+-- Countdown label
+local afkCountdownLabel = Instance.new("TextLabel")
+afkCountdownLabel.Size = UDim2.new(0, 180, 0, 20)
+afkCountdownLabel.Position = UDim2.new(0, 10, 0, 10)
+afkCountdownLabel.BackgroundTransparency = 0.3
+afkCountdownLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+afkCountdownLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+afkCountdownLabel.Font = Enum.Font.GothamBold
+afkCountdownLabel.TextSize = 12
+afkCountdownLabel.Text = "AFK Timer: N/A"
+afkCountdownLabel.Parent = gui
+-- Variables
+local afkCountdownLoop
+local afkTimeLeft = 1200 -- 20 minutes in seconds
+
+local function startAntiAfkLoop()
+	local VirtualUser = game:GetService("VirtualUser")
+
+	-- Cancel old loop
+	if afkCountdownLoop then task.cancel(afkCountdownLoop) end
+	afkTimeLeft = 1200
+
+	afkCountdownLoop = task.spawn(function()
+		while config.autoAfk do
+			-- Update label every second
+			for i = afkTimeLeft, 0, -1 do
+				afkCountdownLabel.Text = "AFK Timer: " .. i .. "s"
+				task.wait(1)
+				afkTimeLeft = afkTimeLeft - 1
+			end
+
+			-- Reset AFK timer with input
+			VirtualUser:CaptureController()
+			VirtualUser:ClickButton2(Vector2.new())
+			print("[Anti AFK] Resetting AFK timer.")
+			afkTimeLeft = 1200 -- Reset to 20 min
+		end
+	end)
+end
+
+local function stopAntiAfkLoop()
+	if afkCountdownLoop then
+		task.cancel(afkCountdownLoop)
+		afkCountdownLoop = nil
+	end
+	afkCountdownLabel.Text = "AFK Timer: N/A"
+end
