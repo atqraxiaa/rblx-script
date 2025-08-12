@@ -90,6 +90,10 @@ local Stats = game:GetService("Stats")
 
 local buyTask
 
+local currentSeedRestockTime = 0
+local currentGearRestockTime = 0
+local currentEggRestockTime = 0
+
 local gui = Instance.new("ScreenGui")
 gui.Name = "SerenityUI"
 gui.IgnoreGuiInset = true
@@ -116,7 +120,7 @@ titleBar.ClipsDescendants = true
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
-title.Text = "Serenity v1.0.6a by mystixie"
+title.Text = "Serenity v1.0.6b by mystixie"
 title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.TextColor3 = Color3.new(1, 1, 1)
@@ -259,7 +263,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = false
 		bodyContainer.Visible = false
 
-		title.Text = "Serenity v1.0.6a"
+		title.Text = "Serenity v1.0.6b"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		minBtn.Text = "+"
 
@@ -273,7 +277,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = true
 		bodyContainer.Visible = true
 
-		title.Text = "Serenity v1.0.6a by mystixie"
+		title.Text = "Serenity v1.0.6b by mystixie"
 		title.Size = UDim2.new(1, -80, 1, 0)
 		minBtn.Text = "-"
 
@@ -1045,30 +1049,31 @@ function parseRestockTimerText(text)
 	return (minutes * 60) + seconds
 end
 
-local function waitForInGameSeedRestockTimerPolling()
-	local player = game:GetService("Players").LocalPlayer
-	local seedShopGui = player.PlayerGui:WaitForChild("Seed_Shop")
-	local timerLabel = seedShopGui.Frame.Frame:FindFirstChild("Timer")
+local function startSeedRestockTimerPolling()
+	task.spawn(function()
+		local player = game:GetService("Players").LocalPlayer
+		local seedShopGui = player.PlayerGui:WaitForChild("Seed_Shop")
+		local timerLabel = seedShopGui.Frame.Frame:FindFirstChild("Timer")
 
-	if not timerLabel or not timerLabel:IsA("TextLabel") then
-		warn("Restock timer label not found, defaulting to 5 minutes wait")
-		task.wait(300)
-		return
-	end
-
-	while true do
-		local timeText = timerLabel.Text
-		local timeLeft = parseRestockTimerText(timeText)
-
-		if timeLeft <= 2 then
-			task.wait(2)
-			break
+		if not timerLabel or not timerLabel:IsA("TextLabel") then
+			warn("Restock timer label not found, defaulting to 5 minutes wait")
+			currentSeedRestockTime = 300
+			return
 		end
 
+		while true do
+			local timeText = timerLabel.Text
+			currentSeedRestockTime = parseRestockTimerText(timeText) or 0
+			task.wait(1)
+		end
+	end)
+end
+
+local function waitForInGameSeedRestockTimerPolling()
+	while currentSeedRestockTime > 2 do
 		task.wait(1)
 	end
-
-	print("[Auto Buy Seeds] Restock timer reached zero, proceeding with buying.")
+	task.wait(2)
 end
 
 local function buyAllSeedsOnce()
@@ -1190,30 +1195,31 @@ local function getGearStockCount(gearName)
 	return 0
 end
 
-local function waitForInGameGearRestockTimerPolling()
-	local player = game:GetService("Players").LocalPlayer
-	local gearShopGui = player.PlayerGui:WaitForChild("Gear_Shop")
-	local timerLabel = gearShopGui.Frame.Frame:FindFirstChild("Timer")
+local function startGearRestockTimerPolling()
+	task.spawn(function()
+		local player = game:GetService("Players").LocalPlayer
+		local gearShopGui = player.PlayerGui:WaitForChild("Gear_Shop")
+		local timerLabel = gearShopGui.Frame.Frame:FindFirstChild("Timer")
 
-	if not timerLabel or not timerLabel:IsA("TextLabel") then
-		warn("Gear restock timer label not found, defaulting to 5 minutes wait")
-		task.wait(300)
-		return
-	end
-
-	while true do
-		local timeText = timerLabel.Text
-		local timeLeft = parseRestockTimerText(timeText)
-
-		if timeLeft <= 2 then
-			task.wait(2)
-			break
+		if not timerLabel or not timerLabel:IsA("TextLabel") then
+			warn("Gear restock timer label not found, defaulting to 5 minutes wait")
+			currentGearRestockTime = 300
+			return
 		end
 
+		while true do
+			local timeText = timerLabel.Text
+			currentGearRestockTime = parseRestockTimerText(timeText) or 0
+			task.wait(1)
+		end
+	end)
+end
+
+local function waitForInGameGearRestockTimerPolling()
+	while currentGearRestockTime > 2 do
 		task.wait(1)
 	end
-
-	print("[Auto Buy Gears] Restock timer reached zero, proceeding with buying.")
+	task.wait(2)
 end
 
 local function buyAllGearsOnce()
@@ -1333,30 +1339,31 @@ local function getEggStockCount(eggName)
 	return 0
 end
 
-local function waitForInGameEggRestockTimerPolling()
-	local player = game:GetService("Players").LocalPlayer
-	local eggShopGui = player.PlayerGui:WaitForChild("PetShop_UI")
-	local timerLabel = eggShopGui.Frame.Frame:FindFirstChild("Timer")
+local function startEggRestockTimerPolling()
+	task.spawn(function()
+		local player = game:GetService("Players").LocalPlayer
+		local eggShopGui = player.PlayerGui:WaitForChild("PetShop_UI")
+		local timerLabel = eggShopGui.Frame.Frame:FindFirstChild("Timer")
 
-	if not timerLabel or not timerLabel:IsA("TextLabel") then
-		warn("Egg restock timer label not found, defaulting to 30 minutes wait")
-		task.wait(1800)
-		return
-	end
-
-	while true do
-		local timeText = timerLabel.Text
-		local timeLeft = parseRestockTimerText(timeText)
-
-		if timeLeft <= 2 then
-			task.wait(2)
-			break
+		if not timerLabel or not timerLabel:IsA("TextLabel") then
+			warn("Egg restock timer label not found, defaulting to 30 minutes wait")
+			currentEggRestockTime = 1800
+			return
 		end
 
+		while true do
+			local timeText = timerLabel.Text
+			currentEggRestockTime = parseRestockTimerText(timeText) or 0
+			task.wait(1)
+		end
+	end)
+end
+
+local function waitForInGameEggRestockTimerPolling()
+	while currentEggRestockTime > 2 do
 		task.wait(1)
 	end
-
-	print("[Auto Buy Eggs] Restock timer reached zero, proceeding with buying.")
+	task.wait(2)
 end
 
 local function buyAllEggsOnce()
@@ -1401,14 +1408,20 @@ function startAutoBuySequence()
 	buyTask = task.spawn(function()
 		while config.autoBuySeeds or config.autoBuyGears or config.autoBuyEggs do
 			if config.autoBuySeeds then
+				print("[Auto Buy Seeds] Buying all Seed stocks...")
+				task.wait(1)
 				buyAllSeedsOnce()
 				waitForInGameSeedRestockTimerPolling()
 			end
 			if config.autoBuyGears then
+				print("[Auto Buy Gears] Buying all Gear stocks...")
+				task.wait(1)
 				buyAllGearsOnce()
 				waitForInGameGearRestockTimerPolling()
 			end
 			if config.autoBuyEggs then
+				print("[Auto Buy Eggs] Buying all Egg stocks...")
+				task.wait(1)
 				buyAllEggsOnce()
 				waitForInGameEggRestockTimerPolling()
 			end
