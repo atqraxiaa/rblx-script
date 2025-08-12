@@ -36,12 +36,12 @@ titleBar.ClipsDescendants = true
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
-title.Text = "Serenity v1.0.1 by kiyaa"
+title.Text = "Serenity v1.0.2 by kiyaa"
 title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.TextColor3 = Color3.new(1, 1, 1)
 title.TextXAlignment = Enum.TextXAlignment.Left
-title.Font = Enum.Font.GothamSemibold
+title.Font = Enum.Font.GothamMedium
 title.TextSize = 14
 title.BackgroundTransparency = 1
 title.Parent = titleBar
@@ -49,7 +49,7 @@ title.Parent = titleBar
 local pingLabel = Instance.new("TextLabel")
 pingLabel.Size = UDim2.new(0, 100, 1, 0)
 pingLabel.Position = UDim2.new(0, 200, 0, 0)
-pingLabel.Font = Enum.Font.GothamSemibold
+pingLabel.Font = Enum.Font.GothamMedium
 pingLabel.TextSize = 14
 pingLabel.TextColor3 = Color3.new(1, 1, 1)
 pingLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -62,7 +62,7 @@ pingLabel.Parent = titleBar
 local fpsLabel = Instance.new("TextLabel")
 fpsLabel.Size = UDim2.new(0, 60, 1, 0)
 fpsLabel.Position = UDim2.new(0, 340, 0, 0)
-fpsLabel.Font = Enum.Font.GothamSemibold
+fpsLabel.Font = Enum.Font.GothamMedium
 fpsLabel.TextSize = 14
 fpsLabel.TextColor3 = Color3.new(1, 1, 1)
 fpsLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -76,7 +76,7 @@ local timeLabel = Instance.new("TextLabel")
 timeLabel.ZIndex = 5
 timeLabel.Size = UDim2.new(0, 150, 1, 0)
 timeLabel.Position = UDim2.new(0, 240, 0, 0)
-timeLabel.Font = Enum.Font.GothamSemibold
+timeLabel.Font = Enum.Font.GothamMedium
 timeLabel.TextSize = 14
 timeLabel.TextColor3 = Color3.new(1, 1, 1)
 timeLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -179,7 +179,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = false
 		bodyContainer.Visible = false
 
-		title.Text = "Serenity v1.0.1"
+		title.Text = "Serenity v1.0.2"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		minBtn.Text = "+"
 
@@ -193,7 +193,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = true
 		bodyContainer.Visible = true
 
-		title.Text = "Serenity v1.0.1 by kiyaa"
+		title.Text = "Serenity v1.0.2 by kiyaa"
 		title.Size = UDim2.new(1, -80, 1, 0)
 		minBtn.Text = "-"
 
@@ -208,7 +208,7 @@ exitBtn.MouseButton1Click:Connect(function()
 	gui:Destroy()
 end)
 
-local tabs = {"Main", "Shop", "Misc"}
+local tabs = {"Home", "Shop", "Misc"}
 local contentFrames = {}
 
 local content = Instance.new("Frame")
@@ -297,18 +297,18 @@ for i, name in ipairs(tabs) do
 end
 
 -- Main Tab
-local mainTab = contentFrames["Main"]
+local mainTab = contentFrames["Home"]
 
--- not tested but will use this for reference
 local mainHeader = Instance.new("TextLabel")
-mainHeader.Text = "-- Server Properties --"
+mainHeader.Text = "Server Properties"
 mainHeader.Font = Enum.Font.GothamBold
 mainHeader.TextSize = 14
 mainHeader.TextColor3 = Color3.fromRGB(255, 255, 255)
 mainHeader.BackgroundTransparency = 1
 mainHeader.Size = UDim2.new(0, 150, 0, 30)
-mainHeader.Position = UDim2.new(0, 20, 0, 10)
-mainHeader.TextXAlignment = Enum.TextXAlignment.Left
+mainHeader.AnchorPoint = Vector2.new(0.5, 0.5)
+mainHeader.Position = UDim2.new(0.5, 0, 0.07, 0)
+mainHeader.TextXAlignment = Enum.TextXAlignment.Center
 mainHeader.Parent = mainTab
 
 local jobIdTitle = Instance.new("TextLabel")
@@ -441,14 +441,15 @@ serverHopButton.MouseButton1Click:Connect(function()
 end)
 
 local mainHeader = Instance.new("TextLabel")
-mainHeader.Text = "-- Script Settings --"
+mainHeader.Text = "Script Settings"
 mainHeader.Font = Enum.Font.GothamBold
 mainHeader.TextSize = 14
 mainHeader.TextColor3 = Color3.fromRGB(255, 255, 255)
 mainHeader.BackgroundTransparency = 1
 mainHeader.Size = UDim2.new(0, 150, 0, 30)
-mainHeader.Position = UDim2.new(0, 20, 0, 120)
-mainHeader.TextXAlignment = Enum.TextXAlignment.Left
+mainHeader.AnchorPoint = Vector2.new(0.5, 0.5)
+mainHeader.Position = UDim2.new(0.5, 0, 0.42, 0)
+mainHeader.TextXAlignment = Enum.TextXAlignment.Center
 mainHeader.Parent = mainTab
 
 local autoReconTitle = Instance.new("TextLabel")
@@ -458,17 +459,17 @@ autoReconTitle.TextSize = 12
 autoReconTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 autoReconTitle.BackgroundTransparency = 1
 autoReconTitle.Size = UDim2.new(0, 130, 0, 30)
-autoReconTitle.Position = UDim2.new(0, 20, 0, 150)
+autoReconTitle.Position = UDim2.new(0, 20, 0, 143)
 autoReconTitle.TextXAlignment = Enum.TextXAlignment.Left
 autoReconTitle.Parent = mainTab
 
-local toggleTrack = Instance.new("Frame")
-toggleTrack.Size = UDim2.new(0, 30, 0, 12)
-toggleTrack.AnchorPoint = Vector2.new(0.5, 0.5)
-toggleTrack.Position = UDim2.new(0, 550, 0, 295)
-toggleTrack.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
-toggleTrack.BorderSizePixel = 0
-toggleTrack.Parent = gui
+local autoReconToggleTrack = Instance.new("Frame")
+autoReconToggleTrack.Size = UDim2.new(0, 30, 0, 12)
+autoReconToggleTrack.AnchorPoint = Vector2.new(0.5, 0.5)
+autoReconToggleTrack.Position = UDim2.new(0, 550, 0, 290)
+autoReconToggleTrack.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+autoReconToggleTrack.BorderSizePixel = 0
+autoReconToggleTrack.Parent = gui
 
 local knob = Instance.new("Frame")
 knob.Size = UDim2.new(0, 16, 0, 16)
@@ -476,19 +477,22 @@ knob.AnchorPoint = Vector2.new(0.5, 0.5)
 knob.Position = UDim2.new(0, 7, 0.5, 0)
 knob.BackgroundColor3 = Color3.new(1, 1, 1)
 knob.BorderSizePixel = 0
-knob.Parent = toggleTrack
+knob.Parent = autoReconToggleTrack
 
 local cornerTrack = Instance.new("UICorner")
 cornerTrack.CornerRadius = UDim.new(1, 0)
-cornerTrack.Parent = toggleTrack
+cornerTrack.Parent = autoReconToggleTrack
 
 local cornerKnob = Instance.new("UICorner")
 cornerKnob.CornerRadius = UDim.new(1, 0)
 cornerKnob.Parent = knob
 
 local toggled = false
-toggleTrack.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+
+autoReconToggleTrack.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1
+	or (Enum.UserInputType.Touch and input.UserInputType == Enum.UserInputType.Touch) then
+
 		toggled = not toggled
 
 		if toggled then
@@ -496,7 +500,7 @@ toggleTrack.InputBegan:Connect(function(input)
 				Position = UDim2.new(1, -7, 0.5, 0)
 			}):Play()
 
-			TweenService:Create(toggleTrack, TweenInfo.new(0.2), {
+			TweenService:Create(autoReconToggleTrack, TweenInfo.new(0.2), {
 				BackgroundColor3 = Color3.fromRGB(0, 170, 0)
 			}):Play()
 		else
@@ -504,7 +508,70 @@ toggleTrack.InputBegan:Connect(function(input)
 				Position = UDim2.new(0, 7, 0.5, 0)
 			}):Play()
 
-			TweenService:Create(toggleTrack, TweenInfo.new(0.2), {
+			TweenService:Create(autoReconToggleTrack, TweenInfo.new(0.2), {
+				BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+			}):Play()
+		end
+	end
+end)
+
+local antiAfkTitle = Instance.new("TextLabel")
+antiAfkTitle.Text = "Anti AFK"
+antiAfkTitle.Font = Enum.Font.GothamBold
+antiAfkTitle.TextSize = 12
+antiAfkTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+antiAfkTitle.BackgroundTransparency = 1
+antiAfkTitle.Size = UDim2.new(0, 130, 0, 30)
+antiAfkTitle.Position = UDim2.new(0, 20, 0, 173)
+antiAfkTitle.TextXAlignment = Enum.TextXAlignment.Left
+antiAfkTitle.Parent = mainTab
+
+local antiAfkToggleTrack = Instance.new("Frame")
+antiAfkToggleTrack.Size = UDim2.new(0, 30, 0, 12)
+antiAfkToggleTrack.AnchorPoint = Vector2.new(0.5, 0.5)
+antiAfkToggleTrack.Position = UDim2.new(0, 550, 0, 320)
+antiAfkToggleTrack.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+antiAfkToggleTrack.BorderSizePixel = 0
+antiAfkToggleTrack.Parent = gui
+
+local knob = Instance.new("Frame")
+knob.Size = UDim2.new(0, 16, 0, 16)
+knob.AnchorPoint = Vector2.new(0.5, 0.5)
+knob.Position = UDim2.new(0, 7, 0.5, 0)
+knob.BackgroundColor3 = Color3.new(1, 1, 1)
+knob.BorderSizePixel = 0
+knob.Parent = antiAfkToggleTrack
+
+local cornerTrack = Instance.new("UICorner")
+cornerTrack.CornerRadius = UDim.new(1, 0)
+cornerTrack.Parent = antiAfkToggleTrack
+
+local cornerKnob = Instance.new("UICorner")
+cornerKnob.CornerRadius = UDim.new(1, 0)
+cornerKnob.Parent = knob
+
+local toggled = false
+
+antiAfkToggleTrack.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1
+	or (Enum.UserInputType.Touch and input.UserInputType == Enum.UserInputType.Touch) then
+
+		toggled = not toggled
+
+		if toggled then
+			TweenService:Create(knob, TweenInfo.new(0.2), {
+				Position = UDim2.new(1, -7, 0.5, 0)
+			}):Play()
+
+			TweenService:Create(antiAfkToggleTrack, TweenInfo.new(0.2), {
+				BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+			}):Play()
+		else
+			TweenService:Create(knob, TweenInfo.new(0.2), {
+				Position = UDim2.new(0, 7, 0.5, 0)
+			}):Play()
+
+			TweenService:Create(antiAfkToggleTrack, TweenInfo.new(0.2), {
 				BackgroundColor3 = Color3.fromRGB(220, 20, 60)
 			}):Play()
 		end
@@ -557,7 +624,6 @@ toggleSeeds.MouseButton1Click:Connect(function()
 			while autoBuySeeds do
 				for _, seed in ipairs(seeds) do
 					ReplicatedStorage.GameEvents.BuySeedStock:FireServer(seed)
-					logPurchase("Seed", seed)
 					task.wait(0.1)
 				end
 				task.wait(0.1)
@@ -619,7 +685,6 @@ toggleGears.MouseButton1Click:Connect(function()
 			while autoBuyGears do
 				for _, gear in ipairs(gears) do
 					ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gear)
-					logPurchase("Gear", gear)
 					task.wait(0.1)
 				end
 				task.wait(0.1)
@@ -679,7 +744,6 @@ toggleEggs.MouseButton1Click:Connect(function()
 			while autoBuyEggs do
 				for _, egg in ipairs(eggs) do
 					ReplicatedStorage.GameEvents.BuyEggStock:FireServer(egg)
-					logPurchase("Egg", egg)
 					task.wait(0.1)
 				end
 				task.wait(0.1)
@@ -745,6 +809,8 @@ toggle.MouseButton1Click:Connect(function()
 	toggle.Text = toggled and "ON" or "OFF"
 end)
 
+local player = game:GetService("Players").LocalPlayer
+
 task.spawn(function()
 	while true do
 		task.wait(10)
@@ -753,11 +819,13 @@ task.spawn(function()
 				local hrp = player.Character:FindFirstChild("HumanoidRootPart")
 				if hrp then
 					local originalCFrame = hrp.CFrame
-					hrP.CFrame = sellCFrame
+					hrp.CFrame = sellCFrame
 					task.wait(1)
-					pcall(function() sellRemote:FireServer() end)
+					pcall(function()
+						sellRemote:FireServer()
+					end)
 					task.wait(0.5)
-					hrP.CFrame = originalCFrame
+					hrp.CFrame = originalCFrame
 				end
 			end
 		end
@@ -769,6 +837,7 @@ local UserInputService = game:GetService("UserInputService")
 
 titleBar.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		
 		dragging = true
 		dragStart = input.Position
 		startPos = frame.Position
