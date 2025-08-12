@@ -3,13 +3,13 @@ repeat task.wait() until game:IsLoaded()
 --if game.PlaceId ~= 126884695634066 then
 --	local TweenService = game:GetService("TweenService")
 --	local PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-	
+
 --	local gui = Instance.new("ScreenGui")
 --	gui.Name = "SerenityUI"
 --	gui.IgnoreGuiInset = true
 --	gui.ResetOnSpawn = false
 --	gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-	
+
 --	local notif = Instance.new("Frame")
 --	notif.Size = UDim2.new(0, 320, 0, 50)
 --	notif.Position = UDim2.new(1, 340, 1, -10)
@@ -35,7 +35,7 @@ repeat task.wait() until game:IsLoaded()
 --	local tweenOut = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
 --		Position = UDim2.new(1, 270, 1, -20)
 --	})
-	
+
 --	Instance.new("UICorner", notif).CornerRadius = UDim.new(0, 12)
 
 --	tweenIn:Play()
@@ -118,7 +118,7 @@ titleBar.ClipsDescendants = true
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
-title.Text = "Serenity v1.0.4d by mystixie"
+title.Text = "Serenity v1.0.5 by mystixie"
 title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.TextColor3 = Color3.new(1, 1, 1)
@@ -261,7 +261,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = false
 		bodyContainer.Visible = false
 
-		title.Text = "Serenity v1.0.4d"
+		title.Text = "Serenity v1.0.5"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		minBtn.Text = "+"
 
@@ -275,10 +275,10 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = true
 		bodyContainer.Visible = true
 
-		title.Text = "Serenity v1.0.4d by mystixie"
+		title.Text = "Serenity v1.0.5 by mystixie"
 		title.Size = UDim2.new(1, -80, 1, 0)
 		minBtn.Text = "-"
-		
+
 		timeLabel.Position = UDim2.new(0, 259, 0, 0)
 
 		tweenFrameSize(fullSize, tweenDuration):Wait()
@@ -1214,7 +1214,7 @@ updateGearsToggleVisual(toggled)
 local function getGearStockCount(gearName)
 	local gearFrame = gearShopFrame:FindFirstChild(gearName)
 	if gearFrame and gearFrame:FindFirstChild("Main_Frame") and gearFrame.Main_Frame:FindFirstChild("Stock_Text") then
-		local stockText = gearFrame.Main_Frame.Stock_Text.Text
+		local stockText = gearFrame.Main_Frame.Gear_Text.Text
 		local stockCount = tonumber(stockText:match("X(%d+)")) or 0
 		return stockCount
 	end
@@ -1230,7 +1230,7 @@ local function startAutoBuyGearLoop()
 				if stock > 0 then
 					print("Buying " .. stock .. " of " .. gearName)
 					for i = 1, stock do
-						ReplicatedStorage.GameEvents.BuySeedStock:FireServer(gearName)
+						ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gearName)
 						task.wait(0.1)
 					end
 				else
@@ -1263,66 +1263,128 @@ if toggled then
 	startAutoBuyGearLoop()
 end
 
---local headerEggs = Instance.new("TextLabel")
---headerEggs.Text = "Auto Buy Eggs"
---headerEggs.Font = Enum.Font.GothamBold
---headerEggs.TextSize = 12
---headerEggs.TextColor3 = Color3.fromRGB(255, 255, 255)
---headerEggs.BackgroundTransparency = 1
---headerEggs.Size = UDim2.new(0, 130, 0, 30)
---headerEggs.Position = UDim2.new(0, 20, 0, 95)
---headerEggs.TextXAlignment = Enum.TextXAlignment.Left
---headerEggs.Parent = shopTab
+local headerEggs = Instance.new("TextLabel")
+headerEggs.Text = "Auto Buy Eggs"
+headerEggs.Font = Enum.Font.GothamBold
+headerEggs.TextSize = 12
+headerEggs.TextColor3 = Color3.fromRGB(255, 255, 255)
+headerEggs.BackgroundTransparency = 1
+headerEggs.Size = UDim2.new(0, 130, 0, 30)
+headerEggs.Position = UDim2.new(0, 20, 0, 95)
+headerEggs.TextXAlignment = Enum.TextXAlignment.Left
+headerEggs.Parent = shopTab
 
+local trackEggs = Instance.new("Frame")
+trackEggs.Size = UDim2.new(0, 30, 0, 12)
+trackEggs.AnchorPoint = Vector2.new(0.5, 0.5)
+trackEggs.Position = UDim2.new(0, 345, 0, 111)
+trackEggs.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+trackEggs.BorderSizePixel = 0
+trackEggs.Parent = shopTab
 
+local knobEggs = Instance.new("Frame")
+knobEggs.Size = UDim2.new(0, 16, 0, 16)
+knobEggs.AnchorPoint = Vector2.new(0.5, 0.5)
+knobEggs.Position = UDim2.new(0, 7, 0.5, 0)
+knobEggs.BackgroundColor3 = Color3.new(1, 1, 1)
+knobEggs.BorderSizePixel = 0
+knobEggs.Parent = trackEggs
 
---local toggleEggs = Instance.new("TextButton")
---toggleEggs.Size = UDim2.new(0, 60, 0, 20)
---toggleEggs.Position = UDim2.new(0, 300, 0, 135)
---toggleEggs.Text = "OFF"
---toggleEggs.Font = Enum.Font.Gotham
---toggleEggs.TextSize = 14
---toggleEggs.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
---toggleEggs.TextColor3 = Color3.fromRGB(255, 255, 255)
---toggleEggs.Parent = shopTab
+local cornerTrack = Instance.new("UICorner")
+cornerTrack.CornerRadius = UDim.new(1, 0)
+cornerTrack.Parent = trackEggs
 
---local eggs = {
---	"Common Egg", "Common Summer Egg", "Rare Summer Egg",
---	"Mythical Egg", "Paradise Egg", "Bug Egg"
---}
+local cornerKnob = Instance.new("UICorner")
+cornerKnob.CornerRadius = UDim.new(1, 0)
+cornerKnob.Parent = knobEggs
 
---local ReplicatedStorage = game:GetService("ReplicatedStorage")
---local autoBuyEggs = false
+local eggs = {
+	"Common Egg", "Common Summer Egg", "Rare Summer Egg",
+	"Mythical Egg", "Paradise Egg", "Bug Egg"
+}
 
---toggleEggs.MouseButton1Click:Connect(function()
---	autoBuyEggs = not autoBuyEggs
---	toggleEggs.Text = autoBuyEggs and "ON" or "OFF"
---	toggleEggs.BackgroundColor3 = autoBuyEggs and Color3.fromRGB(70, 180, 70) or Color3.fromRGB(50, 50, 60)
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
---	if autoBuyEggs then
---		task.spawn(function()
---			while autoBuyEggs do
---				for _, egg in ipairs(eggs) do
---					ReplicatedStorage.GameEvents.BuyEggStock:FireServer(egg)
---					task.wait(0.1)
---				end
---				task.wait(0.1)
---			end
---		end)
---	end
---end)
+local player = Players.LocalPlayer
+local eggShopFrame = player.PlayerGui:WaitForChild("PetShop_UI").Frame.ScrollingFrame
 
---local descEggs = Instance.new("TextLabel")
---descEggs.Text = "Automatically buys all available eggs."
---descEggs.Font = Enum.Font.Gotham
---descEggs.TextSize = 12
---descEggs.TextColor3 = Color3.fromRGB(200, 200, 200)
---descEggs.BackgroundTransparency = 1
---descEggs.Size = UDim2.new(1, -40, 0, 20)
---descEggs.Position = UDim2.new(0, 20, 0, 160)
---descEggs.TextXAlignment = Enum.TextXAlignment.Left
---descEggs.TextWrapped = true
---descEggs.Parent = shopTab
+local toggled = config.autoBuyEggs or false
+local buyEggTask
+
+local function updateEggsToggleVisual(state)
+	if state then
+		TweenService:Create(knobEggs, TweenInfo.new(0.2), {
+			Position = UDim2.new(1, -7, 0.5, 0)
+		}):Play()
+		TweenService:Create(trackEggs, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+		}):Play()
+	else
+		TweenService:Create(knobEggs, TweenInfo.new(0.2), {
+			Position = UDim2.new(0, 7, 0.5, 0)
+		}):Play()
+		TweenService:Create(trackEggs, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+		}):Play()
+	end
+end
+
+trackEggs.Active = true
+
+updateEggsToggleVisual(toggled)
+
+local function getEggStockCount(eggName)
+	local eggFrame = eggShopFrame:FindFirstChild(eggName)
+	if eggFrame and eggFrame:FindFirstChild("Main_Frame") and eggFrame.Main_Frame:FindFirstChild("Stock_Text") then
+		local stockText = eggFrame.Main_Frame.Stock_Text.Text
+		local stockCount = tonumber(stockText:match("X(%d+)")) or 0
+		return stockCount
+	end
+	return 0
+end
+
+local function startAutoBuyEggLoop()
+	if buyEggTask then return end
+	buyEggTask = task.spawn(function()
+		while toggled do
+			for _, eggName in ipairs(eggs) do
+				local stock = getEggStockCount(eggName)
+				if stock > 0 then
+					print("Buying " .. stock .. " of " .. eggName)
+					for i = 1, stock do
+						ReplicatedStorage.GameEvents.BuyPetEgg:FireServer(eggName)
+						task.wait(0.1)
+					end
+				else
+					print(eggName .. " out of stock")
+				end
+				task.wait(0.1)
+			end
+			waitUntilNextFiveMinuteMark()
+		end
+		buyEggTask = nil
+	end)
+end
+
+trackEggs.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		toggled = not toggled
+		config.autoBuyEggs = toggled
+		saveConfig()
+		updateEggsToggleVisual(toggled)
+
+		if toggled then
+			startAutoBuyEggLoop()
+		end
+	end
+end)
+
+updateEggsToggleVisual(toggled)
+
+if toggled then
+	startAutoBuyEggLoop()
+end
 
 -- Misc Tab
 local miscTab = contentFrames["Misc"]
@@ -1338,66 +1400,51 @@ header.Position = UDim2.new(0, 20, 0, 10)
 header.TextXAlignment = Enum.TextXAlignment.Left
 header.Parent = miscTab
 
-local toggle = Instance.new("TextButton")
-toggle.Size = UDim2.new(0, 60, 0, 20)
-toggle.Position = UDim2.new(0, 300, 0, 15)
-toggle.Text = "OFF"
-toggle.Font = Enum.Font.Gotham
-toggle.TextSize = 14
-toggle.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
-toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggle.Parent = miscTab
+--local description = Instance.new("TextLabel")
+--description.Text = "Automatically sells items when your inventory is full."
+--description.Font = Enum.Font.Gotham
+--description.TextSize = 12
+--description.TextColor3 = Color3.fromRGB(200, 200, 200)
+--description.BackgroundTransparency = 1
+--description.Size = UDim2.new(1, -40, 0, 20)
+--description.Position = UDim2.new(0, 20, 0, 40)
+--description.TextXAlignment = Enum.TextXAlignment.Left
+--description.TextWrapped = true
+--description.Parent = miscTab
 
-local description = Instance.new("TextLabel")
-description.Text = "Automatically sells items when your inventory is full."
-description.Font = Enum.Font.Gotham
-description.TextSize = 12
-description.TextColor3 = Color3.fromRGB(200, 200, 200)
-description.BackgroundTransparency = 1
-description.Size = UDim2.new(1, -40, 0, 20)
-description.Position = UDim2.new(0, 20, 0, 40)
-description.TextXAlignment = Enum.TextXAlignment.Left
-description.TextWrapped = true
-description.Parent = miscTab
+--local toggled = false
+--local sellRemote = ReplicatedStorage:WaitForChild("GameEvents"):WaitForChild("Sell_Inventory")
+--local sellCFrame = CFrame.new(86.5844193, 2.99999976, 0.426782995)
 
-local toggled = false
-local sellRemote = ReplicatedStorage:WaitForChild("GameEvents"):WaitForChild("Sell_Inventory")
-local sellCFrame = CFrame.new(86.5844193, 2.99999976, 0.426782995)
+--local player = game:GetService("Players").LocalPlayer
 
-toggle.MouseButton1Click:Connect(function()
-	toggled = not toggled
-	toggle.Text = toggled and "ON" or "OFF"
-end)
-
-local player = game:GetService("Players").LocalPlayer
-
-task.spawn(function()
-	while true do
-		task.wait(10)
-		if toggled then
-			if player.Character then
-				local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-				if hrp then
-					local originalCFrame = hrp.CFrame
-					hrp.CFrame = sellCFrame
-					task.wait(1)
-					pcall(function()
-						sellRemote:FireServer()
-					end)
-					task.wait(0.5)
-					hrp.CFrame = originalCFrame
-				end
-			end
-		end
-	end
-end)
+--task.spawn(function()
+--	while true do
+--		task.wait(10)
+--		if toggled then
+--			if player.Character then
+--				local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+--				if hrp then
+--					local originalCFrame = hrp.CFrame
+--					hrp.CFrame = sellCFrame
+--					task.wait(1)
+--					pcall(function()
+--						sellRemote:FireServer()
+--					end)
+--					task.wait(0.5)
+--					hrp.CFrame = originalCFrame
+--				end
+--			end
+--		end
+--	end
+--end)
 
 local dragging, dragInput, dragStart, startPos
 local UserInputService = game:GetService("UserInputService")
 
 titleBar.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		
+
 		dragging = true
 		dragStart = input.Position
 		startPos = frame.Position
@@ -1425,4 +1472,3 @@ UserInputService.InputChanged:Connect(function(input)
 		)
 	end
 end)
-
