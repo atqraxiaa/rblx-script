@@ -41,7 +41,7 @@ if game.PlaceId ~= 126884695634066 then
 	tweenIn:Play()
 	tweenIn.Completed:Wait()
 
-	task.wait(3)
+	task.wait(10)
 
 	tweenOut:Play()
 	tweenOut.Completed:Wait()
@@ -115,7 +115,7 @@ titleBar.ClipsDescendants = true
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
-title.Text = "Serenity v1.0.3 by mystixie"
+title.Text = "Serenity v1.0.3a by mystixie"
 title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.TextColor3 = Color3.new(1, 1, 1)
@@ -258,7 +258,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = false
 		bodyContainer.Visible = false
 
-		title.Text = "Serenity v1.0.3"
+		title.Text = "Serenity v1.0.3a"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		minBtn.Text = "+"
 
@@ -272,7 +272,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = true
 		bodyContainer.Visible = true
 
-		title.Text = "Serenity v1.0.3 by mystixie"
+		title.Text = "Serenity v1.0.3a by mystixie"
 		title.Size = UDim2.new(1, -80, 1, 0)
 		minBtn.Text = "-"
 		
@@ -547,7 +547,6 @@ gameVersionBox.FocusLost:Connect(function(enterPressed)
 	saveConfig()
 end)
 
-gameVersionBox.Text = config.desiredGameVersion or ""
 
 local autoServerHopLabel = Instance.new("TextLabel")
 autoServerHopLabel.Text = "Auto Server Hop until Desired Version"
@@ -583,9 +582,6 @@ cornerTrack.Parent = autoServerHopTrack
 local cornerKnob = Instance.new("UICorner")
 cornerKnob.CornerRadius = UDim.new(1, 0)
 cornerKnob.Parent = autoServerHopKnob
-
-local hopToggled = config.autoServerHop or false
-local hopLoop
 
 local hopToggled = config.autoServerHop or false
 local hopLoop
@@ -668,6 +664,21 @@ local function stopHopLoop()
 		warn("[Auto Hop] Stopped.")
 	end
 end
+
+gameVersionBox.Text = config.desiredGameVersion or ""
+
+gameVersionBox.FocusLost:Connect(function(enterPressed)
+	if enterPressed then
+		hopToggled = false
+		config.autoServerHop = false
+		saveConfig()
+		updateHopToggleVisual(false)
+
+		gameVersionBox.Text = ""
+
+		stopHopLoop()
+	end
+end)
 
 updateHopToggleVisual(hopToggled)
 
@@ -1199,51 +1210,3 @@ UserInputService.InputChanged:Connect(function(input)
 		)
 	end
 end)
-
--- Countdown label
-local afkCountdownLabel = Instance.new("TextLabel")
-afkCountdownLabel.Size = UDim2.new(0, 180, 0, 20)
-afkCountdownLabel.Position = UDim2.new(0, 10, 0, 10)
-afkCountdownLabel.BackgroundTransparency = 0.3
-afkCountdownLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-afkCountdownLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-afkCountdownLabel.Font = Enum.Font.GothamBold
-afkCountdownLabel.TextSize = 12
-afkCountdownLabel.Text = "AFK Timer: N/A"
-afkCountdownLabel.Parent = gui
--- Variables
-local afkCountdownLoop
-local afkTimeLeft = 1200 -- 20 minutes in seconds
-
-local function startAntiAfkLoop()
-	local VirtualUser = game:GetService("VirtualUser")
-
-	-- Cancel old loop
-	if afkCountdownLoop then task.cancel(afkCountdownLoop) end
-	afkTimeLeft = 1200
-
-	afkCountdownLoop = task.spawn(function()
-		while config.autoAfk do
-			-- Update label every second
-			for i = afkTimeLeft, 0, -1 do
-				afkCountdownLabel.Text = "AFK Timer: " .. i .. "s"
-				task.wait(1)
-				afkTimeLeft = afkTimeLeft - 1
-			end
-
-			-- Reset AFK timer with input
-			VirtualUser:CaptureController()
-			VirtualUser:ClickButton2(Vector2.new())
-			print("[Anti AFK] Resetting AFK timer.")
-			afkTimeLeft = 1200 -- Reset to 20 min
-		end
-	end)
-end
-
-local function stopAntiAfkLoop()
-	if afkCountdownLoop then
-		task.cancel(afkCountdownLoop)
-		afkCountdownLoop = nil
-	end
-	afkCountdownLabel.Text = "AFK Timer: N/A"
-end
