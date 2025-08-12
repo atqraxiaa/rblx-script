@@ -1,55 +1,55 @@
 repeat task.wait() until game:IsLoaded()
 
-if game.PlaceId ~= 126884695634066 then
-	local TweenService = game:GetService("TweenService")
-	local PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+--if game.PlaceId ~= 126884695634066 then
+--	local TweenService = game:GetService("TweenService")
+--	local PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 	
-	local gui = Instance.new("ScreenGui")
-	gui.Name = "SerenityUI"
-	gui.IgnoreGuiInset = true
-	gui.ResetOnSpawn = false
-	gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+--	local gui = Instance.new("ScreenGui")
+--	gui.Name = "SerenityUI"
+--	gui.IgnoreGuiInset = true
+--	gui.ResetOnSpawn = false
+--	gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 	
-	local notif = Instance.new("Frame")
-	notif.Size = UDim2.new(0, 320, 0, 50)
-	notif.Position = UDim2.new(1, 340, 1, -10)
-	notif.AnchorPoint = Vector2.new(1, 1)
-	notif.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-	notif.BorderSizePixel = 0
-	notif.Parent = gui
+--	local notif = Instance.new("Frame")
+--	notif.Size = UDim2.new(0, 320, 0, 50)
+--	notif.Position = UDim2.new(1, 340, 1, -10)
+--	notif.AnchorPoint = Vector2.new(1, 1)
+--	notif.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+--	notif.BorderSizePixel = 0
+--	notif.Parent = gui
 
-	local text = Instance.new("TextLabel")
-	text.Size = UDim2.new(1, -20, 1, 0)
-	text.Position = UDim2.new(0, 10, 0, 0)
-	text.BackgroundTransparency = 1
-	text.Text = "❌ This script only supports Grow a Garden."
-	text.Font = Enum.Font.Gotham
-	text.TextSize = 14
-	text.TextColor3 = Color3.fromRGB(255, 255, 255)
-	text.TextXAlignment = Enum.TextXAlignment.Center
-	text.Parent = notif
+--	local text = Instance.new("TextLabel")
+--	text.Size = UDim2.new(1, -20, 1, 0)
+--	text.Position = UDim2.new(0, 10, 0, 0)
+--	text.BackgroundTransparency = 1
+--	text.Text = "❌ This script only supports Grow a Garden."
+--	text.Font = Enum.Font.Gotham
+--	text.TextSize = 14
+--	text.TextColor3 = Color3.fromRGB(255, 255, 255)
+--	text.TextXAlignment = Enum.TextXAlignment.Center
+--	text.Parent = notif
 
-	local tweenIn = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-		Position = UDim2.new(1, -20, 1, -20)
-	})
-	local tweenOut = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
-		Position = UDim2.new(1, 270, 1, -20)
-	})
+--	local tweenIn = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+--		Position = UDim2.new(1, -20, 1, -20)
+--	})
+--	local tweenOut = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
+--		Position = UDim2.new(1, 270, 1, -20)
+--	})
 	
-	Instance.new("UICorner", notif).CornerRadius = UDim.new(0, 12)
+--	Instance.new("UICorner", notif).CornerRadius = UDim.new(0, 12)
 
-	tweenIn:Play()
-	tweenIn.Completed:Wait()
+--	tweenIn:Play()
+--	tweenIn.Completed:Wait()
 
-	task.wait(10)
+--	task.wait(10)
 
-	tweenOut:Play()
-	tweenOut.Completed:Wait()
+--	tweenOut:Play()
+--	tweenOut.Completed:Wait()
 
-	notif:Destroy()
+--	notif:Destroy()
 
-	return
-end
+--	return
+--end
 
 local CONFIG_FILE = "SerenityConfig.json"
 local HttpService = game:GetService("HttpService")
@@ -57,7 +57,10 @@ local config = {
 	autoAfk = false,
 	autoReconnect = false,
 	autoServerHop = false,
-	desiredGameVersion = ""
+	desiredGameVersion = "",
+	autoBuySeeds = false,
+	autoBuyGears = false,
+	autoBuyEggs = false
 }
 
 local function saveConfig()
@@ -115,7 +118,7 @@ titleBar.ClipsDescendants = true
 Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
-title.Text = "Serenity v1.0.3b by mystixie"
+title.Text = "Serenity v1.0.4a by mystixie"
 title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.TextColor3 = Color3.new(1, 1, 1)
@@ -258,7 +261,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = false
 		bodyContainer.Visible = false
 
-		title.Text = "Serenity v1.0.3b"
+		title.Text = "Serenity v1.0.4a"
 		title.Size = UDim2.new(1, -60, 1, 0)
 		minBtn.Text = "+"
 
@@ -272,7 +275,7 @@ minBtn.MouseButton1Click:Connect(function()
 		timeLabel.Visible = true
 		bodyContainer.Visible = true
 
-		title.Text = "Serenity v1.0.3b by mystixie"
+		title.Text = "Serenity v1.0.4a by mystixie"
 		title.Size = UDim2.new(1, -80, 1, 0)
 		minBtn.Text = "-"
 		
@@ -846,13 +849,13 @@ antiAfkToggleTrack.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
 antiAfkToggleTrack.BorderSizePixel = 0
 antiAfkToggleTrack.Parent = mainTab
 
-local knob = Instance.new("Frame")
-knob.Size = UDim2.new(0, 16, 0, 16)
-knob.AnchorPoint = Vector2.new(0.5, 0.5)
-knob.Position = UDim2.new(0, 7, 0.5, 0)
-knob.BackgroundColor3 = Color3.new(1, 1, 1)
-knob.BorderSizePixel = 0
-knob.Parent = antiAfkToggleTrack
+local antiAfkToggleKnob = Instance.new("Frame")
+antiAfkToggleKnob.Size = UDim2.new(0, 16, 0, 16)
+antiAfkToggleKnob.AnchorPoint = Vector2.new(0.5, 0.5)
+antiAfkToggleKnob.Position = UDim2.new(0, 7, 0.5, 0)
+antiAfkToggleKnob.BackgroundColor3 = Color3.new(1, 1, 1)
+antiAfkToggleKnob.BorderSizePixel = 0
+antiAfkToggleKnob.Parent = antiAfkToggleTrack
 
 local cornerTrack = Instance.new("UICorner")
 cornerTrack.CornerRadius = UDim.new(1, 0)
@@ -860,21 +863,21 @@ cornerTrack.Parent = antiAfkToggleTrack
 
 local cornerKnob = Instance.new("UICorner")
 cornerKnob.CornerRadius = UDim.new(1, 0)
-cornerKnob.Parent = knob
+cornerKnob.Parent = antiAfkToggleKnob
 
 local toggled = config.autoAfk or false
 local antiAfkLoop
 
 local function updateAntiAfkVisual(state)
 	if state then
-		TweenService:Create(knob, TweenInfo.new(0.2), {
+		TweenService:Create(antiAfkToggleKnob, TweenInfo.new(0.2), {
 			Position = UDim2.new(1, -7, 0.5, 0)
 		}):Play()
 		TweenService:Create(antiAfkToggleTrack, TweenInfo.new(0.2), {
 			BackgroundColor3 = Color3.fromRGB(0, 170, 0)
 		}):Play()
 	else
-		TweenService:Create(knob, TweenInfo.new(0.2), {
+		TweenService:Create(antiAfkToggleKnob, TweenInfo.new(0.2), {
 			Position = UDim2.new(0, 7, 0.5, 0)
 		}):Play()
 		TweenService:Create(antiAfkToggleTrack, TweenInfo.new(0.2), {
@@ -931,26 +934,88 @@ end
 -- Shop Tab
 local shopTab = contentFrames["Shop"]
 
+local shopHeader = Instance.new("TextLabel")
+shopHeader.Text = "────────────    Shop Stocks    ────────────"
+shopHeader.Font = Enum.Font.GothamBold
+shopHeader.TextSize = 14
+shopHeader.TextColor3 = Color3.fromRGB(255, 255, 255)
+shopHeader.BackgroundTransparency = 1
+shopHeader.Size = UDim2.new(0, 150, 0, 30)
+shopHeader.AnchorPoint = Vector2.new(0.5, 0.5)
+shopHeader.Position = UDim2.new(0.5, 0, 0.07, 0)
+shopHeader.TextXAlignment = Enum.TextXAlignment.Center
+shopHeader.Parent = shopTab
+
 local headerSeeds = Instance.new("TextLabel")
 headerSeeds.Text = "Auto Buy Seeds"
 headerSeeds.Font = Enum.Font.GothamBold
-headerSeeds.TextSize = 14
+headerSeeds.TextSize = 12
 headerSeeds.TextColor3 = Color3.fromRGB(255, 255, 255)
 headerSeeds.BackgroundTransparency = 1
-headerSeeds.Size = UDim2.new(0, 150, 0, 30)
-headerSeeds.Position = UDim2.new(0, 20, 0, 10)
+headerSeeds.Size = UDim2.new(0, 130, 0, 30)
+headerSeeds.Position = UDim2.new(0, 20, 0, 35)
 headerSeeds.TextXAlignment = Enum.TextXAlignment.Left
 headerSeeds.Parent = shopTab
 
-local toggleSeeds = Instance.new("TextButton")
-toggleSeeds.Size = UDim2.new(0, 60, 0, 20)
-toggleSeeds.Position = UDim2.new(0, 300, 0, 15)
-toggleSeeds.Text = "OFF"
-toggleSeeds.Font = Enum.Font.Gotham
-toggleSeeds.TextSize = 14
-toggleSeeds.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
-toggleSeeds.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleSeeds.Parent = shopTab
+local headerSeedsTrack = Instance.new("Frame")
+headerSeedsTrack.Size = UDim2.new(0, 30, 0, 12)
+headerSeedsTrack.AnchorPoint = Vector2.new(0.5, 0.5)
+headerSeedsTrack.Position = UDim2.new(0, 345, 0, 51)
+headerSeedsTrack.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+headerSeedsTrack.BorderSizePixel = 0
+headerSeedsTrack.Parent = shopTab
+
+local headerSeedsKnob = Instance.new("Frame")
+headerSeedsKnob.Size = UDim2.new(0, 16, 0, 16)
+headerSeedsKnob.AnchorPoint = Vector2.new(0.5, 0.5)
+headerSeedsKnob.Position = UDim2.new(0, 7, 0.5, 0)
+headerSeedsKnob.BackgroundColor3 = Color3.new(1, 1, 1)
+headerSeedsKnob.BorderSizePixel = 0
+headerSeedsKnob.Parent = headerSeedsTrack
+
+local cornerTrack = Instance.new("UICorner")
+cornerTrack.CornerRadius = UDim.new(1, 0)
+cornerTrack.Parent = headerSeedsTrack
+
+local cornerKnob = Instance.new("UICorner")
+cornerKnob.CornerRadius = UDim.new(1, 0)
+cornerKnob.Parent = headerSeedsKnob
+
+local autoBuySeeds = config.autoBuySeeds or false
+
+local function updateSeedsToggleVisual(state)
+	if state then
+		TweenService:Create(headerSeedsKnob, TweenInfo.new(0.2), {
+			Position = UDim2.new(1, -7, 0.5, 0)
+		}):Play()
+		TweenService:Create(headerSeedsTrack, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+		}):Play()
+	else
+		TweenService:Create(headerSeedsKnob, TweenInfo.new(0.2), {
+			Position = UDim2.new(0, 7, 0.5, 0)
+		}):Play()
+		TweenService:Create(headerSeedsTrack, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+		}):Play()
+	end
+end
+
+updateSeedsToggleVisual(autoBuySeeds)
+
+headerSeedsTrack.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		autoBuySeeds = not autoBuySeeds
+		config.autoBuySeeds = autoBuySeeds
+		saveConfig()
+		updateSeedsToggleVisual(autoBuySeeds)
+	end
+end)
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local seedShopFrame = player.PlayerGui:WaitForChild("Seed_Shop").Frame.ScrollingFrame
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local seeds = {
 	"Carrot", "Strawberry", "Blueberry", "Orange Tulip", "Tomato",
@@ -961,26 +1026,71 @@ local seeds = {
 	"Giant Pinecone", "Elder Strawberry"
 }
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local autoBuySeeds = false
+local function getStockCount(seedName)
+	local seedFrame = seedShopFrame:FindFirstChild(seedName)
+	if seedFrame and seedFrame:FindFirstChild("Main_Frame") and seedFrame.Main_Frame:FindFirstChild("Seed_Text") then
+		local stockText = seedFrame.Main_Frame.Seed_Text.Text
+		local stockCount = tonumber(stockText:match("X(%d+)")) or 0
+		return stockCount
+	end
+	return 0
+end
 
-toggleSeeds.MouseButton1Click:Connect(function()
-	autoBuySeeds = not autoBuySeeds
-	toggleSeeds.Text = autoBuySeeds and "ON" or "OFF"
-	toggleSeeds.BackgroundColor3 = autoBuySeeds and Color3.fromRGB(70, 180, 70) or Color3.fromRGB(50, 50, 60)
+local function waitUntilNextFiveMinuteMark()
+	local now = os.date("*t")
+	local minute = now.min
+	local second = now.sec
 
-	if autoBuySeeds then
-		task.spawn(function()
-			while autoBuySeeds do
-				for _, seed in ipairs(seeds) do
-					ReplicatedStorage.GameEvents.BuySeedStock:FireServer(seed)
-					task.wait(0.1)
+	local nextMinute = math.ceil(minute / 5) * 5
+	if nextMinute == minute and second == 0 then
+		return
+	end
+
+	local waitSeconds
+	if nextMinute >= 60 then
+		nextMinute = 0
+		waitSeconds = (60 - minute) * 60 - second
+	else
+		waitSeconds = (nextMinute - minute) * 60 - second
+	end
+
+	if waitSeconds > 0 then
+		task.wait(waitSeconds)
+	end
+end
+
+headerSeedsTrack.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		autoBuySeeds = not autoBuySeeds
+		config.autoBuySeeds = autoBuySeeds
+		saveConfig()
+		updateSeedsToggleVisual(autoBuySeeds)
+
+		if autoBuySeeds then
+			task.spawn(function()
+				while autoBuySeeds do
+					for _, seedName in ipairs(seeds) do
+						local stock = getStockCount(seedName)
+						if stock > 0 then
+							print("Buying " .. stock .. " of " .. seedName)
+							for i = 1, stock do
+								ReplicatedStorage.GameEvents.BuySeedStock:FireServer(seedName)
+								task.wait(0.1)
+							end
+						else
+							print(seedName .. " is out of stock or not available.")
+						end
+						task.wait(0.1)
+					end
+					print("[AutoBuySeeds] Waiting until next 5-minute mark...")
+					waitUntilNextFiveMinuteMark()
 				end
-				task.wait(0.1)
-			end
-		end)
+			end)
+		end
 	end
 end)
+
+updateSeedsToggleVisual(autoBuySeeds)
 
 local descSeeds = Instance.new("TextLabel")
 descSeeds.Text = "Automatically buys all available seeds."
@@ -997,13 +1107,16 @@ descSeeds.Parent = shopTab
 local headerGears = Instance.new("TextLabel")
 headerGears.Text = "Auto Buy Gears"
 headerGears.Font = Enum.Font.GothamBold
-headerGears.TextSize = 14
+headerGears.TextSize = 12
 headerGears.TextColor3 = Color3.fromRGB(255, 255, 255)
 headerGears.BackgroundTransparency = 1
-headerGears.Size = UDim2.new(0, 150, 0, 30)
-headerGears.Position = UDim2.new(0, 20, 0, 70)
+headerGears.Size = UDim2.new(0, 130, 0, 30)
+headerGears.Position = UDim2.new(0, 20, 0, 65)
 headerGears.TextXAlignment = Enum.TextXAlignment.Left
 headerGears.Parent = shopTab
+
+
+
 
 local toggleGears = Instance.new("TextButton")
 toggleGears.Size = UDim2.new(0, 60, 0, 20)
@@ -1016,14 +1129,68 @@ toggleGears.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggleGears.Parent = shopTab
 
 local gears = {
-	"Watering Can", "Trowel", "Recall Wrench", "Basic Sprinkler", "Advanced Sprinkler",
-	"Medium Toy", "Medium Treat", "Godly Sprinkler", "Magnifying Glass", "Tanning Mirror",
+	"Watering Can", "Trading Ticket", "Trowel", "Recall Wrench", "Basic Sprinkler", "Advanced Sprinkler",
+	"Medium Toy", "Medium Treat", "Godly Sprinkler", "Magnifying Glass", 
 	"Master Sprinkler", "Cleaning Spray", "Favorite Tool", "Harvest Tool",
 	"Friendship Pot", "Levelup Lollipop"
 }
 
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local gearShopFrame = player.PlayerGui:WaitForChild("Gear_Shop").Frame.ScrollingFrame
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 local autoBuyGears = false
+local autoBuyTask
+
+local function getStockCount(gearName)
+	local gearFrame = gearShopFrame:FindFirstChild(gearName)
+	if gearFrame and gearFrame:FindFirstChild("Main_Frame") and gearFrame.Main_Frame:FindFirstChild("Stock_Text") then
+		local stockText = gearFrame.Main_Frame.Stock_Text.Text
+		local stockCount = tonumber(stockText:match("X(%d+)")) or 0
+		return stockCount
+	end
+	return 0
+end
+
+local function logAllStocks()
+	print("Current Gear Stocks:")
+	for _, gearName in ipairs(gears) do
+		local stock = getStockCount(gearName)
+		print(string.format("  %s stock count: %d", gearName, stock))
+	end
+end
+
+local function buyGearsBasedOnStock()
+	for _, gearName in ipairs(gears) do
+		local stock = getStockCount(gearName)
+		if stock > 0 then
+			print(string.format("Buying %d of %s", stock, gearName))
+			for i = 1, stock do
+				ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gearName)
+				task.wait(0.1)
+			end
+		else
+			print(string.format("%s is out of stock or not available.", gearName))
+		end
+	end
+end
+
+local function waitUntilNextFiveMinute()
+	while true do
+		local time = os.date("*t")
+		local minute = time.min
+		local second = time.sec
+		local waitSeconds = ((5 - (minute % 5)) * 60) - second
+		if waitSeconds <= 0 then
+			waitSeconds = 0
+		end
+		task.wait(waitSeconds)
+		break
+	end
+end
+
+local autoBuyGears = config.autoBuyGears or false
 
 toggleGears.MouseButton1Click:Connect(function()
 	autoBuyGears = not autoBuyGears
@@ -1031,15 +1198,23 @@ toggleGears.MouseButton1Click:Connect(function()
 	toggleGears.BackgroundColor3 = autoBuyGears and Color3.fromRGB(70, 180, 70) or Color3.fromRGB(50, 50, 60)
 
 	if autoBuyGears then
-		task.spawn(function()
+		autoBuyTask = task.spawn(function()
 			while autoBuyGears do
-				for _, gear in ipairs(gears) do
-					ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gear)
-					task.wait(0.1)
-				end
-				task.wait(0.1)
+				waitUntilNextFiveMinute()
+
+				print("=== Running gear stock check and buy at " .. os.date("%X") .. " ===")
+
+				logAllStocks()
+				buyGearsBasedOnStock()
+				task.wait(1)
+				logAllStocks()
 			end
 		end)
+	else
+		if autoBuyTask then
+			task.cancel(autoBuyTask)
+			autoBuyTask = nil
+		end
 	end
 end)
 
@@ -1058,13 +1233,15 @@ descGears.Parent = shopTab
 local headerEggs = Instance.new("TextLabel")
 headerEggs.Text = "Auto Buy Eggs"
 headerEggs.Font = Enum.Font.GothamBold
-headerEggs.TextSize = 14
+headerEggs.TextSize = 12
 headerEggs.TextColor3 = Color3.fromRGB(255, 255, 255)
 headerEggs.BackgroundTransparency = 1
-headerEggs.Size = UDim2.new(0, 150, 0, 30)
-headerEggs.Position = UDim2.new(0, 20, 0, 130)
+headerEggs.Size = UDim2.new(0, 130, 0, 30)
+headerEggs.Position = UDim2.new(0, 20, 0, 95)
 headerEggs.TextXAlignment = Enum.TextXAlignment.Left
 headerEggs.Parent = shopTab
+
+
 
 local toggleEggs = Instance.new("TextButton")
 toggleEggs.Size = UDim2.new(0, 60, 0, 20)
@@ -1215,3 +1392,4 @@ UserInputService.InputChanged:Connect(function(input)
 		)
 	end
 end)
+
