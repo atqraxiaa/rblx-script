@@ -957,65 +957,29 @@ headerSeeds.Position = UDim2.new(0, 20, 0, 35)
 headerSeeds.TextXAlignment = Enum.TextXAlignment.Left
 headerSeeds.Parent = shopTab
 
-local headerSeedsTrack = Instance.new("Frame")
-headerSeedsTrack.Size = UDim2.new(0, 30, 0, 12)
-headerSeedsTrack.AnchorPoint = Vector2.new(0.5, 0.5)
-headerSeedsTrack.Position = UDim2.new(0, 345, 0, 51)
-headerSeedsTrack.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
-headerSeedsTrack.BorderSizePixel = 0
-headerSeedsTrack.Parent = shopTab
+local trackSeeds = Instance.new("Frame")
+trackSeeds.Size = UDim2.new(0, 30, 0, 12)
+trackSeeds.AnchorPoint = Vector2.new(0.5, 0.5)
+trackSeeds.Position = UDim2.new(0, 345, 0, 51)
+trackSeeds.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+trackSeeds.BorderSizePixel = 0
+trackSeeds.Parent = shopTab
 
-local headerSeedsKnob = Instance.new("Frame")
-headerSeedsKnob.Size = UDim2.new(0, 16, 0, 16)
-headerSeedsKnob.AnchorPoint = Vector2.new(0.5, 0.5)
-headerSeedsKnob.Position = UDim2.new(0, 7, 0.5, 0)
-headerSeedsKnob.BackgroundColor3 = Color3.new(1, 1, 1)
-headerSeedsKnob.BorderSizePixel = 0
-headerSeedsKnob.Parent = headerSeedsTrack
+local knobSeeds = Instance.new("Frame")
+knobSeeds.Size = UDim2.new(0, 16, 0, 16)
+knobSeeds.AnchorPoint = Vector2.new(0.5, 0.5)
+knobSeeds.Position = UDim2.new(0, 7, 0.5, 0)
+knobSeeds.BackgroundColor3 = Color3.new(1, 1, 1)
+knobSeeds.BorderSizePixel = 0
+knobSeeds.Parent = trackSeeds
 
 local cornerTrack = Instance.new("UICorner")
 cornerTrack.CornerRadius = UDim.new(1, 0)
-cornerTrack.Parent = headerSeedsTrack
+cornerTrack.Parent = trackSeeds
 
 local cornerKnob = Instance.new("UICorner")
 cornerKnob.CornerRadius = UDim.new(1, 0)
-cornerKnob.Parent = headerSeedsKnob
-
-local autoBuySeeds = config.autoBuySeeds or false
-
-local function updateSeedsToggleVisual(state)
-	if state then
-		TweenService:Create(headerSeedsKnob, TweenInfo.new(0.2), {
-			Position = UDim2.new(1, -7, 0.5, 0)
-		}):Play()
-		TweenService:Create(headerSeedsTrack, TweenInfo.new(0.2), {
-			BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-		}):Play()
-	else
-		TweenService:Create(headerSeedsKnob, TweenInfo.new(0.2), {
-			Position = UDim2.new(0, 7, 0.5, 0)
-		}):Play()
-		TweenService:Create(headerSeedsTrack, TweenInfo.new(0.2), {
-			BackgroundColor3 = Color3.fromRGB(220, 20, 60)
-		}):Play()
-	end
-end
-
-updateSeedsToggleVisual(autoBuySeeds)
-
-headerSeedsTrack.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		autoBuySeeds = not autoBuySeeds
-		config.autoBuySeeds = autoBuySeeds
-		saveConfig()
-		updateSeedsToggleVisual(autoBuySeeds)
-	end
-end)
-
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local seedShopFrame = player.PlayerGui:WaitForChild("Seed_Shop").Frame.ScrollingFrame
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+cornerKnob.Parent = knobSeeds
 
 local seeds = {
 	"Carrot", "Strawberry", "Blueberry", "Orange Tulip", "Tomato",
@@ -1025,6 +989,37 @@ local seeds = {
 	"Ember Lily", "Sugar Apple", "Burning Bud",
 	"Giant Pinecone", "Elder Strawberry"
 }
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local player = Players.LocalPlayer
+local seedShopFrame = player.PlayerGui:WaitForChild("Seed_Shop").Frame.ScrollingFrame
+
+local toggled = config.autoBuySeeds or false
+local buyTask
+
+local function updateSeedsToggleVisual(state)
+	if state then
+		TweenService:Create(knobSeeds, TweenInfo.new(0.2), {
+			Position = UDim2.new(1, -7, 0.5, 0)
+		}):Play()
+		TweenService:Create(trackSeeds, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+		}):Play()
+	else
+		TweenService:Create(knobSeeds, TweenInfo.new(0.2), {
+			Position = UDim2.new(0, 7, 0.5, 0)
+		}):Play()
+		TweenService:Create(trackSeeds, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+		}):Play()
+	end
+end
+
+trackSeeds.Active = true
+
+updateSeedsToggleVisual(toggled)
 
 local function getStockCount(seedName)
 	local seedFrame = seedShopFrame:FindFirstChild(seedName)
@@ -1059,38 +1054,49 @@ local function waitUntilNextFiveMinuteMark()
 	end
 end
 
-headerSeedsTrack.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		autoBuySeeds = not autoBuySeeds
-		config.autoBuySeeds = autoBuySeeds
-		saveConfig()
-		updateSeedsToggleVisual(autoBuySeeds)
-
-		if autoBuySeeds then
-			task.spawn(function()
-				while autoBuySeeds do
-					for _, seedName in ipairs(seeds) do
-						local stock = getStockCount(seedName)
-						if stock > 0 then
-							print("Buying " .. stock .. " of " .. seedName)
-							for i = 1, stock do
-								ReplicatedStorage.GameEvents.BuySeedStock:FireServer(seedName)
-								task.wait(0.1)
-							end
-						else
-							print(seedName .. " is out of stock or not available.")
-						end
+local function startAutoBuyLoop()
+	if buyTask then return end
+	buyTask = task.spawn(function()
+		while toggled do
+			for _, seedName in ipairs(seeds) do
+				local stock = getStockCount(seedName)
+				if stock > 0 then
+					print("Buying " .. stock .. " of " .. seedName)
+					for i = 1, stock do
+						ReplicatedStorage.GameEvents.BuySeedStock:FireServer(seedName)
 						task.wait(0.1)
 					end
-					print("[AutoBuySeeds] Waiting until next 5-minute mark...")
-					waitUntilNextFiveMinuteMark()
+				else
+					print(seedName .. " out of stock")
 				end
-			end)
+				task.wait(0.1)
+			end
+			print("[AutoBuySeeds] Waiting until next 5-minute mark...")
+			waitUntilNextFiveMinuteMark()
+		end
+		buyTask = nil
+	end)
+end
+
+trackSeeds.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		print("trackSeeds clicked")
+		toggled = not toggled
+		config.autoBuySeeds = toggled
+		saveConfig()
+		updateSeedsToggleVisual(toggled)
+
+		if toggled then
+			startAutoBuyLoop()
 		end
 	end
 end)
 
-updateSeedsToggleVisual(autoBuySeeds)
+updateSeedsToggleVisual(toggled)
+
+if toggled then
+	startAutoBuyLoop()
+end
 
 --local headerGears = Instance.new("TextLabel")
 --headerGears.Text = "Auto Buy Gears"
