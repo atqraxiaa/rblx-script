@@ -2,6 +2,36 @@
 repeat task.wait() until game:IsLoaded()
 -- if game.PlaceId ~= 126884695634066 then return end
 
+local CONFIG_FILE = "SerenityConfig.json"
+local HttpService = game:GetService("HttpService")
+local config = {
+	autoAfk = false,
+	autoReconnect = false,
+	autoServerHop = false,
+	desiredGameVersion = ""
+}
+
+local function saveConfig()
+	if writefile then
+		writefile(CONFIG_FILE, HttpService:JSONEncode(config))
+	end
+end
+
+local function loadConfig()
+	if isfile and isfile(CONFIG_FILE) then
+		local success, data = pcall(function()
+			return HttpService:JSONDecode(readfile(CONFIG_FILE))
+		end)
+		if success and type(data) == "table" then
+			for k, v in pairs(data) do
+				config[k] = v
+			end
+		end
+	end
+end
+
+loadConfig()
+
 -- variables needed para sa script
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
@@ -300,7 +330,7 @@ end
 local mainTab = contentFrames["Home"]
 
 local mainHeader = Instance.new("TextLabel")
-mainHeader.Text = "Server Properties"
+mainHeader.Text = "──────────     Server Properties     ──────────"
 mainHeader.Font = Enum.Font.GothamBold
 mainHeader.TextSize = 14
 mainHeader.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -440,15 +470,175 @@ serverHopButton.MouseButton1Click:Connect(function()
 	end
 end)
 
+local inputGameVersion = Instance.new("TextLabel")
+inputGameVersion.Text = "Desired Game Version"
+inputGameVersion.Font = Enum.Font.GothamBold
+inputGameVersion.TextSize = 12
+inputGameVersion.TextColor3 = Color3.fromRGB(255, 255, 255)
+inputGameVersion.BackgroundTransparency = 1
+inputGameVersion.Size = UDim2.new(0, 130, 0, 30)
+inputGameVersion.Position = UDim2.new(0, 20, 0, 118)
+inputGameVersion.TextXAlignment = Enum.TextXAlignment.Left
+inputGameVersion.Parent = mainTab
+
+local gameVersionBox = Instance.new("TextBox")	
+gameVersionBox.Size = UDim2.new(0, 100, 0, 20)
+gameVersionBox.Position = UDim2.new(0, 260, 0, 123)
+gameVersionBox.Font = Enum.Font.Gotham
+gameVersionBox.TextSize = 12
+gameVersionBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+gameVersionBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+gameVersionBox.ClearTextOnFocus = true
+gameVersionBox.Text = ""
+gameVersionBox.PlaceholderText = ""
+gameVersionBox.Parent = mainTab
+
+Instance.new("UICorner", gameVersionBox).CornerRadius = UDim.new(0, 6)
+gameVersionBox.FocusLost:Connect(function(enterPressed)
+	config.desiredGameVersion = gameVersionBox.Text
+	saveConfig()
+end)
+
+gameVersionBox.Text = config.desiredGameVersion or ""
+
+local autoServerHopLabel = Instance.new("TextLabel")
+autoServerHopLabel.Text = "Auto Server Hop until Desired Version"
+autoServerHopLabel.Font = Enum.Font.GothamBold
+autoServerHopLabel.TextSize = 12
+autoServerHopLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+autoServerHopLabel.BackgroundTransparency = 1
+autoServerHopLabel.Size = UDim2.new(0, 130, 0, 30)
+autoServerHopLabel.Position = UDim2.new(0, 20, 0, 149)
+autoServerHopLabel.TextXAlignment = Enum.TextXAlignment.Left
+autoServerHopLabel.Parent = mainTab
+
+local autoServerHopTrack = Instance.new("Frame")
+autoServerHopTrack.Size = UDim2.new(0, 30, 0, 12)
+autoServerHopTrack.AnchorPoint = Vector2.new(0.5, 0.5)
+autoServerHopTrack.Position = UDim2.new(0, 345, 0, 165)
+autoServerHopTrack.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+autoServerHopTrack.BorderSizePixel = 0
+autoServerHopTrack.Parent = mainTab
+
+local knob = Instance.new("Frame")
+knob.Size = UDim2.new(0, 16, 0, 16)
+knob.AnchorPoint = Vector2.new(0.5, 0.5)
+knob.Position = UDim2.new(0, 7, 0.5, 0)
+knob.BackgroundColor3 = Color3.new(1, 1, 1)
+knob.BorderSizePixel = 0
+knob.Parent = autoServerHopTrack
+
+local cornerTrack = Instance.new("UICorner")
+cornerTrack.CornerRadius = UDim.new(1, 0)
+cornerTrack.Parent = autoServerHopTrack
+
+local cornerKnob = Instance.new("UICorner")
+cornerKnob.CornerRadius = UDim.new(1, 0)
+cornerKnob.Parent = knob
+
+local hopToggled = config.autoServerHop or false
+local hopLoop
+
+local function updateHopToggleVisual(state)
+	if state then
+		TweenService:Create(knob, TweenInfo.new(0.2), {
+			Position = UDim2.new(1, -7, 0.5, 0)
+		}):Play()
+		TweenService:Create(autoServerHopTrack, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+		}):Play()
+	else
+		TweenService:Create(knob, TweenInfo.new(0.2), {
+			Position = UDim2.new(0, 7, 0.5, 0)
+		}):Play()
+		TweenService:Create(autoServerHopTrack, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+		}):Play()
+	end
+end
+
+updateHopToggleVisual(hopToggled)
+
+autoServerHopTrack.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1
+		or input.UserInputType == Enum.UserInputType.Touch then
+
+		hopToggled = not hopToggled
+		config.autoServerHop = hopToggled
+		saveConfig()
+
+		updateHopToggleVisual(hopToggled)
+
+		if hopToggled then
+			local HttpService = game:GetService("HttpService")
+			local TeleportService = game:GetService("TeleportService")
+			local Players = game:GetService("Players")
+			local desiredVersion = tonumber(gameVersionBox.Text)
+			local placeId = game.PlaceId
+
+			hopLoop = task.spawn(function()
+				while hopToggled do
+					if game.PlaceVersion == desiredVersion then
+						warn("[Auto Hop] Found desired version:", desiredVersion)
+						break
+					end
+
+					local servers = {}
+					local cursor = ""
+
+					repeat
+						local url = string.format(
+							"https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100%s",
+							placeId,
+							cursor ~= "" and "&cursor=" .. cursor or ""
+						)
+
+						local success, response = pcall(function()
+							return HttpService:JSONDecode(game:HttpGet(url))
+						end)
+
+						if success and response and response.data then
+							for _, server in ipairs(response.data) do
+								if server.id ~= game.JobId and server.playing < server.maxPlayers then
+									table.insert(servers, server.id)
+								end
+							end
+							cursor = response.nextPageCursor or ""
+						else
+							break
+						end
+					until cursor == "" or #servers >= 1
+
+					if #servers > 0 then
+						local newServerId = servers[math.random(1, #servers)]
+						warn("[Auto Hop] Hopping to new server:", newServerId)
+						TeleportService:TeleportToPlaceInstance(placeId, newServerId, Players.LocalPlayer)
+					else
+						warn("[Auto Hop] No available servers found, retrying...")
+						task.wait(3)
+					end
+				end
+			end)
+
+		else
+			if hopLoop then
+				task.cancel(hopLoop)
+				hopLoop = nil
+				warn("[Auto Hop] Stopped.")
+			end
+		end
+	end
+end)
+
 local mainHeader = Instance.new("TextLabel")
-mainHeader.Text = "Script Settings"
+mainHeader.Text = "───────────     Script Settings     ───────────"
 mainHeader.Font = Enum.Font.GothamBold
 mainHeader.TextSize = 14
 mainHeader.TextColor3 = Color3.fromRGB(255, 255, 255)
 mainHeader.BackgroundTransparency = 1
 mainHeader.Size = UDim2.new(0, 150, 0, 30)
 mainHeader.AnchorPoint = Vector2.new(0.5, 0.5)
-mainHeader.Position = UDim2.new(0.5, 0, 0.42, 0)
+mainHeader.Position = UDim2.new(0.5, 0, 0.6, 0)
 mainHeader.TextXAlignment = Enum.TextXAlignment.Center
 mainHeader.Parent = mainTab
 
@@ -459,17 +649,17 @@ autoReconTitle.TextSize = 12
 autoReconTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 autoReconTitle.BackgroundTransparency = 1
 autoReconTitle.Size = UDim2.new(0, 130, 0, 30)
-autoReconTitle.Position = UDim2.new(0, 20, 0, 143)
+autoReconTitle.Position = UDim2.new(0, 20, 0, 205)
 autoReconTitle.TextXAlignment = Enum.TextXAlignment.Left
 autoReconTitle.Parent = mainTab
 
 local autoReconToggleTrack = Instance.new("Frame")
 autoReconToggleTrack.Size = UDim2.new(0, 30, 0, 12)
 autoReconToggleTrack.AnchorPoint = Vector2.new(0.5, 0.5)
-autoReconToggleTrack.Position = UDim2.new(0, 550, 0, 290)
+autoReconToggleTrack.Position = UDim2.new(0, 345, 0, 221)
 autoReconToggleTrack.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
 autoReconToggleTrack.BorderSizePixel = 0
-autoReconToggleTrack.Parent = gui
+autoReconToggleTrack.Parent = mainTab
 
 local knob = Instance.new("Frame")
 knob.Size = UDim2.new(0, 16, 0, 16)
@@ -487,30 +677,73 @@ local cornerKnob = Instance.new("UICorner")
 cornerKnob.CornerRadius = UDim.new(1, 0)
 cornerKnob.Parent = knob
 
-local toggled = false
+local toggled = config.autoReconnect or false
+
+local function updateReconToggleVisual(state)
+	if state then
+		TweenService:Create(knob, TweenInfo.new(0.2), {
+			Position = UDim2.new(1, -7, 0.5, 0)
+		}):Play()
+		TweenService:Create(autoReconToggleTrack, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+		}):Play()
+	else
+		TweenService:Create(knob, TweenInfo.new(0.2), {
+			Position = UDim2.new(0, 7, 0.5, 0)
+		}):Play()
+		TweenService:Create(autoReconToggleTrack, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+		}):Play()
+	end
+end
+
+updateReconToggleVisual(toggled)
 
 autoReconToggleTrack.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1
-	or (Enum.UserInputType.Touch and input.UserInputType == Enum.UserInputType.Touch) then
+		or input.UserInputType == Enum.UserInputType.Touch then
 
 		toggled = not toggled
+		config.autoReconnect = toggled
+		saveConfig()
 
+		updateReconToggleVisual(toggled)
+	end
+end)
+
+local CoreGui = game:GetService("CoreGui")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+local function clickReconnect()
+	local promptOverlay = CoreGui:FindFirstChild("RobloxPromptGui", true)
+	if not promptOverlay then return end
+
+	local reconnectButton = promptOverlay:FindFirstChild("TextButton", true)
+	if reconnectButton and reconnectButton.Text:lower():find("reconnect") then
+		local absPos = reconnectButton.AbsolutePosition
+		local absSize = reconnectButton.AbsoluteSize
+		VirtualInputManager:SendMouseButtonEvent(
+			absPos.X + absSize.X / 2,
+			absPos.Y + absSize.Y / 2,
+			0, true, nil, 0
+		)
+		VirtualInputManager:SendMouseButtonEvent(
+			absPos.X + absSize.X / 2,
+			absPos.Y + absSize.Y / 2,
+			0, false, nil, 0
+		)
+		warn("[Auto Reconnect] Reconnect button clicked!")
+	end
+end
+
+task.spawn(function()
+	while true do
+		task.wait(1)
 		if toggled then
-			TweenService:Create(knob, TweenInfo.new(0.2), {
-				Position = UDim2.new(1, -7, 0.5, 0)
-			}):Play()
-
-			TweenService:Create(autoReconToggleTrack, TweenInfo.new(0.2), {
-				BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-			}):Play()
-		else
-			TweenService:Create(knob, TweenInfo.new(0.2), {
-				Position = UDim2.new(0, 7, 0.5, 0)
-			}):Play()
-
-			TweenService:Create(autoReconToggleTrack, TweenInfo.new(0.2), {
-				BackgroundColor3 = Color3.fromRGB(220, 20, 60)
-			}):Play()
+			local prompt = CoreGui:FindFirstChild("RobloxPromptGui", true)
+			if prompt and prompt:FindFirstChild("LostConnectionPrompt", true) then
+				clickReconnect()
+			end
 		end
 	end
 end)
@@ -522,17 +755,17 @@ antiAfkTitle.TextSize = 12
 antiAfkTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 antiAfkTitle.BackgroundTransparency = 1
 antiAfkTitle.Size = UDim2.new(0, 130, 0, 30)
-antiAfkTitle.Position = UDim2.new(0, 20, 0, 173)
+antiAfkTitle.Position = UDim2.new(0, 20, 0, 235)
 antiAfkTitle.TextXAlignment = Enum.TextXAlignment.Left
 antiAfkTitle.Parent = mainTab
 
 local antiAfkToggleTrack = Instance.new("Frame")
 antiAfkToggleTrack.Size = UDim2.new(0, 30, 0, 12)
 antiAfkToggleTrack.AnchorPoint = Vector2.new(0.5, 0.5)
-antiAfkToggleTrack.Position = UDim2.new(0, 550, 0, 320)
+antiAfkToggleTrack.Position = UDim2.new(0, 345, 0, 251)
 antiAfkToggleTrack.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
 antiAfkToggleTrack.BorderSizePixel = 0
-antiAfkToggleTrack.Parent = gui
+antiAfkToggleTrack.Parent = mainTab
 
 local knob = Instance.new("Frame")
 knob.Size = UDim2.new(0, 16, 0, 16)
@@ -550,33 +783,71 @@ local cornerKnob = Instance.new("UICorner")
 cornerKnob.CornerRadius = UDim.new(1, 0)
 cornerKnob.Parent = knob
 
-local toggled = false
+local toggled = config.autoAfk or false
+local antiAfkLoop
+
+local function updateAntiAfkVisual(state)
+	if state then
+		TweenService:Create(knob, TweenInfo.new(0.2), {
+			Position = UDim2.new(1, -7, 0.5, 0)
+		}):Play()
+		TweenService:Create(antiAfkToggleTrack, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+		}):Play()
+	else
+		TweenService:Create(knob, TweenInfo.new(0.2), {
+			Position = UDim2.new(0, 7, 0.5, 0)
+		}):Play()
+		TweenService:Create(antiAfkToggleTrack, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+		}):Play()
+	end
+end
+
+updateAntiAfkVisual(toggled)
+
+local function startAntiAfkLoop()
+	if antiAfkLoop then return end
+	antiAfkLoop = task.spawn(function()
+		local VirtualUser = game:GetService("VirtualUser")
+		while toggled do
+			task.wait(60)
+			VirtualUser:CaptureController()
+			VirtualUser:ClickButton2(Vector2.new())
+			print("[Anti AFK] Activity signal sent.")
+		end
+	end)
+end
+
+local function stopAntiAfkLoop()
+	if antiAfkLoop then
+		task.cancel(antiAfkLoop)
+		antiAfkLoop = nil
+		print("[Anti AFK] Stopped.")
+	end
+end
 
 antiAfkToggleTrack.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1
-	or (Enum.UserInputType.Touch and input.UserInputType == Enum.UserInputType.Touch) then
+		or input.UserInputType == Enum.UserInputType.Touch then
 
 		toggled = not toggled
+		config.autoAfk = toggled
+		saveConfig()
+
+		updateAntiAfkVisual(toggled)
 
 		if toggled then
-			TweenService:Create(knob, TweenInfo.new(0.2), {
-				Position = UDim2.new(1, -7, 0.5, 0)
-			}):Play()
-
-			TweenService:Create(antiAfkToggleTrack, TweenInfo.new(0.2), {
-				BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-			}):Play()
+			startAntiAfkLoop()
 		else
-			TweenService:Create(knob, TweenInfo.new(0.2), {
-				Position = UDim2.new(0, 7, 0.5, 0)
-			}):Play()
-
-			TweenService:Create(antiAfkToggleTrack, TweenInfo.new(0.2), {
-				BackgroundColor3 = Color3.fromRGB(220, 20, 60)
-			}):Play()
+			stopAntiAfkLoop()
 		end
 	end
 end)
+
+if toggled then
+	startAntiAfkLoop()
+end
 
 -- Shop Tab
 local shopTab = contentFrames["Shop"]
