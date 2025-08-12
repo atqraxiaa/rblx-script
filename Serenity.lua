@@ -4,11 +4,11 @@ if game.PlaceId ~= 126884695634066 then
 	local TweenService = game:GetService("TweenService")
 	local PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-	local gui = Instance.new("ScreenGui")
-	gui.Name = "SerenityUI"
-	gui.IgnoreGuiInset = true
-	gui.ResetOnSpawn = false
-	gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+	local notifGui = Instance.new("ScreenGui")
+	notifGui.Name = "SerenityUI"
+	notifGui.IgnoreGuiInset = true
+	notifGui.ResetOnSpawn = false
+	notifGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
 	local notif = Instance.new("Frame")
 	notif.Size = UDim2.new(0, 320, 0, 50)
@@ -16,7 +16,7 @@ if game.PlaceId ~= 126884695634066 then
 	notif.AnchorPoint = Vector2.new(1, 1)
 	notif.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 	notif.BorderSizePixel = 0
-	notif.Parent = gui
+	notif.Parent = notifGui
 
 	local text = Instance.new("TextLabel")
 	text.Size = UDim2.new(1, -20, 1, 0)
@@ -102,7 +102,6 @@ frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
 frame.BackgroundTransparency = 0
 frame.BorderSizePixel = 0
 frame.ClipsDescendants = true
---frame.ZIndex = 99999
 frame.Parent = gui
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
 
