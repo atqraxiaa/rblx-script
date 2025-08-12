@@ -268,7 +268,7 @@ minBtn.MouseButton1Click:Connect(function()
 		minBtn.Text = "+"
 
 		fpsLabel.Position = UDim2.new(0, 115, 0, 0)
-		pingLabel.Position = UDim2.new(0, 180, 0, 0)
+		pingLabel.Position = UDim2.new(0, 180, 0, 0)v
 
 		tweenFrameSize(UDim2.new(0, 335, 0, 32), tweenDuration):Wait()
 	else
@@ -1080,6 +1080,8 @@ local function buyAllSeedsOnce()
 	for _, seedName in ipairs(seeds) do
 		local stock = getSeedStockCount(seedName)
 		if stock > 0 then
+			print("[Auto Buy Seeds] Buying all Seed stocks...")
+			task.wait(1)
 			print("Buying " .. stock .. " of " .. seedName)
 			for i = 1, stock do
 				ReplicatedStorage.GameEvents.BuySeedStock:FireServer(seedName)
@@ -1226,6 +1228,8 @@ local function buyAllGearsOnce()
 	for _, gearName in ipairs(gears) do
 		local stock = getGearStockCount(gearName)
 		if stock > 0 then
+			print("[Auto Buy Gears] Buying all Gear stocks...")
+			task.wait(1)
 			print("Buying " .. stock .. " of " .. gearName)
 			for i = 1, stock do
 				ReplicatedStorage.GameEvents.BuyGearStock:FireServer(gearName)
@@ -1370,6 +1374,8 @@ local function buyAllEggsOnce()
 	for _, eggName in ipairs(eggs) do
 		local stock = getEggStockCount(eggName)
 		if stock > 0 then
+			print("[Auto Buy Eggs] Buying all Egg stocks...")
+			task.wait(1)
 			print("Buying " .. stock .. " of " .. eggName)
 			for i = 1, stock do
 				ReplicatedStorage.GameEvents.BuyPetEgg:FireServer(eggName)
@@ -1403,25 +1409,23 @@ if toggled then
 	buyAllEggsOnce()
 end
 
+startSeedRestockTimerPolling()
+startGearRestockTimerPolling()
+startEggRestockTimerPolling()
+
 function startAutoBuySequence()
 	if buyTask then return end
 	buyTask = task.spawn(function()
 		while config.autoBuySeeds or config.autoBuyGears or config.autoBuyEggs do
 			if config.autoBuySeeds then
-				print("[Auto Buy Seeds] Buying all Seed stocks...")
-				task.wait(1)
 				buyAllSeedsOnce()
 				waitForInGameSeedRestockTimerPolling()
 			end
 			if config.autoBuyGears then
-				print("[Auto Buy Gears] Buying all Gear stocks...")
-				task.wait(1)
 				buyAllGearsOnce()
 				waitForInGameGearRestockTimerPolling()
 			end
 			if config.autoBuyEggs then
-				print("[Auto Buy Eggs] Buying all Egg stocks...")
-				task.wait(1)
 				buyAllEggsOnce()
 				waitForInGameEggRestockTimerPolling()
 			end
