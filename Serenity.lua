@@ -557,7 +557,18 @@ local function updateHopToggleVisual(state)
 	end
 end
 
-updateHopToggleVisual(hopToggled)
+updateHopToggleVisual(config.autoServerHop)
+
+if config.autoServerHop then
+	if not config.desiredGameVersion or config.desiredGameVersion == "" then
+		warn("[Auto Hop] Config says ON, but no desired version set. Disabling.")
+		config.autoServerHop = false
+		saveConfig()
+		updateHopToggleVisual(false)
+	else
+		hopToggled = true
+	end
+end
 
 autoServerHopTrack.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1
@@ -570,10 +581,20 @@ autoServerHopTrack.InputBegan:Connect(function(input)
 		updateHopToggleVisual(hopToggled)
 
 		if hopToggled then
+			if not config.desiredGameVersion or config.desiredGameVersion == "" then
+				warn("[Auto Hop] No desired game version set. Please enter a version first.")
+				hopToggled = false
+				config.autoServerHop = false
+				saveConfig()
+				updateHopToggleVisual(false)
+				gameVersionBox:CaptureFocus()
+				return
+			end
+
 			local HttpService = game:GetService("HttpService")
 			local TeleportService = game:GetService("TeleportService")
 			local Players = game:GetService("Players")
-			local desiredVersion = tonumber(gameVersionBox.Text)
+			local desiredVersion = tonumber(config.desiredGameVersion)
 			local placeId = game.PlaceId
 
 			hopLoop = task.spawn(function()
