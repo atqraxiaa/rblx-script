@@ -1,56 +1,55 @@
 repeat task.wait() until game:IsLoaded()
 
--- for debugging
--- if game.PlaceId ~= 126884695634066 then
--- 	local TweenService = game:GetService("TweenService")
--- 	local PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+if game.PlaceId ~= 126884695634066 then
+	local TweenService = game:GetService("TweenService")
+	local PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
--- 	local notifGui = Instance.new("ScreenGui")
--- 	notifGui.Name = "SerenityUI"
--- 	notifGui.IgnoreGuiInset = true
--- 	notifGui.ResetOnSpawn = false
--- 	notifGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+	local notifGui = Instance.new("ScreenGui")
+	notifGui.Name = "SerenityUI"
+	notifGui.IgnoreGuiInset = true
+	notifGui.ResetOnSpawn = false
+	notifGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
--- 	local notif = Instance.new("Frame")
--- 	notif.Size = UDim2.new(0, 320, 0, 50)
--- 	notif.Position = UDim2.new(1, 340, 1, -10)
--- 	notif.AnchorPoint = Vector2.new(1, 1)
--- 	notif.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
--- 	notif.BorderSizePixel = 0
--- 	notif.Parent = notifGui
+	local notif = Instance.new("Frame")
+	notif.Size = UDim2.new(0, 320, 0, 50)
+	notif.Position = UDim2.new(1, 340, 1, -10)
+	notif.AnchorPoint = Vector2.new(1, 1)
+	notif.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	notif.BorderSizePixel = 0
+	notif.Parent = notifGui
 
--- 	local text = Instance.new("TextLabel")
--- 	text.Size = UDim2.new(1, -20, 1, 0)
--- 	text.Position = UDim2.new(0, 10, 0, 0)
--- 	text.BackgroundTransparency = 1
--- 	text.Text = "❌ This script only supports Grow a Garden."
--- 	text.Font = Enum.Font.Gotham
--- 	text.TextSize = 14
--- 	text.TextColor3 = Color3.fromRGB(255, 255, 255)
--- 	text.TextXAlignment = Enum.TextXAlignment.Center
--- 	text.Parent = notif
+	local text = Instance.new("TextLabel")
+	text.Size = UDim2.new(1, -20, 1, 0)
+	text.Position = UDim2.new(0, 10, 0, 0)
+	text.BackgroundTransparency = 1
+	text.Text = "❌ This script only supports Grow a Garden."
+	text.Font = Enum.Font.Gotham
+	text.TextSize = 14
+	text.TextColor3 = Color3.fromRGB(255, 255, 255)
+	text.TextXAlignment = Enum.TextXAlignment.Center
+	text.Parent = notif
 
--- 	local tweenIn = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
--- 		Position = UDim2.new(1, -20, 1, -20)
--- 	})
--- 	local tweenOut = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
--- 		Position = UDim2.new(1, 270, 1, -20)
--- 	})
+	local tweenIn = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+		Position = UDim2.new(1, -20, 1, -20)
+	})
+	local tweenOut = TweenService:Create(notif, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
+		Position = UDim2.new(1, 270, 1, -20)
+	})
 
--- 	Instance.new("UICorner", notif).CornerRadius = UDim.new(0, 12)
+	Instance.new("UICorner", notif).CornerRadius = UDim.new(0, 12)
 
--- 	tweenIn:Play()
--- 	tweenIn.Completed:Wait()
+	tweenIn:Play()
+	tweenIn.Completed:Wait()
 
--- 	task.wait(10)
+	task.wait(10)
 
--- 	tweenOut:Play()
--- 	tweenOut.Completed:Wait()
+	tweenOut:Play()
+	tweenOut.Completed:Wait()
 
--- 	notif:Destroy()
+	notif:Destroy()
 
--- 	return
--- end
+	return
+end
 
 local CONFIG_FILE = "SerenityConfig.json"
 local HttpService = game:GetService("HttpService")
@@ -268,7 +267,7 @@ minBtn.MouseButton1Click:Connect(function()
 		minBtn.Text = "+"
 
 		fpsLabel.Position = UDim2.new(0, 115, 0, 0)
-		pingLabel.Position = UDim2.new(0, 180, 0, 0)v
+		pingLabel.Position = UDim2.new(0, 180, 0, 0)
 
 		tweenFrameSize(UDim2.new(0, 335, 0, 32), tweenDuration):Wait()
 	else
@@ -1521,4 +1520,3 @@ UserInputService.InputChanged:Connect(function(input)
 	end
 
 end)
-
