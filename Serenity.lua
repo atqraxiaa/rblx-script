@@ -1,6 +1,6 @@
 repeat task.wait() until game:IsLoaded()
 
-debugging
+-- for debugging
 -- if game.PlaceId ~= 126884695634066 then
 -- 	local TweenService = game:GetService("TweenService")
 -- 	local PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -1521,3 +1521,4 @@ UserInputService.InputChanged:Connect(function(input)
 	end
 
 end)
+
